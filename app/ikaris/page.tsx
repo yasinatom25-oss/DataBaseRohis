@@ -48,7 +48,7 @@ export default function IkarisPage() {
 
       // If NOT BPH, only fetch users in their department
       if (!isBPH(user.role.name)) {
-        usersQuery = usersQuery.eq("department_id", user.department_id);
+        usersQuery = usersQuery.eq("department_id", (user as any).department_id || user.department?.id);
       }
 
       const { data: users, error: uError } = await usersQuery;
