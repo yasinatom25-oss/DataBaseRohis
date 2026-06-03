@@ -1,14 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
-import { ArrowLeft, MapPin, Video, User as UserIcon, Calendar, CheckCircle, Wifi } from "lucide-react";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import RichTextEditor from "@/components/RichTextEditor";
+import { ArrowLeft, MapPin, User as UserIcon, Calendar, CheckCircle, Wifi } from "lucide-react";
 
 interface MeetingDetail {
   id: string;
@@ -24,41 +21,24 @@ interface MeetingDetail {
   notetaker?: { name: string } | null;
 }
 
-const quillModules = {
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    [{ indent: "-1" }, { indent: "+1" }],
-    ["link", "clean"],
-  ],
-};
-
-const quillFormats = [
-  "header", "bold", "italic", "underline", "strike",
-  "list", "bullet", "indent", "link",
-];
-
 export default function MeetingDetailPage() {
   const params = useParams();
   const id = params?.id as string;
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [meeting, setMeeting] = useState<MeetingDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [notes, setNotes] = useState("");
   const [notetakerName, setNotetakerName] = useState("Belum ditentukan");
 
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-
   useEffect(() => {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsedUser = JSON.parse(stored);
       setUser(parsedUser);
-      // Use stored user ID directly — it's the users.id (UUID from users table)
       setCurrentUserId(parsedUser.id);
     } else {
       router.push("/login");
@@ -71,10 +51,7 @@ export default function MeetingDetailPage() {
     try {
       const { data, error } = await supabase
         .from("attendances")
-        .select(`
-          *,
-          notetaker:users!attendances_notetaker_id_fkey(name)
-        `)
+        .select(`*, notetaker:users!attendances_notetaker_id_fkey(name)`)
         .eq("id", id)
         .single();
 
@@ -83,10 +60,8 @@ export default function MeetingDetailPage() {
       setMeeting(data as MeetingDetail);
       setNotes(data.notes_content || "");
 
-      const notetakerData = data.notetaker as any;
-      if (notetakerData?.name) {
-        setNotetakerName(notetakerData.name);
-      }
+      const nd = data.notetaker as any;
+      if (nd?.name) setNotetakerName(nd.name);
     } catch (err: any) {
       console.error(err);
     } finally {
@@ -128,48 +103,29 @@ export default function MeetingDetailPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <main
-        className="main-content fade-in"
-        style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}
-      >
+      <main className="main-content fade-in" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          style={{
-            display: "flex", alignItems: "center", gap: "8px",
-            background: "transparent", border: "none", color: "var(--text-muted)",
-            cursor: "pointer", marginBottom: "24px", fontWeight: 600, fontSize: "0.9rem",
-          }}
+          style={{ display: "flex", alignItems: "center", gap: "8px", background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", marginBottom: "24px", fontWeight: 600, fontSize: "0.9rem" }}
         >
           <ArrowLeft size={18} /> Kembali ke Daftar Rapat
         </button>
 
         {/* Header Card */}
-        <div style={{
-          background: "linear-gradient(135deg, #008CBA 0%, #005f7a 100%)",
-          borderRadius: "16px", padding: "30px", color: "white", marginBottom: "24px",
-          boxShadow: "0 8px 24px rgba(0,140,186,0.25)",
-        }}>
-          <div style={{
-            display: "inline-block", background: "rgba(255,255,255,0.2)",
-            padding: "4px 14px", borderRadius: "20px", fontSize: "0.82rem",
-            fontWeight: 700, marginBottom: "14px", letterSpacing: "0.04em",
-          }}>
+        <div style={{ background: "linear-gradient(135deg, #008CBA 0%, #005f7a 100%)", borderRadius: "16px", padding: "30px", color: "white", marginBottom: "24px", boxShadow: "0 8px 24px rgba(0,140,186,0.25)" }}>
+          <div style={{ display: "inline-block", background: "rgba(255,255,255,0.2)", padding: "4px 14px", borderRadius: "20px", fontSize: "0.82rem", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.04em" }}>
             {meeting.event_type}
           </div>
-
           <h1 style={{ fontSize: "1.9rem", fontWeight: 800, margin: "0 0 20px 0", lineHeight: 1.25 }}>
             {meeting.event_name}
           </h1>
-
           <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", fontSize: "0.9rem", opacity: 0.9 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Calendar size={16} />
-              {new Date(meeting.event_date).toLocaleDateString("id-ID", {
-                weekday: "long", day: "numeric", month: "long", year: "numeric",
-              })}
+              {new Date(meeting.event_date).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </div>
-
             {meeting.location_type && (
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 {meeting.location_type === "Online" ? <Wifi size={16} /> : <MapPin size={16} />}
@@ -177,7 +133,6 @@ export default function MeetingDetailPage() {
                 {meeting.location_detail && ` — ${meeting.location_detail}`}
               </div>
             )}
-
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <UserIcon size={16} />
               Notulen: <strong>{notetakerName}</strong>
@@ -194,24 +149,15 @@ export default function MeetingDetailPage() {
               </h2>
               {isNotetaker && (
                 <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "4px" }}>
-                  Anda ditunjuk sebagai notulen. Tulis dan simpan catatan rapat di bawah ini.
+                  Anda ditunjuk sebagai notulen. Gunakan toolbar di bawah untuk memformat teks.
                 </p>
               )}
             </div>
-
             {isNotetaker && (
               <button
                 onClick={saveNotes}
                 disabled={saving}
-                style={{
-                  display: "flex", alignItems: "center", gap: "8px",
-                  padding: "10px 22px", borderRadius: "10px", border: "none",
-                  background: "#10b981", color: "white", fontWeight: 700,
-                  cursor: saving ? "not-allowed" : "pointer",
-                  opacity: saving ? 0.7 : 1,
-                  boxShadow: "0 4px 14px rgba(16,185,129,0.3)",
-                  transition: "all 0.2s",
-                }}
+                style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 22px", borderRadius: "10px", border: "none", background: "#10b981", color: "white", fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.7 : 1, boxShadow: "0 4px 14px rgba(16,185,129,0.3)", transition: "all 0.2s" }}
               >
                 <CheckCircle size={18} />
                 {saving ? "Menyimpan..." : "Simpan Notulensi"}
@@ -220,53 +166,25 @@ export default function MeetingDetailPage() {
           </div>
 
           {isNotetaker ? (
-            <div style={{ border: "1px solid var(--border-color)", borderRadius: "10px", overflow: "hidden" }}>
-              <style>{`
-                .ql-toolbar.ql-snow {
-                  background: var(--bg-main);
-                  border-color: var(--border-color);
-                  border-bottom-color: var(--border-color);
-                }
-                .ql-container.ql-snow {
-                  background: var(--bg-card);
-                  border-color: var(--border-color);
-                  min-height: 320px;
-                  font-size: 1rem;
-                  color: var(--text-main);
-                }
-                .ql-editor {
-                  min-height: 320px;
-                  font-family: inherit;
-                  line-height: 1.7;
-                }
-              `}</style>
-              <ReactQuill
-                theme="snow"
-                value={notes}
-                onChange={setNotes}
-                modules={quillModules}
-                formats={quillFormats}
-              />
-            </div>
+            <RichTextEditor value={notes} onChange={setNotes} />
           ) : (
-            <div style={{
-              background: "var(--bg-main)", padding: "24px",
-              borderRadius: "10px", border: "1px solid var(--border-color)",
-              minHeight: "220px",
-            }}>
+            <div style={{ background: "var(--bg-main)", padding: "24px", borderRadius: "10px", border: "1px solid var(--border-color)", minHeight: "220px" }}>
               {notes ? (
                 <>
                   <style>{`
-                    .notulensi-content h1,h2,h3 { color: var(--text-main); font-weight: 700; margin: 12px 0 6px; }
-                    .notulensi-content p { color: var(--text-main); line-height: 1.7; margin: 6px 0; }
-                    .notulensi-content ul, .notulensi-content ol { color: var(--text-main); padding-left: 20px; }
+                    .notulensi-content h1 { font-size: 1.5rem; font-weight: 700; margin: 12px 0 6px; color: var(--text-main); }
+                    .notulensi-content h2 { font-size: 1.2rem; font-weight: 700; margin: 10px 0 5px; color: var(--text-main); }
+                    .notulensi-content h3 { font-size: 1.05rem; font-weight: 600; margin: 8px 0 4px; color: var(--text-main); }
+                    .notulensi-content p { color: var(--text-main); line-height: 1.75; margin: 6px 0; }
+                    .notulensi-content ul { color: var(--text-main); padding-left: 20px; list-style-type: disc; }
+                    .notulensi-content ol { color: var(--text-main); padding-left: 20px; list-style-type: decimal; }
+                    .notulensi-content li { margin: 4px 0; }
                     .notulensi-content strong { font-weight: 700; }
                     .notulensi-content em { font-style: italic; }
+                    .notulensi-content a { color: #008CBA; text-decoration: underline; }
+                    .notulensi-content hr { border: none; border-top: 1px solid var(--border-color); margin: 12px 0; }
                   `}</style>
-                  <div
-                    className="notulensi-content"
-                    dangerouslySetInnerHTML={{ __html: notes }}
-                  />
+                  <div className="notulensi-content" dangerouslySetInnerHTML={{ __html: notes }} />
                 </>
               ) : (
                 <p style={{ color: "var(--text-muted)", fontStyle: "italic", textAlign: "center", marginTop: "60px" }}>
