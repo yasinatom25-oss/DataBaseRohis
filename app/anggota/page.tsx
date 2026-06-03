@@ -38,10 +38,44 @@ export default function AnggotaPage() {
     try {
       const { data: usersData, error: uError } = await supabase
         .from("users")
-        .select("*, role:roles(*), department:departments(*)")
-        .order("role_id", { ascending: true });
+        .select("*, role:roles(*), department:departments(*)");
         
-      if (usersData) setMembers(usersData);
+      if (usersData) {
+        const roleRank: Record<string, number> = {
+          pembina: 1,
+          ketua_umum: 2,
+          wakil_ketum: 3,
+          sekretaris_umum: 4,
+          wakil_sekretaris: 5,
+          bendahara_umum: 6,
+          wakil_bendahara: 7,
+          ketua_departemen: 8,
+          sekretaris_departemen: 9,
+          pj_program: 10,
+          anggota: 11
+        };
+
+        const sortedUsers = usersData.sort((a, b) => {
+          const deptA = (Array.isArray(a.department) ? a.department[0]?.name : a.department?.name) || "Z";
+          const deptB = (Array.isArray(b.department) ? b.department[0]?.name : b.department?.name) || "Z";
+          
+          const isBphA = deptA.includes("BPH") ? 0 : 1;
+          const isBphB = deptB.includes("BPH") ? 0 : 1;
+          
+          if (isBphA !== isBphB) return isBphA - isBphB;
+          if (deptA !== deptB) return deptA.localeCompare(deptB);
+
+          const roleA = (Array.isArray(a.role) ? a.role[0]?.name : a.role?.name) || "anggota";
+          const roleB = (Array.isArray(b.role) ? b.role[0]?.name : b.role?.name) || "anggota";
+
+          const rankA = roleRank[roleA] || 99;
+          const rankB = roleRank[roleB] || 99;
+
+          return rankA - rankB;
+        });
+
+        setMembers(sortedUsers);
+      }
 
       const { data: rolesData } = await supabase.from("roles").select("*").order("name");
       if (rolesData) setRoles(rolesData);
