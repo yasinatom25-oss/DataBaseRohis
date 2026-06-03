@@ -55,18 +55,18 @@ export default function AnggotaPage() {
           anggota: 11
         };
 
-        const sortedUsers = usersData.sort((a, b) => {
+        const sortedUsers = [...usersData].sort((a, b) => {
           const deptA = (Array.isArray(a.department) ? a.department[0]?.name : a.department?.name) || "Z";
           const deptB = (Array.isArray(b.department) ? b.department[0]?.name : b.department?.name) || "Z";
           
-          const isBphA = deptA.includes("BPH") ? 0 : 1;
-          const isBphB = deptB.includes("BPH") ? 0 : 1;
+          const isBphA = deptA.toUpperCase().includes("BPH") ? 0 : 1;
+          const isBphB = deptB.toUpperCase().includes("BPH") ? 0 : 1;
           
           if (isBphA !== isBphB) return isBphA - isBphB;
           if (deptA !== deptB) return deptA.localeCompare(deptB);
 
-          const roleA = (Array.isArray(a.role) ? a.role[0]?.name : a.role?.name) || "anggota";
-          const roleB = (Array.isArray(b.role) ? b.role[0]?.name : b.role?.name) || "anggota";
+          const roleA = ((Array.isArray(a.role) ? a.role[0]?.name : a.role?.name) || "anggota").toLowerCase();
+          const roleB = ((Array.isArray(b.role) ? b.role[0]?.name : b.role?.name) || "anggota").toLowerCase();
 
           const rankA = roleRank[roleA] || 99;
           const rankB = roleRank[roleB] || 99;
