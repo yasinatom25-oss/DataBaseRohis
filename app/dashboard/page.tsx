@@ -86,7 +86,7 @@ export default function DashboardPage() {
         else if (r.status === "Alpa") alpa++;
       });
       const total = hadir + izin + sakit + alpa;
-      const percentage = total > 0 ? Math.round(((hadir + izin) / total) * 100) : 0;
+      const percentage = total > 0 ? Math.round((hadir / total) * 100) : 0;
       setAttendanceStats({ hadir, izin, sakit, alpa, total, percentage });
 
       // 3. Fetch Mutabaah Logs for current month
@@ -333,7 +333,7 @@ export default function DashboardPage() {
         >
           {[
             {
-              label: "Mutabaah Bulan Ini",
+              label: mutabaahTimeframe === "pekan" ? "Mutabaah Pekan Ini" : "Mutabaah Bulan Ini",
               value: `${mutabaahAverage}%`,
               sub: "Rata-rata capaian Anda",
               icon: BookOpen,
