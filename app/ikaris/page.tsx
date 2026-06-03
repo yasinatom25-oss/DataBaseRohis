@@ -172,20 +172,65 @@ export default function IkarisPage() {
         
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <label style={{ fontWeight: 600, color: "var(--text-main)" }}>Pilih Bulan:</label>
-          <input
-            type="month"
-            value={selectedMonth}
-            onChange={handleMonthChange}
-            style={{
-              padding: "10px 14px",
-              borderRadius: "8px",
-              border: "1px solid var(--border-color)",
-              background: "var(--bg-card)",
-              color: "var(--text-main)",
-              outline: "none",
-              fontWeight: 500,
-            }}
-          />
+          <div style={{ display: "flex", gap: "8px" }}>
+            <select
+              value={selectedMonth.split("-")[1]}
+              onChange={(e) => {
+                const newM = e.target.value;
+                const newY = selectedMonth.split("-")[0];
+                const val = `${newY}-${newM}`;
+                setSelectedMonth(val);
+                fetchIkarisData(currentUser, val);
+              }}
+              style={{
+                padding: "10px 14px",
+                borderRadius: "8px",
+                border: "1px solid var(--border-color)",
+                background: "var(--bg-card)",
+                color: "var(--text-main)",
+                outline: "none",
+                fontWeight: 500,
+                cursor: "pointer",
+              }}
+            >
+              <option value="01">Januari</option>
+              <option value="02">Februari</option>
+              <option value="03">Maret</option>
+              <option value="04">April</option>
+              <option value="05">Mei</option>
+              <option value="06">Juni</option>
+              <option value="07">Juli</option>
+              <option value="08">Agustus</option>
+              <option value="09">September</option>
+              <option value="10">Oktober</option>
+              <option value="11">November</option>
+              <option value="12">Desember</option>
+            </select>
+            <select
+              value={selectedMonth.split("-")[0]}
+              onChange={(e) => {
+                const newY = e.target.value;
+                const newM = selectedMonth.split("-")[1];
+                const val = `${newY}-${newM}`;
+                setSelectedMonth(val);
+                fetchIkarisData(currentUser, val);
+              }}
+              style={{
+                padding: "10px 14px",
+                borderRadius: "8px",
+                border: "1px solid var(--border-color)",
+                background: "var(--bg-card)",
+                color: "var(--text-main)",
+                outline: "none",
+                fontWeight: 500,
+                cursor: "pointer",
+              }}
+            >
+              {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 

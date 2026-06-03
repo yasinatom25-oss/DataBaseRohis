@@ -189,12 +189,43 @@ export default function MutabaahPage() {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
               <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "var(--bg-card)", padding: "4px", borderRadius: "10px", border: "1px solid var(--border-color)" }}>
-                <input 
-                  type="month" 
-                  value={exportMonth}
-                  onChange={(e) => setExportMonth(e.target.value)}
-                  style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px 8px" }}
-                />
+                <div style={{ display: "flex", gap: "4px" }}>
+                  <select
+                    value={exportMonth.split("-")[1] || "01"}
+                    onChange={(e) => {
+                      const newM = e.target.value;
+                      const newY = exportMonth.split("-")[0] || new Date().getFullYear().toString();
+                      setExportMonth(`${newY}-${newM}`);
+                    }}
+                    style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px" }}
+                  >
+                    <option value="01">Jan</option>
+                    <option value="02">Feb</option>
+                    <option value="03">Mar</option>
+                    <option value="04">Apr</option>
+                    <option value="05">Mei</option>
+                    <option value="06">Jun</option>
+                    <option value="07">Jul</option>
+                    <option value="08">Agu</option>
+                    <option value="09">Sep</option>
+                    <option value="10">Okt</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Des</option>
+                  </select>
+                  <select
+                    value={exportMonth.split("-")[0] || new Date().getFullYear().toString()}
+                    onChange={(e) => {
+                      const newY = e.target.value;
+                      const newM = exportMonth.split("-")[1] || "01";
+                      setExportMonth(`${newY}-${newM}`);
+                    }}
+                    style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px" }}
+                  >
+                    {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
                 <button 
                   onClick={handleExportExcel}
                   style={{ 
