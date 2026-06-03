@@ -10,14 +10,12 @@ import {
   BookOpen,
   ClipboardList,
   CalendarCheck,
-  BarChart3,
-  Settings,
-  LogOut,
-  Users,
+  Wallet,
 } from "lucide-react";
 import { User } from "@/lib/types";
+import { canViewIkaris } from "@/lib/rbac";
 
-const NAV_ITEMS = [
+const BASE_NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/mutabaah", label: "Mutabaah", icon: BookOpen },
   { href: "/amanah", label: "Amanah", icon: ClipboardList },
@@ -72,13 +70,18 @@ export default function Sidebar() {
 
         {/* Menu Utama (Dipisah per item) */}
         <nav style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
+          {(() => {
+            const items = [...BASE_NAV_ITEMS];
+            if (canViewIkaris(safeRole)) {
+              items.push({ href: "/ikaris", label: "Ikaris (Uang Kas)", icon: Wallet });
+            }
+            return items.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
                 className="floating-pill"
                 style={{
                   display: "flex",
@@ -200,7 +203,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* ========== Mobile Bottom Nav – White & Blue ========== */}
+      {/* ========== Mobile Navigation Bar ========== */}
       <nav
         className="mobile-nav"
         style={{
@@ -209,21 +212,27 @@ export default function Sidebar() {
           bottom: 0,
           left: 0,
           right: 0,
-          background: "var(--bg-card)",
+          background: "var(--bg-main)",
           borderTop: "1px solid var(--border-color)",
-          padding: "6px 0 max(6px, env(safe-area-inset-bottom))",
           zIndex: 50,
+          padding: "10px 16px",
           justifyContent: "space-around",
-          boxShadow: "0 -2px 12px rgba(0,0,0,0.04)",
+          alignItems: "center",
+          boxShadow: "0 -4px 12px rgba(0,0,0,0.05)",
         }}
       >
-        {NAV_ITEMS.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
+        {(() => {
+          const items = [...BASE_NAV_ITEMS];
+          if (canViewIkaris(safeRole)) {
+            items.push({ href: "/ikaris", label: "Ikaris", icon: Wallet });
+          }
+          return items.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
               style={{
                 display: "flex",
                 flexDirection: "column",

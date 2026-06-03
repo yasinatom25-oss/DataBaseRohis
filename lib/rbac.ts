@@ -72,3 +72,22 @@ export function canViewGlobalData(role: RoleName | string): boolean {
 export function canCreateRecords(role: RoleName | string): boolean {
   return isBPH(role) || isKadiv(role);
 }
+
+/**
+ * Can the user view Ikaris page? (BPH and Kadiv)
+ */
+export function canViewIkaris(role: RoleName | string): boolean {
+  return isBPH(role) || isKadiv(role);
+}
+
+/**
+ * Can the user edit/approve Ikaris? (Ketua, Wakil, Bendahara)
+ */
+export function canEditIkaris(role: RoleName | string): boolean {
+  return [
+    "ketua_umum",
+    "wakil_ketum",
+    "bendahara_umum",
+    "wakil_bendahara", // Giving wakil bendahara access just in case, but can be adjusted
+  ].includes(role);
+}

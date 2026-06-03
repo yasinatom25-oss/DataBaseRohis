@@ -35,6 +35,7 @@ export default function DashboardPage() {
   const [mutabaahTimeframe, setMutabaahTimeframe] = useState<"pekan" | "bulan">("pekan");
   const [rawMutabaahLogs, setRawMutabaahLogs] = useState<any[]>([]);
   const [trenIbadah, setTrenIbadah] = useState({ status: "Konsisten", sub: "Masih stabil minggu ini", trendUp: true });
+  const [ikarisStatus, setIkarisStatus] = useState<"Sudah Bayar" | "Belum Bayar" | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -127,6 +128,17 @@ export default function DashboardPage() {
       } else {
         setTrenIbadah({ status: "Konsisten", sub: "Masih stabil minggu ini", trendUp: true });
       }
+
+      // 6. Fetch Ikaris Status
+      const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}`;
+      const { data: ikarisData } = await supabase
+        .from("ikaris_records")
+        .select("status")
+        .eq("user_id", currentUser.id)
+        .eq("month_year", currentMonth)
+        .maybeSingle();
+      
+      setIkarisStatus(ikarisData?.status || "Belum Bayar");
 
     } catch (e) {
       console.error("Failed to fetch Supabase data:", e);
@@ -321,6 +333,36 @@ export default function DashboardPage() {
                 <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Alpa</div>
               </div>
         </div>
+
+        {/* ===== Ikaris Reminder ===== */}
+        {ikarisStatus === "Belum Bayar" && (() => {
+          const safeRole = typeof user.role === 'string' ? user.role : (user.role?.name || user.role?.label || "");
+          if (safeRole !== "pembina") {
+            return (
+              <div style={{
+                background: "#fee2e2",
+                border: "1px solid #fecaca",
+                borderRadius: "12px",
+                padding: "16px 20px",
+                marginBottom: "24px",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px"
+              }}>
+                <div style={{ background: "#ef4444", color: "white", borderRadius: "50%", width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span style={{ fontWeight: "bold" }}>!</span>
+                </div>
+                <div>
+                  <h3 style={{ color: "#b91c1c", fontSize: "0.95rem", fontWeight: 700, margin: 0 }}>Pengingat Uang Kas</h3>
+                  <p style={{ color: "#991b1b", fontSize: "0.85rem", margin: "4px 0 0 0" }}>
+                    Anda belum membayar uang kas (Ikaris) untuk bulan ini. Mohon segera diselesaikan ya!
+                  </p>
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
 
         {/* ===== Summary Cards ===== */}
         <div
