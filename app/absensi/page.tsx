@@ -21,7 +21,7 @@ export default function AbsensiPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [meetingType, setMeetingType] = useState<"Rapat Umum" | "Rapat Departemen">("Rapat Departemen");
   const [selectedMeeting, setSelectedMeeting] = useState<any | null>(null);
-  
+
   const [attendanceStats, setAttendanceStats] = useState({ hadir: 0, izin: 0, sakit: 0, alpa: 0, total: 0, percentage: 0 });
 
   useEffect(() => {
@@ -62,10 +62,10 @@ export default function AbsensiPage() {
     try {
       const { error: err1 } = await supabase.from("attendance_records").delete().eq("attendance_id", meetingId);
       if (err1) throw err1;
-      
+
       const { error: err2 } = await supabase.from("attendances").delete().eq("id", meetingId);
       if (err2) throw err2;
-      
+
       if (user) {
         fetchMeetings(user);
       }
@@ -80,7 +80,7 @@ export default function AbsensiPage() {
       const { data, error } = await supabase.from("attendances").update({ status: "Completed" }).eq("id", meetingId).select();
       if (error) throw error;
       if (!data || data.length === 0) throw new Error("Data rapat tidak ditemukan atau akses ditolak oleh server.");
-      
+
       alert("Berhasil! Rapat telah dipindahkan ke Riwayat.");
       if (user) fetchMeetings(user);
     } catch (err: any) {
@@ -94,19 +94,19 @@ export default function AbsensiPage() {
     async function fetchStats() {
       try {
         const { data, error } = await supabase.from("attendance_records").select("status, user_id, user:users(department:departments(name))");
-        
+
         if (error) throw error;
-        
+
         let filtered = data || [];
         if (activeTab === "personal") {
           filtered = filtered.filter((r: any) => r.user_id === user!.id);
         } else if (activeTab === "divisi" && user!.department?.name) {
           filtered = filtered.filter((r: any) => {
-             const deptName = Array.isArray(r.user?.department) ? r.user.department[0]?.name : r.user?.department?.name;
-             return deptName === user!.department?.name;
+            const deptName = Array.isArray(r.user?.department) ? r.user.department[0]?.name : r.user?.department?.name;
+            return deptName === user!.department?.name;
           });
         }
-        
+
         const stats = { hadir: 0, izin: 0, sakit: 0, alpa: 0, total: 0, percentage: 0 };
         filtered.forEach((r: any) => {
           if (r.status === "Hadir") stats.hadir++;
@@ -130,9 +130,9 @@ export default function AbsensiPage() {
 
   // Filter meetings logic
   const filteredMeetings = meetings.filter((m) => {
-    if (activeTab === "personal") return true; 
+    if (activeTab === "personal") return true;
     if (activeTab === "divisi") return m.department === user.department?.name || m.department === "Seluruh Rohis";
-    return true; 
+    return true;
   });
 
   return (
@@ -157,20 +157,20 @@ export default function AbsensiPage() {
         {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
           <div className="animate-fade-in-up animate-delay-100" style={{ display: "flex", gap: "8px", marginBottom: "20px", borderBottom: "1px solid var(--border-color)", paddingBottom: "12px", justifyContent: "space-between", alignItems: "center" }}>
             <div style={{ display: "flex", gap: "8px" }}>
-              <button 
+              <button
                 onClick={() => setActiveTab("personal")}
                 style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "personal" ? "#008CBA" : "transparent", color: activeTab === "personal" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
               >
                 Data Saya
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab("divisi")}
                 style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "divisi" ? "#008CBA" : "transparent", color: activeTab === "divisi" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
               >
                 Data Divisi ({user.department?.name})
               </button>
               {canViewGlobalData(user.role.name) && (
-                <button 
+                <button
                   onClick={() => setActiveTab("semua")}
                   style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "semua" ? "#008CBA" : "transparent", color: activeTab === "semua" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
                 >
@@ -178,11 +178,11 @@ export default function AbsensiPage() {
                 </button>
               )}
             </div>
-            
+
             {/* Action Buttons based on Role */}
             <div style={{ display: "flex", gap: "10px" }}>
               {canCreateRecords(user.role.name) && (
-                <button 
+                <button
                   onClick={() => {
                     setMeetingType("Rapat Departemen");
                     setIsModalOpen(true);
@@ -193,7 +193,7 @@ export default function AbsensiPage() {
                 </button>
               )}
               {isBPH(user.role.name) && (
-                <button 
+                <button
                   onClick={() => {
                     setMeetingType("Rapat Umum");
                     setIsModalOpen(true);
@@ -210,33 +210,33 @@ export default function AbsensiPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "20px" }}>
           {/* Chart */}
           <div className="solid-card animate-fade-in-up animate-delay-200" style={{ padding: "24px" }}>
-             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
-               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : "Rohis"}
-             </h2>
-             <AttendancePieChart data={attendanceStats} />
-             <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
-               <div style={{ textAlign: "center" }}>
-                 <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
-                 <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
-               </div>
-               <div style={{ textAlign: "center" }}>
-                 <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
-                 <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
-               </div>
-               <div style={{ textAlign: "center" }}>
-                 <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
-                 <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
-               </div>
-               <div style={{ textAlign: "center" }}>
-                 <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
-                 <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
-               </div>
-             </div>
+            <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
+              Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : "Rohis"}
+            </h2>
+            <AttendancePieChart data={attendanceStats} />
+            <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
+                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
+              </div>
+            </div>
           </div>
-          
+
           {/* Meetings Table */}
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-            
+
             {/* Jadwal Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal Rapat (Akan Datang)</h2>
@@ -319,7 +319,7 @@ export default function AbsensiPage() {
                 </div>
               )}
             </div>
-            
+
           </div>
         </div>
       </main>
@@ -334,7 +334,7 @@ export default function AbsensiPage() {
           if (user) fetchMeetings(user);
         }}
       />
-      
+
       {/* Fill Attendance Modal */}
       <FillAttendanceModal
         isOpen={!!selectedMeeting}

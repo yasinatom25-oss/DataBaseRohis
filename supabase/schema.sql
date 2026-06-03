@@ -99,3 +99,9 @@ CREATE TABLE IF NOT EXISTS ikaris_records (
 -- Hapus constraint jika sudah ada untuk menghindari error
 ALTER TABLE ikaris_records DROP CONSTRAINT IF EXISTS unique_user_month;
 ALTER TABLE ikaris_records ADD CONSTRAINT unique_user_month UNIQUE (user_id, month_year);
+-- Tambahkan kolom detail lokasi dan notulensi ke tabel attendances
+ALTER TABLE attendances
+ADD COLUMN IF NOT EXISTS location_type TEXT CHECK (location_type IN ('Offline', 'Online')),
+ADD COLUMN IF NOT EXISTS location_detail TEXT,
+ADD COLUMN IF NOT EXISTS notetaker_id UUID REFERENCES users(id) ON DELETE SET NULL,
+ADD COLUMN IF NOT EXISTS notes_content TEXT;
