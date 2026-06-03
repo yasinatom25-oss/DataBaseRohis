@@ -11,6 +11,10 @@ import {
   ClipboardList,
   CalendarCheck,
   Wallet,
+  BarChart3,
+  Settings,
+  LogOut,
+  Users,
 } from "lucide-react";
 import { User } from "@/lib/types";
 import { canViewIkaris } from "@/lib/rbac";
@@ -100,6 +104,7 @@ export default function Sidebar() {
                 {item.label}
               </Link>
             );
+            });
           })()}
         </nav>
 
@@ -262,7 +267,8 @@ export default function Sidebar() {
               <Icon size={20} />
               {item.label}
             </Link>
-          );
+            );
+          });
         })()}
       </nav>
 
