@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* ============================
+   ROHISER – Biru Soft & Putih Bersih
+   #008CBA based palette
+   ============================ */
+
+:root {
+  /* Primary – Biru Soft (#008CBA) */
+  --primary-50: #e6f4f9;
+  --primary-100: #b3deec;
+  --primary-200: #80c9de;
+  --primary-300: #4db3d1;
+  --primary-400: #269ec5;
+  --primary-500: #008CBA;
+  --primary-600: #007aa3;
+  --primary-700: #00688b;
+  --primary-800: #005673;
+  --primary-900: #00445c;
+
+  /* Neutral */
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5e1;
+  --neutral-400: #94a3b8;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-700: #334155;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+
+  /* Semantic */
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #008CBA;
+
+  /* Surfaces (Light Mode) */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --hover-bg: #f1f5f9;
+
+  --background: var(--bg-main);
+  --foreground: var(--text-main);
+  --card-bg: var(--bg-card);
+  --card-border: var(--border-color);
+
+  /* Alerts */
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+  --danger-text: #dc2626;
+
+  /* Status Badges */
+  --status-pending-bg: #fef3c7;
+  --status-pending-text: #92400e;
+  --status-progress-bg: #e0e7ff;
+  --status-progress-text: #4338ca;
+  --status-waiting-bg: #b3deec;
+  --status-waiting-text: #00688b;
+  --status-completed-bg: #dcfce7;
+  --status-completed-text: #15803d;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark {
+  /* Surfaces (Dark Mode) */
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --hover-bg: #334155;
+
+  /* Alerts (Dark Mode) */
+  --danger-bg: #450a0a;
+  --danger-border: #7f1d1d;
+  --danger-text: #fca5a5;
+
+  /* Primary Overrides (Dark Mode) */
+  --primary-50: rgba(0, 140, 186, 0.1);
+  --primary-100: rgba(0, 140, 186, 0.2);
+  --primary-700: #80c9de;
+
+  /* Status Badges (Dark Mode) */
+  --status-pending-bg: rgba(245, 158, 11, 0.2);
+  --status-pending-text: #fcd34d;
+  --status-progress-bg: rgba(99, 102, 241, 0.2);
+  --status-progress-text: #a5b4fc;
+  --status-waiting-bg: rgba(0, 140, 186, 0.2);
+  --status-waiting-text: #80c9de;
+  --status-completed-bg: rgba(34, 197, 94, 0.2);
+  --status-completed-text: #86efac;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, 'Inter', 'Segoe UI', sans-serif);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cards */
+.solid-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.solid-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,140,186,0.08);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.badge-primary { background: var(--primary-100); color: var(--primary-700); }
+.badge-success { background: #dcfce7; color: #15803d; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-danger  { background: #fee2e2; color: #991b1b; }
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; }
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--primary-200); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-300); }
+
+/* Focus */
+input:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--primary-400);
+  outline-offset: 2px;
+}
