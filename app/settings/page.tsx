@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import ThemeToggle from "@/components/ThemeToggle";
+import NotificationDropdown from "@/components/NotificationDropdown";
 import type { User } from "@/lib/types";
 import { Search, Bell, Settings } from "lucide-react";
 
@@ -31,7 +32,7 @@ export default function SettingsPage() {
       <Sidebar userName={user.name} userRole={user.role?.name || user.role?.label || "Anggota"} userInitials={initials} />
       <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
         {/* Header */}
-        <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px" }}>
+        <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
           <div>
             <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-main)", letterSpacing: "-0.02em" }}>Pengaturan Akun</h1>
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Atur preferensi akun dan aplikasi</p>
@@ -41,9 +42,7 @@ export default function SettingsPage() {
               <Search size={15} style={{ color: "var(--text-muted)" }} />
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
             </div>
-            <button style={{ width: "38px", height: "38px", borderRadius: "10px", background: "var(--bg-card)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <Bell size={17} style={{ color: "var(--text-muted)" }} />
-            </button>
+            <NotificationDropdown currentUser={user} />
           </div>
         </header>
 

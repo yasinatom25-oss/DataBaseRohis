@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@/lib/types";
 import {
@@ -11,12 +12,12 @@ import ProgressBar from "@/components/ProgressBar";
 import AmanahList from "@/components/AmanahList";
 import AttendancePieChart from "@/components/AttendancePieChart";
 import EditTaskModal from "@/components/EditTaskModal";
+import NotificationDropdown from "@/components/NotificationDropdown";
 import {
   TrendingUp,
   ClipboardList,
   CalendarCheck,
   BookOpen,
-  Bell,
   Search,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -240,6 +241,8 @@ export default function DashboardPage() {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "28px",
+            position: "relative",
+            zIndex: 100,
           }}
         >
           <div>
@@ -259,55 +262,11 @@ export default function DashboardPage() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {/* Search */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "8px 14px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border-color)",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-            >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px", cursor: "pointer" }}>
               <Search size={15} style={{ color: "var(--text-muted)" }} />
-              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
-                Cari...
-              </span>
+              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
             </div>
-
-            {/* Notification */}
-            <button
-              id="notification-bell"
-              style={{
-                width: "38px",
-                height: "38px",
-                borderRadius: "10px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border-color)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                position: "relative",
-              }}
-            >
-              <Bell size={17} style={{ color: "var(--text-muted)" }} />
-              <div
-                style={{
-                  position: "absolute",
-                  top: "7px",
-                  right: "7px",
-                  width: "7px",
-                  height: "7px",
-                  borderRadius: "50%",
-                  background: "var(--danger-text)",
-                  border: "1.5px solid var(--bg-card)",
-                }}
-              />
-            </button>
+            <NotificationDropdown currentUser={user} />
           </div>
         </header>
 
@@ -487,9 +446,9 @@ export default function DashboardPage() {
                   Ibadah bulan ini — rata-rata {mutabaahAverage}%
                 </p>
               </div>
-              <span className="badge badge-primary">
-                {user.gender === "ikhwan" ? "Ikhwan" : "Akhwat"}
-              </span>
+              <Link href="/mutabaah" className="badge badge-primary" style={{ textDecoration: "none" }}>
+                Lihat Semua
+              </Link>
             </div>
             <div
               style={{
@@ -635,7 +594,8 @@ export default function DashboardPage() {
                   {pendingTasks.length} tugas belum selesai
                 </p>
               </div>
-              <button
+              <Link
+                href="/amanah"
                 style={{
                   padding: "6px 14px",
                   borderRadius: "8px",
@@ -646,10 +606,11 @@ export default function DashboardPage() {
                   fontWeight: 600,
                   cursor: "pointer",
                   transition: "all var(--transition-fast)",
+                  textDecoration: "none",
                 }}
               >
                 Lihat Semua
-              </button>
+              </Link>
             </div>
             <AmanahList tasks={tasks} onTaskClick={(task) => setSelectedTask(task)} />
           </div>

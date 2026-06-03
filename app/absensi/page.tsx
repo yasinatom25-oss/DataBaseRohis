@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import type { User } from "@/lib/types";
-import { Search, Bell, Plus, Users, LayoutDashboard, Trash2 } from "lucide-react";
+import { Search, Plus, Users, LayoutDashboard, Trash2 } from "lucide-react";
 import AttendancePieChart from "@/components/AttendancePieChart";
 import CreateMeetingModal from "@/components/CreateMeetingModal";
 import FillAttendanceModal from "@/components/FillAttendanceModal";
 import { mockAttendanceSummary } from "@/lib/mock-data";
 import { canViewGlobalData, isKadiv, isBPH, canCreateRecords, formatRoleName } from "@/lib/rbac";
-
+import NotificationDropdown from "@/components/NotificationDropdown";
 import { supabase } from "@/lib/supabase";
 
 export default function AbsensiPage() {
@@ -128,7 +128,7 @@ export default function AbsensiPage() {
       />
       <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
         {/* Header */}
-        <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px" }}>
+        <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
           <div>
             <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-main)", letterSpacing: "-0.02em" }}>Absensi Kehadiran</h1>
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Rekap kehadiran rapat pleno dan divisi</p>
@@ -138,9 +138,7 @@ export default function AbsensiPage() {
               <Search size={15} style={{ color: "var(--text-muted)" }} />
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
             </div>
-            <button style={{ width: "38px", height: "38px", borderRadius: "10px", background: "var(--bg-card)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <Bell size={17} style={{ color: "var(--text-muted)" }} />
-            </button>
+            <NotificationDropdown currentUser={user} />
           </div>
         </header>
 
