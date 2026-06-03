@@ -74,8 +74,6 @@ export default function AbsensiPage() {
   }
 
   async function handleMarkCompleted(meetingId: string) {
-    const ok = window.confirm("Tandai rapat ini sebagai 'Sudah Terlaksana'? Rapat akan dipindahkan ke Riwayat Rapat.");
-    if (!ok) return;
     try {
       const { data, error } = await supabase.from("attendances").update({ status: "Completed" }).eq("id", meetingId).select();
       if (error) throw error;
