@@ -38,8 +38,8 @@ export default function IkarisPage() {
     }
   }, [router]);
 
-  async function fetchIkarisData(user: User, monthFilter: string) {
-    setLoading(true);
+  async function fetchIkarisData(user: User, monthFilter: string, isBackground = false) {
+    if (!isBackground) setLoading(true);
     try {
       // 1. Fetch Users based on role
       let usersQuery = supabase
@@ -128,8 +128,11 @@ export default function IkarisPage() {
         if (error) throw error;
       }
       
-      // Refresh
-      fetchIkarisData(currentUser, selectedMonth);
+      // Optimistic update
+      setMembersData(prev => prev.map(m => m.id === member.id ? { ...m, status: newStatus } : m));
+      
+      // Background Refresh
+      fetchIkarisData(currentUser, selectedMonth, true);
     } catch (err: any) {
       console.error(err);
       alert("Gagal memperbarui status: " + err.message);
