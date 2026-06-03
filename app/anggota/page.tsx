@@ -57,16 +57,25 @@ export default function AnggotaPage() {
     }
     setLoading(false);
   }
-
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Apakah Anda yakin ingin menghapus ${name} dari sistem?`)) return;
+    if (!confirm(`Apakah Anda yakin ingin menghapus ${name} dari sistem? Semua data terkait (mutabaah, amanah, absensi) juga akan terhapus.`)) return;
     try {
-      // Delete user
-      await supabase.from("users").delete().eq("id", id);
+      // Cascading deletes (karena foreign key tidak memiliki ON DELETE CASCADE)
+      await supabase.from("mutabaah_logs").delete().eq("user_id", id);
+      await supabase.from("attendance_records").delete().eq("user_id", id);
+      await supabase.from("tasks").delete().eq("assignee_id", id);
+      await supabase.from("tasks").delete().eq("assigner_id", id);
+      await supabase.from("attendances").delete().eq("creator_id", id);
+      
+      // Hapus pengguna
+      const { error } = await supabase.from("users").delete().eq("id", id);
+      if (error) throw error;
+      
+      alert(`${name} berhasil dihapus dari sistem.`);
       fetchData();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Gagal menghapus pengguna.");
+      alert("Gagal menghapus pengguna: " + (err.message || "Unknown error"));
     }
   };
 
