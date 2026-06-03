@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { User } from "@/lib/types";
-import { Search, Bell, BookOpen, Clock, AlertCircle } from "lucide-react";
+import { Search, Bell, BookOpen, Clock, AlertCircle, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import { mockMutabaahHistory } from "@/lib/mock-data";
 import { canViewGlobalData, isKadiv, formatRoleName } from "@/lib/rbac";
 import MutabaahFormModal from "@/components/MutabaahFormModal";
+import MutabaahDetailModal from "@/components/MutabaahDetailModal";
 import NotificationDropdown from "@/components/NotificationDropdown";
 import { supabase } from "@/lib/supabase";
 
@@ -18,6 +20,12 @@ export default function MutabaahPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [myLatestLog, setMyLatestLog] = useState<any>(null);
+  const [selectedDetailLog, setSelectedDetailLog] = useState<any>(null);
+  const [exportMonth, setExportMonth] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -52,7 +60,8 @@ export default function MutabaahPage() {
             name: d.user?.name || "System",
             department: d.user?.department?.name || "BPH",
             date: d.log_date,
-            average: avg
+            average: avg,
+            raw: d
           };
         }));
         
@@ -81,14 +90,79 @@ export default function MutabaahPage() {
 
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
+  const handleExportExcel = () => {
+    const targetPrefix = exportMonth;
+    const dataToExport = history.filter(log => log.date.startsWith(targetPrefix));
+
+    if (dataToExport.length === 0) {
+      alert(`Tidak ada data mutabaah untuk bulan ${exportMonth}`);
+      return;
+    }
+
+    const depts: Record<string, any[]> = {};
+    
+    // Parameter names for headers
+    const paramNames = [
+      "Shalat Tepat Waktu", "Shalat Tahajud", "Shalat Duha", "Shalat Rawatib", 
+      "Saum Sunnah", "Tilawah", "Tambahan Hafalan", "Capaian Hafalan", 
+      "Al-Matsurat Pagi", "Al-Matsurat Sore", "Birrul Walidain", "Infaq", "Menambah Wawasan Islami"
+    ];
+
+    dataToExport.forEach(log => {
+      const dept = log.department || "Lainnya";
+      if (!depts[dept]) depts[dept] = [];
+      
+      const row: any = {
+        "Tanggal Pengisian": new Date(log.date).toLocaleDateString("id-ID"),
+        "Nama Anggota": log.name,
+        "Rata-rata Capaian (%)": log.average,
+      };
+
+      // Add all 13 parameters
+      for (let i = 1; i <= 13; i++) {
+        row[paramNames[i-1]] = log.raw[`param_${i}_val`] || 0;
+      }
+      row["Keterangan Hafalan"] = log.raw.hafalan_text || "-";
+
+      depts[dept].push(row);
+    });
+
+    const wb = XLSX.utils.book_new();
+    Object.keys(depts).forEach(deptName => {
+      const ws = XLSX.utils.json_to_sheet(depts[deptName]);
+      // Make columns wider
+      const wscols = [
+        {wch: 15}, // Tanggal
+        {wch: 25}, // Nama
+        {wch: 20}, // Rata-rata
+        ...Array(13).fill({wch: 20}), // 13 params
+        {wch: 40}  // Keterangan
+      ];
+      ws['!cols'] = wscols;
+      
+      const safeSheetName = deptName.substring(0, 31).replace(/[\\/?*\[\]]/g, "_");
+      XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+    });
+
+    XLSX.writeFile(wb, `Laporan_Mutabaah_${exportMonth}.xlsx`);
+  };
+
   // Logic: Mutabaah can be filled anytime, limit 1 per week (handled by myLatestLog edit logic)
   const isTimeWindowOpen = true;
 
   // Filter Data Logic
   const filteredHistory = history.filter((log) => {
-    if (activeTab === "personal") return log.userId === user.id;
-    if (activeTab === "divisi") return log.department === user.department?.name;
-    return true; // "semua"
+    if (activeTab === "personal" && log.userId !== user.id) return false;
+    if (activeTab === "divisi" && log.department !== user.department?.name) return false;
+    
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      if (!log.name.toLowerCase().includes(q) && !log.department.toLowerCase().includes(q)) {
+        return false;
+      }
+    }
+    
+    return true;
   });
 
   return (
@@ -101,9 +175,37 @@ export default function MutabaahPage() {
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Pantau dan catat target ibadah mingguan Anda</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px", cursor: "pointer" }}>
+            {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "var(--bg-card)", padding: "4px", borderRadius: "10px", border: "1px solid var(--border-color)" }}>
+                <input 
+                  type="month" 
+                  value={exportMonth}
+                  onChange={(e) => setExportMonth(e.target.value)}
+                  style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px 8px" }}
+                />
+                <button 
+                  onClick={handleExportExcel}
+                  style={{ 
+                    display: "flex", alignItems: "center", gap: "6px", 
+                    padding: "6px 12px", background: "#10b981", color: "#ffffff", 
+                    border: "none", borderRadius: "6px", fontSize: "0.85rem", 
+                    fontWeight: 600, cursor: "pointer", transition: "all 0.2s" 
+                  }}
+                  title="Export data bulan ini ke Excel"
+                >
+                  <Download size={16} /> Export
+                </button>
+              </div>
+            )}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px" }}>
               <Search size={15} style={{ color: "var(--text-muted)" }} />
-              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
+              <input 
+                type="text"
+                placeholder="Cari anggota..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.8rem", color: "var(--text-main)", width: "120px" }}
+              />
             </div>
             <NotificationDropdown currentUser={user} />
           </div>
@@ -184,6 +286,7 @@ export default function MutabaahPage() {
                     <th style={{ padding: "12px", fontWeight: 600 }}>Divisi</th>
                     <th style={{ padding: "12px", fontWeight: 600 }}>Tanggal Isi</th>
                     <th style={{ padding: "12px", fontWeight: 600 }}>Pencapaian Rata-rata</th>
+                    <th style={{ padding: "12px", fontWeight: 600, textAlign: "right" }}>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -199,6 +302,14 @@ export default function MutabaahPage() {
                           </div>
                           <span style={{ fontWeight: 600, color: "var(--text-main)", width: "40px" }}>{log.average}%</span>
                         </div>
+                      </td>
+                      <td style={{ padding: "12px", textAlign: "right" }}>
+                        <button 
+                          onClick={() => setSelectedDetailLog(log)}
+                          style={{ padding: "6px 12px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "6px", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
+                        >
+                          Detail
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -218,6 +329,13 @@ export default function MutabaahPage() {
             setIsModalOpen(false);
             fetchMutabaah(user);
           }} 
+        />
+      )}
+
+      {selectedDetailLog && (
+        <MutabaahDetailModal 
+          log={selectedDetailLog} 
+          onClose={() => setSelectedDetailLog(null)} 
         />
       )}
     </div>

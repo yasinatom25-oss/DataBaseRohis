@@ -40,7 +40,8 @@ export default function Sidebar() {
   if (!user) return null;
 
   const safeRole = typeof user.role === 'string' ? user.role : (user.role?.name || user.role?.label || "");
-  const isKetumOrPembina = safeRole.toLowerCase().includes("ketua umum") || safeRole.toLowerCase().includes("pembina");
+  const safeRoleLower = safeRole.toLowerCase();
+  const isKetumOrPembina = safeRoleLower.includes("ketua umum") || safeRoleLower.includes("ketua_umum") || safeRoleLower.includes("pembina");
 
   const userName = user.name;
   const userInitials = userName.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase();

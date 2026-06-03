@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { supabase } from "@/lib/supabase";
 import { User, TaskStatus, Task } from "@/lib/types";
-import { canCreateRecords } from "@/lib/rbac";
+import { canCreateRecords, canViewGlobalData } from "@/lib/rbac";
 
 interface EditTaskModalProps {
   isOpen: boolean;
@@ -36,16 +36,19 @@ export default function EditTaskModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const isEditor = canCreateRecords(currentUser.role.name);
+  const isOwner = task?.assignerId === currentUser.id || canViewGlobalData(currentUser.role.name);
+  const isAssignee = task?.assigneeId === currentUser.id;
+
+  const [editTitle, setEditTitle] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+  const [editDeadline, setEditDeadline] = useState("");
 
   useEffect(() => {
     if (isOpen && task) {
       setStatus(task.status as TaskStatus);
-      if (task.isTemplate) {
-        setRecurrenceInterval((task.recurrenceInterval as any) || "monthly");
-        setRecurrenceDay(task.recurrenceDay || 1);
-        setDeadlineDurationDays(task.deadlineDurationDays || 7);
-      }
+      setEditTitle(task.title || "");
+      setEditDesc(task.description || "");
+      setEditDeadline(task.deadline || "");
       setError("");
     }
   }, [isOpen, task]);
@@ -53,28 +56,34 @@ export default function EditTaskModal({
   if (!task) return null;
 
   const handleUpdate = async () => {
-    if (!isEditor) return;
+    if (!isOwner && !isAssignee) return;
     setLoading(true);
     setError("");
 
     try {
       let updatePayload: Record<string, unknown> = {};
-      if (task.isTemplate) {
-        updatePayload = {
-          recurrence_interval: recurrenceInterval,
-          recurrence_day: recurrenceDay,
-          deadline_duration_days: deadlineDurationDays,
+      
+      // If Owner, they can edit everything including status.
+      // If only Assignee, they can only edit status.
+      if (isOwner) {
+        updatePayload = { 
+          title: editTitle, 
+          description: editDesc, 
+          deadline: editDeadline, 
+          status 
         };
-      } else {
+      } else if (isAssignee) {
         updatePayload = { status };
       }
 
-      const { error: updateError } = await supabase
-        .from("tasks")
-        .update(updatePayload)
-        .eq("id", task.id);
-
-      if (updateError) throw updateError;
+      if (Object.keys(updatePayload).length > 0) {
+        const { error: updateError } = await supabase
+          .from("tasks")
+          .update(updatePayload)
+          .eq("id", task.id);
+        
+        if (updateError) throw updateError;
+      }
 
       onTaskUpdated();
       onClose();
@@ -87,7 +96,7 @@ export default function EditTaskModal({
   };
 
   const handleDelete = async () => {
-    if (!isEditor) return;
+    if (!isOwner) return;
     if (!window.confirm("Apakah Anda yakin ingin menghapus amanah ini?")) return;
     
     setLoading(true);
@@ -129,67 +138,60 @@ export default function EditTaskModal({
           </div>
         )}
 
-        {/* Info */}
+        {/* Info or Edit Form */}
         <div style={{ background: "var(--bg-main)", padding: "16px", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-          <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "8px", marginTop: 0 }}>
-            {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.75rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
-            {task.title}
-          </h3>
-          <p style={{ fontSize: "0.85rem", color: "var(--text-main)", lineHeight: "1.5", marginBottom: "16px", marginTop: 0 }}>
-            {task.description || "Tidak ada deskripsi."}
-          </p>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "0.82rem" }}>
-            {!task.isTemplate && (
+          {isOwner ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               <div>
-                <div style={{ color: "var(--text-muted)", marginBottom: "2px" }}>Tenggat Waktu:</div>
-                <div style={{ fontWeight: 600, color: "var(--text-main)" }}>{formatDate(task.deadline)}</div>
+                <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Judul Tugas</label>
+                <input value={editTitle} onChange={e => setEditTitle(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none", fontWeight: 600 }} />
               </div>
-            )}
-            <div>
-              <div style={{ color: "var(--text-muted)", marginBottom: "2px" }}>Penugasan Dari:</div>
-              <div style={{ fontWeight: 600, color: "var(--text-main)" }}>{task.assignerName || "Sistem"}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Template Editing or Status Editing */}
-        {task.isTemplate ? (
-          isEditor ? (
-            <div style={{ padding: "16px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-              <h4 style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: "12px", color: "#008CBA" }}>Pengaturan Rutin</h4>
+              <div>
+                <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Deskripsi</label>
+                <textarea value={editDesc} onChange={e => setEditDesc(e.target.value)} rows={3} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
+              </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-main)", marginBottom: "4px" }}>Siklus</label>
-                  <select value={recurrenceInterval} onChange={e => setRecurrenceInterval(e.target.value as any)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }}>
-                    <option value="monthly">Bulanan</option>
-                    <option value="weekly">Pekanan</option>
-                  </select>
+                  <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Tenggat Waktu</label>
+                  <input type="date" value={editDeadline} onChange={e => setEditDeadline(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-main)", marginBottom: "4px" }}>
-                    {recurrenceInterval === "monthly" ? "Pada Tanggal (1-31)" : "Pada Hari (0=Ahad, 1=Senin)"}
-                  </label>
-                  <input type="number" min="0" max="31" value={recurrenceDay} onChange={e => setRecurrenceDay(parseInt(e.target.value) || 0)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
-                </div>
-                <div style={{ gridColumn: "1 / -1" }}>
-                  <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-main)", marginBottom: "4px" }}>Lama Pengerjaan (Hari Deadline)</label>
-                  <input type="number" min="1" value={deadlineDurationDays} onChange={e => setDeadlineDurationDays(parseInt(e.target.value) || 1)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
+                  <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Penugasan Dari</label>
+                  <div style={{ padding: "8px", background: "var(--bg-card)", borderRadius: "6px", border: "1px solid var(--border-color)", color: "var(--text-main)", fontSize: "0.85rem" }}>
+                    {task.assignerName || "Sistem"}
+                  </div>
                 </div>
               </div>
             </div>
           ) : (
-            <div style={{ padding: "10px", background: "var(--hover-bg)", borderRadius: "8px", fontSize: "0.85rem", color: "var(--text-muted)" }}>
-              Ini adalah cetakan tugas rutin. Hanya pembuat tugas yang dapat mengubah siklusnya.
+            <div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "8px", marginTop: 0 }}>
+                {task.title}
+              </h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--text-main)", lineHeight: "1.5", marginBottom: "16px", marginTop: 0 }}>
+                {task.description || "Tidak ada deskripsi."}
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "0.82rem" }}>
+                <div>
+                  <div style={{ color: "var(--text-muted)", marginBottom: "2px" }}>Tenggat Waktu:</div>
+                  <div style={{ fontWeight: 600, color: "var(--text-main)" }}>{formatDate(task.deadline)}</div>
+                </div>
+                <div>
+                  <div style={{ color: "var(--text-muted)", marginBottom: "2px" }}>Penugasan Dari:</div>
+                  <div style={{ fontWeight: 600, color: "var(--text-main)" }}>{task.assignerName || "Sistem"}</div>
+                </div>
+              </div>
             </div>
-          )
-        ) : (
+          )}
+        </div>
+
+        {/* Status Editing */}
           <div>
             <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "6px" }}>
               Status Saat Ini
             </label>
             
-            {isEditor ? (
+            {isOwner || isAssignee ? (
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
@@ -225,11 +227,10 @@ export default function EditTaskModal({
               </div>
             )}
           </div>
-        )}
 
         {/* Actions */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "10px" }}>
-          {isEditor ? (
+          {isOwner ? (
             <button
               type="button"
               onClick={handleDelete}
@@ -250,11 +251,11 @@ export default function EditTaskModal({
               Tutup
             </button>
             
-            {isEditor && (
+            {(isOwner || isAssignee) && (
               <button
                 onClick={handleUpdate}
                 style={{ padding: "10px 18px", borderRadius: "8px", border: "none", background: "#008CBA", color: "#ffffff", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}
-                disabled={loading || (!task.isTemplate && status === task.status)}
+                disabled={loading}
               >
                 {loading ? "Menyimpan..." : "Simpan Perubahan"}
               </button>

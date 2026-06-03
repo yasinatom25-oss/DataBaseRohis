@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { User, Task } from "@/lib/types";
-import { Search, FileText, CheckCircle2, Clock } from "lucide-react";
+import { Search, FileText, CheckCircle2, Clock, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import { mockTasks, mockUsers } from "@/lib/mock-data";
 import { canViewGlobalData, isKadiv, formatRoleName } from "@/lib/rbac";
 import NotificationDropdown from "@/components/NotificationDropdown";
@@ -14,7 +15,11 @@ export default function LaporanPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState("Juni 2025");
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [searchQuery, setSearchQuery] = useState("");
   const [groupedTasks, setGroupedTasks] = useState<Record<string, { user: User; tasks: Task[] }>>({});
 
   useEffect(() => {
@@ -34,7 +39,8 @@ export default function LaporanPage() {
       let query = supabase
         .from("tasks")
         .select("*, assignee:users!assignee_id(*, role:roles(*), department:departments(*))")
-        .neq("status", "completed");
+        .neq("status", "completed")
+        .eq("is_template", false);
 
       // Filter tasks based on role visibility
       if (!canViewGlobalData(currentUser.role.name) && !isKadiv(currentUser.role.name)) {
@@ -84,6 +90,53 @@ export default function LaporanPage() {
 
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
+  // Derived state for filtering
+  const filteredGroups = Object.values(groupedTasks)
+    .map(({ user: assignee, tasks }) => {
+      // Filter tasks by month
+      const monthTasks = tasks.filter(t => t.deadline?.startsWith(selectedMonth));
+      return { user: assignee, tasks: monthTasks };
+    })
+    .filter(g => g.tasks.length > 0) // Only users with tasks in this month
+    .filter(g => {
+      // Filter by search query
+      if (!searchQuery.trim()) return true;
+      return g.user.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+
+  const handleExportExcel = () => {
+    if (filteredGroups.length === 0) {
+      alert("Tidak ada data untuk diekspor pada bulan ini.");
+      return;
+    }
+    
+    const wb = XLSX.utils.book_new();
+    const sheetsData: Record<string, any[]> = {};
+    
+    filteredGroups.forEach(g => {
+      const deptName = g.user.department?.name || "BPH";
+      if (!sheetsData[deptName]) sheetsData[deptName] = [];
+      
+      g.tasks.forEach(t => {
+        sheetsData[deptName].push({
+          "Nama Anggota": g.user.name,
+          "Tugas": t.title,
+          "Deskripsi": t.description || "-",
+          "Deadline": t.deadline,
+          "Status": t.status === "pending" ? "Belum Mulai" : "Menunggu Review"
+        });
+      });
+    });
+
+    Object.keys(sheetsData).forEach(dept => {
+      const safeSheetName = dept.replace(/[\[\]\*\\\/\?]/g, "").substring(0, 31);
+      const ws = XLSX.utils.json_to_sheet(sheetsData[dept]);
+      XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
+    });
+
+    XLSX.writeFile(wb, `Laporan_Sisa_Amanah_${selectedMonth}.xlsx`);
+  };
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
       <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
@@ -94,9 +147,15 @@ export default function LaporanPage() {
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Pantau sisa amanah bulanan per anggota</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px", cursor: "pointer" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px" }}>
               <Search size={15} style={{ color: "var(--text-muted)" }} />
-              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
+              <input 
+                type="text"
+                placeholder="Cari anggota..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.8rem", color: "var(--text-main)", width: "120px" }}
+              />
             </div>
             <NotificationDropdown currentUser={user} />
           </div>
@@ -106,31 +165,31 @@ export default function LaporanPage() {
         <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "16px 24px", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
              <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)" }}>Laporan Bulan:</span>
-             <select 
+             <input 
+               type="month"
                value={selectedMonth}
                onChange={(e) => setSelectedMonth(e.target.value)}
                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-main)", outline: "none", background: "var(--bg-main)" }}
-             >
-               <option>Mei 2025</option>
-               <option>Juni 2025</option>
-               <option>Juli 2025</option>
-             </select>
+             />
            </div>
-           <button style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
-             <FileText size={16} /> Export PDF
+           <button 
+             onClick={handleExportExcel}
+             style={{ padding: "8px 16px", background: "#10b981", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}
+           >
+             <Download size={16} /> Export Excel
            </button>
         </div>
 
         {/* Grouped Tasks */}
         <div className="animate-fade-in-up animate-delay-200" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {Object.keys(groupedTasks).length === 0 ? (
+          {filteredGroups.length === 0 ? (
              <div className="solid-card" style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>
                <CheckCircle2 size={48} style={{ color: "#16a34a", opacity: 0.5, margin: "0 auto 16px" }} />
                <h3 style={{ fontSize: "1.1rem", color: "var(--text-main)", fontWeight: 600, marginBottom: "4px" }}>Semua Amanah Selesai!</h3>
-               <p style={{ fontSize: "0.85rem" }}>Tidak ada amanah yang tertunda untuk bulan ini.</p>
+               <p style={{ fontSize: "0.85rem" }}>Tidak ada amanah yang tertunda untuk kriteria pencarian ini.</p>
              </div>
           ) : (
-            Object.values(groupedTasks).map(({ user: assignee, tasks }) => (
+            filteredGroups.map(({ user: assignee, tasks }) => (
               <div key={assignee.id} className="solid-card" style={{ padding: "24px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid var(--hover-bg)", paddingBottom: "16px", marginBottom: "16px" }}>
                   <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "linear-gradient(135deg, #008CBA, #80c9de)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontWeight: 700, fontSize: "0.9rem" }}>

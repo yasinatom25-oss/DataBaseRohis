@@ -95,16 +95,41 @@ export default function CreateTaskModal({
 
       if (taskType === "terencana") {
         payload.deadline = deadline;
+        const { error: insertError } = await supabase.from("tasks").insert([payload]);
+        if (insertError) throw insertError;
       } else {
         payload.is_template = true;
         payload.recurrence_interval = recurrenceInterval;
         payload.recurrence_day = parseInt(recurrenceDay, 10);
         payload.deadline_duration_days = parseInt(deadlineDuration, 10);
+        payload.last_spawned_at = new Date().toISOString().split("T")[0]; // mark as spawned today
+
+        const { data: insertedTemplate, error: insertError } = await supabase
+          .from("tasks")
+          .insert([payload])
+          .select("*")
+          .single();
+
+        if (insertError) throw insertError;
+
+        // Automatically spawn the FIRST concrete task so it appears on the board!
+        const deadlineDate = new Date();
+        deadlineDate.setDate(deadlineDate.getDate() + parseInt(deadlineDuration, 10));
+        
+        const firstInstancePayload = {
+          title,
+          description,
+          assignee_id: assigneeId,
+          assigner_id: currentUser.id,
+          status: "pending",
+          task_type: "rutin",
+          is_template: false,
+          deadline: deadlineDate.toISOString().split("T")[0],
+          parent_template_id: insertedTemplate.id
+        };
+        const { error: spawnError } = await supabase.from("tasks").insert([firstInstancePayload]);
+        if (spawnError) throw spawnError;
       }
-
-      const { error: insertError } = await supabase.from("tasks").insert([payload]);
-
-      if (insertError) throw insertError;
 
       // Success
       setTitle("");

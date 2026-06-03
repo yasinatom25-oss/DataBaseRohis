@@ -21,7 +21,6 @@ export default function AmanahPage() {
   const [tasks, setTasks] = useState<any[]>(mockTasks);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
-  const [showTemplates, setShowTemplates] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -71,9 +70,8 @@ export default function AmanahPage() {
         }));
 
         const filteredTasks = processedTasks.filter((t) => {
-          // Pisahkan template dan tugas nyata
-          if (showTemplates && !t.isTemplate) return false;
-          if (!showTemplates && t.isTemplate) return false;
+          // Never show templates in UI (they are hidden background routines)
+          if (t.isTemplate) return false;
 
           if (canViewGlobalData(currentUser.role.name)) return true;
           if (isKadiv(currentUser.role.name)) {
@@ -133,15 +131,6 @@ export default function AmanahPage() {
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Daftar tugas kepanitiaan dan organisasi</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {canCreateRecords(user.role.name) && (
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.85rem", color: "var(--text-muted)", cursor: "pointer", marginRight: "12px" }}>
-                <input type="checkbox" checked={showTemplates} onChange={(e) => {
-                  setShowTemplates(e.target.checked);
-                  setTimeout(() => fetchTasks(user), 0);
-                }} />
-                Lihat Master Rutin
-              </label>
-            )}
             <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px", cursor: "pointer" }}>
               <Search size={15} style={{ color: "var(--text-muted)" }} />
               <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Cari...</span>
