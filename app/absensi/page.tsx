@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@/lib/types";
 import { Search, Plus, Users, LayoutDashboard, Trash2 } from "lucide-react";
@@ -49,6 +50,9 @@ export default function AbsensiPage() {
           status: d.status || "Scheduled",
           creatorId: d.creator_id,
           creatorName: d.creator?.name || "System",
+          notetakerId: d.notetaker_id || null,
+          locationType: d.location_type || null,
+          locationDetail: d.location_detail || null,
           department: d.event_type === "Rapat Umum" ? "Seluruh Rohis" : currentUser.department?.name || "Divisi",
         })));
       }
@@ -265,12 +269,13 @@ export default function AbsensiPage() {
                         </span>
                         {canCreateRecords(user.role.name) ? (
                           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "center" }}>
+                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#10b981", fontWeight: 600, textDecoration: "none" }}>Detail & Notulensi</Link>
                             <button onClick={() => handleMarkCompleted(m.id)} style={{ border: "none", outline: "none", fontSize: "0.75rem", color: "#16a34a", fontWeight: 600, cursor: "pointer", background: "#dcfce7", padding: "4px 8px", borderRadius: "4px" }}>✓ Terlaksana</button>
                             <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Isi Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
                           </div>
                         ) : (
-                          <div onClick={() => alert("Fitur detail presensi untuk anggota sedang dikembangkan.")} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Lihat Detail</div>
+                          <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
                         )}
                       </div>
                     </div>
@@ -307,11 +312,12 @@ export default function AbsensiPage() {
                         </span>
                         {canCreateRecords(user.role.name) ? (
                           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "center" }}>
+                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#10b981", fontWeight: 600, textDecoration: "none" }}>Detail & Notulensi</Link>
                             <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Edit Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
                           </div>
                         ) : (
-                          <div onClick={() => alert("Fitur detail presensi untuk anggota sedang dikembangkan.")} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Lihat Detail</div>
+                          <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
                         )}
                       </div>
                     </div>

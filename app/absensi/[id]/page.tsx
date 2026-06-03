@@ -51,10 +51,15 @@ export default function MeetingDetailPage() {
   const [notes, setNotes] = useState("");
   const [notetakerName, setNotetakerName] = useState("Belum ditentukan");
 
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
   useEffect(() => {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
-      setUser(JSON.parse(stored));
+      const parsedUser = JSON.parse(stored);
+      setUser(parsedUser);
+      // Use stored user ID directly — it's the users.id (UUID from users table)
+      setCurrentUserId(parsedUser.id);
     } else {
       router.push("/login");
       return;
@@ -119,7 +124,7 @@ export default function MeetingDetailPage() {
     return <div style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Rapat tidak ditemukan.</div>;
   }
 
-  const isNotetaker = meeting.notetaker_id === user.id;
+  const isNotetaker = !!(currentUserId && meeting.notetaker_id && meeting.notetaker_id === currentUserId);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
