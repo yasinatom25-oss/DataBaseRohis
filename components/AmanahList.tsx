@@ -158,6 +158,8 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
               >
                 <span>Dari: {task.assignerName}</span>
                 <span>•</span>
+                <span>Untuk: {task.assigneeName}</span>
+                <span>•</span>
                 <span
                   style={{
                     color: isUrgent ? "var(--danger-text)" : "var(--text-muted)",

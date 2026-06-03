@@ -53,11 +53,11 @@ export default function DashboardPage() {
       // 1. Fetch Tasks
       const { data: tasksData, error: tasksError } = await supabase
         .from("tasks")
-        .select("*")
+        .select("*, assigner:users!assigner_id(name), assignee:users!assignee_id(name)")
         .eq("assignee_id", currentUser.id);
       
       if (tasksData && tasksData.length > 0) {
-        setTasks(tasksData.map(d => ({
+        setTasks(tasksData.map((d: any) => ({
           id: d.id,
           title: d.title,
           description: d.description,
@@ -65,6 +65,8 @@ export default function DashboardPage() {
           deadline: d.deadline,
           assigneeId: d.assignee_id,
           assignerId: d.assigner_id,
+          assignerName: d.assigner?.name || "System",
+          assigneeName: d.assignee?.name || "Anggota",
         })));
       } else {
         setTasks([]);

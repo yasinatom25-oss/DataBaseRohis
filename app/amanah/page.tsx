@@ -19,6 +19,7 @@ export default function AmanahPage() {
   const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
   const [tasks, setTasks] = useState<any[]>(mockTasks);
+  const [statusFilter, setStatusFilter] = useState<string>("Semua");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any | null>(null);
 
@@ -92,6 +93,8 @@ export default function AmanahPage() {
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
   let groupedTasks: { groupName: string; tasks: any[] }[] = [];
+  const finalFilteredTasks = tasks.filter(t => statusFilter === "Semua" || t.status === statusFilter);
+
   if (canViewGlobalData(user.role.name)) {
     const groups: Record<string, any[]> = {
       "Badan Pengurus Harian (BPH)": [],
@@ -100,7 +103,7 @@ export default function AmanahPage() {
       "Fundrising": [],
       "Human Resource": []
     };
-    tasks.forEach(t => {
+    finalFilteredTasks.forEach(t => {
       let key = t.departmentName || "BPH";
       if (key === "BPH") key = "Badan Pengurus Harian (BPH)";
       if (key === "Tarbiyah") key = "Tarbiyah Islamiyah";
@@ -111,14 +114,14 @@ export default function AmanahPage() {
     groupedTasks = Object.keys(groups).map(k => ({ groupName: k, tasks: groups[k] }));
   } else if (isKadiv(user.role.name)) {
     const groups: Record<string, any[]> = {};
-    tasks.forEach(t => {
+    finalFilteredTasks.forEach(t => {
       const key = t.assigneeName || "Lainnya";
       if(!groups[key]) groups[key] = [];
       groups[key].push(t);
     });
     groupedTasks = Object.keys(groups).map(k => ({ groupName: k, tasks: groups[k] }));
   } else {
-    groupedTasks = [{ groupName: "Tugas Saya", tasks: tasks }];
+    groupedTasks = [{ groupName: "Tugas Saya", tasks: finalFilteredTasks }];
   }
 
   return (
@@ -142,15 +145,28 @@ export default function AmanahPage() {
         {/* Content */}
         <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "24px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)" }}>Semua Amanah</h2>
-             {canCreateRecords(user.role.name) && (
-               <button 
-                 onClick={() => setIsCreateModalOpen(true)}
-                 style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}
+             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)" }}>Daftar Amanah</h2>
+             <div style={{ display: "flex", gap: "10px" }}>
+               <select
+                 value={statusFilter}
+                 onChange={(e) => setStatusFilter(e.target.value)}
+                 style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.8rem", outline: "none", cursor: "pointer" }}
                >
-                 + Tambah Amanah
-               </button>
-             )}
+                 <option value="Semua">Semua Status</option>
+                 <option value="pending">Pending</option>
+                 <option value="in_progress">Sedang Berjalan</option>
+                 <option value="waiting_approval">Menunggu Approval</option>
+                 <option value="completed">Selesai</option>
+               </select>
+               {canCreateRecords(user.role.name) && (
+                 <button 
+                   onClick={() => setIsCreateModalOpen(true)}
+                   style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}
+                 >
+                   + Tambah Amanah
+                 </button>
+               )}
+             </div>
           </div>
           
           {groupedTasks.length === 0 ? (

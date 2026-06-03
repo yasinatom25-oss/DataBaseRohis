@@ -22,7 +22,6 @@ const NAV_ITEMS = [
   { href: "/mutabaah", label: "Mutabaah", icon: BookOpen },
   { href: "/amanah", label: "Amanah", icon: ClipboardList },
   { href: "/absensi", label: "Absensi", icon: CalendarCheck },
-  { href: "/laporan", label: "Laporan", icon: BarChart3 },
 ];
 
 export default function Sidebar() {

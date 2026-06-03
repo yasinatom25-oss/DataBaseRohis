@@ -73,6 +73,7 @@ export interface Task {
   assigneeId: string;
   assignerId: string;
   assignerName: string;
+  assigneeName?: string;
   committeeId?: string;
   status: TaskStatus;
   deadline: string;
