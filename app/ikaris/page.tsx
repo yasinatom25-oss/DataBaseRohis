@@ -81,7 +81,7 @@ export default function IkarisPage() {
           status: record?.status || "Belum Bayar",
           paid_at: record?.paid_at || null,
         };
-      });
+      }).filter(u => u.roleName.toLowerCase() !== "pembina");
       
       // Sort: Belum Bayar first, then by department
       mapped.sort((a, b) => {
