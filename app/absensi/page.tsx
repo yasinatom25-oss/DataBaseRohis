@@ -66,7 +66,9 @@ export default function AbsensiPage() {
       const { error: err2 } = await supabase.from("attendances").delete().eq("id", meetingId);
       if (err2) throw err2;
       
-      window.location.reload();
+      if (user) {
+        fetchMeetings(user);
+      }
     } catch (err: any) {
       console.error(err);
       alert("Gagal menghapus rapat: " + err.message);
