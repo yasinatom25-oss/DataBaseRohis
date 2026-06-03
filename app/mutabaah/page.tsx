@@ -48,11 +48,23 @@ export default function MutabaahPage() {
         
       if (data) {
         setHistory(data.map((d: any) => {
-          let sum = 0;
+          let totalScore = 0;
+          let count = 0;
+          
+          const standards: Record<number, number | null> = {
+            1: 35, 2: 7, 3: 7, 4: 35, 5: 2, 6: 35, 7: 15, 8: null, 9: 7, 10: 7, 11: 7, 12: 1, 13: 1
+          };
+          
           for (let i = 1; i <= 13; i++) {
-            if (d[`param_${i}_val`] > 0) sum++;
+            const val = d[`param_${i}_val`] || 0;
+            const std = standards[i];
+            if (std !== null) {
+               const percentage = Math.min(100, (val / std) * 100);
+               totalScore += percentage;
+               count++;
+            }
           }
-          const avg = Math.round((sum / 13) * 100);
+          const avg = count > 0 ? Math.round(totalScore / count) : 0;
           
           return {
             id: d.id,
