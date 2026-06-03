@@ -100,7 +100,7 @@ export default function Sidebar() {
                 {item.label}
               </Link>
             );
-          })}
+          })()}
         </nav>
 
         <div style={{ flex: 1 }} /> {/* Spacer */}
@@ -263,7 +263,7 @@ export default function Sidebar() {
               {item.label}
             </Link>
           );
-        })}
+        })()}
       </nav>
 
       {/* Responsive */}
