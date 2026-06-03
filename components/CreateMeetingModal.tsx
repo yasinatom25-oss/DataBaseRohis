@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
@@ -13,6 +13,9 @@ interface CreateMeetingModalProps {
   onMeetingCreated: () => void;
 }
 
+const ONLINE_PLATFORMS = ["Zoom", "Google Meet", "Microsoft Teams", "Discord", "WhatsApp", "Lainnya"];
+const OFFLINE_PLACES = ["Masjid Sekolah", "Ruang Kelas", "Aula Sekolah", "Kantin", "Lainnya"];
+
 export default function CreateMeetingModal({
   isOpen,
   onClose,
@@ -22,8 +25,38 @@ export default function CreateMeetingModal({
 }: CreateMeetingModalProps) {
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
+  const [locationType, setLocationType] = useState<"Offline" | "Online">("Offline");
+  const [locationPreset, setLocationPreset] = useState("");
+  const [locationCustom, setLocationCustom] = useState("");
+  const [notetakerId, setNotetakerId] = useState("");
+  const [availableUsers, setAvailableUsers] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Reset form
+    setEventName("");
+    setEventDate("");
+    setLocationType("Offline");
+    setLocationPreset("");
+    setLocationCustom("");
+    setNotetakerId("");
+    setError("");
+
+    // Fetch users for notetaker dropdown
+    const fetchUsers = async () => {
+      let query = supabase.from("users").select("id, name");
+      if (meetingType === "Rapat Departemen" && currentUser.department?.id) {
+        query = query.eq("department_id", currentUser.department.id);
+      }
+      const { data } = await query.order("name");
+      if (data) setAvailableUsers(data);
+    };
+
+    fetchUsers();
+  }, [isOpen, meetingType, currentUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +67,9 @@ export default function CreateMeetingModal({
       return;
     }
 
+    // Build location detail: use custom if "Lainnya", otherwise preset
+    const locationDetail = locationPreset === "Lainnya" ? locationCustom : locationPreset;
+
     setLoading(true);
     try {
       const { error: insertError } = await supabase.from("attendances").insert([
@@ -42,14 +78,14 @@ export default function CreateMeetingModal({
           event_name: eventName,
           event_date: eventDate,
           creator_id: currentUser.id,
+          location_type: locationType,
+          location_detail: locationDetail || null,
+          notetaker_id: notetakerId || null,
         },
       ]);
 
       if (insertError) throw insertError;
 
-      // Success
-      setEventName("");
-      setEventDate("");
       onMeetingCreated();
       onClose();
     } catch (err: any) {
@@ -59,6 +95,27 @@ export default function CreateMeetingModal({
       setLoading(false);
     }
   };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "10px 14px",
+    border: "1px solid var(--border-color)",
+    borderRadius: "8px",
+    fontSize: "0.9rem",
+    outline: "none",
+    background: "var(--bg-card)",
+    color: "var(--text-main)",
+    boxSizing: "border-box",
+  };
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+    color: "var(--text-main)",
+    marginBottom: "6px",
+  };
+
+  const presetOptions = locationType === "Online" ? ONLINE_PLATFORMS : OFFLINE_PLACES;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={`Jadwalkan ${meetingType}`}>
@@ -71,40 +128,104 @@ export default function CreateMeetingModal({
 
         {/* Info Box */}
         <div style={{ padding: "12px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-muted)" }}>
-          Anda akan membuat jadwal <strong>{meetingType}</strong>. {meetingType === "Rapat Departemen" && currentUser.department?.name ? `(Departemen ${currentUser.department.name})` : ""}
+          Anda akan membuat jadwal <strong>{meetingType}</strong>.{" "}
+          {meetingType === "Rapat Departemen" && currentUser.department?.name
+            ? `(Departemen ${currentUser.department.name})`
+            : ""}
         </div>
 
         {/* Event Name */}
         <div>
-          <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "6px" }}>
-            Nama / Topik Rapat *
-          </label>
+          <label style={labelStyle}>Nama / Topik Rapat *</label>
           <input
             type="text"
             value={eventName}
             onChange={(e) => setEventName(e.target.value)}
             placeholder="Contoh: Evaluasi Proker Bulan Juni"
-            style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none" }}
+            style={inputStyle}
             required
           />
         </div>
 
         {/* Date */}
         <div>
-          <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "6px" }}>
-            Tanggal Pelaksanaan *
-          </label>
+          <label style={labelStyle}>Tanggal Pelaksanaan *</label>
           <input
             type="date"
             value={eventDate}
             onChange={(e) => setEventDate(e.target.value)}
-            style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none" }}
+            style={inputStyle}
             required
           />
         </div>
 
+        {/* Location Type */}
+        <div>
+          <label style={labelStyle}>Tipe Pertemuan</label>
+          <select
+            value={locationType}
+            onChange={(e) => {
+              setLocationType(e.target.value as "Offline" | "Online");
+              setLocationPreset("");
+              setLocationCustom("");
+            }}
+            style={inputStyle}
+          >
+            <option value="Offline">🏫 Tatap Muka (Offline)</option>
+            <option value="Online">💻 Daring (Online)</option>
+          </select>
+        </div>
+
+        {/* Location Detail — Preset Dropdown */}
+        <div>
+          <label style={labelStyle}>
+            {locationType === "Online" ? "Platform yang Digunakan" : "Tempat Pelaksanaan"}
+          </label>
+          <select
+            value={locationPreset}
+            onChange={(e) => setLocationPreset(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="">-- Pilih --</option>
+            {presetOptions.map((opt) => (
+              <option key={opt} value={opt}>{opt}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Custom Input if "Lainnya" */}
+        {locationPreset === "Lainnya" && (
+          <div>
+            <label style={labelStyle}>
+              {locationType === "Online" ? "Nama Platform / Link" : "Nama Tempat"}
+            </label>
+            <input
+              type="text"
+              value={locationCustom}
+              onChange={(e) => setLocationCustom(e.target.value)}
+              placeholder={locationType === "Online" ? "Contoh: Telegram Group / Discord Server" : "Contoh: Rumah Ketua"}
+              style={inputStyle}
+            />
+          </div>
+        )}
+
+        {/* Notetaker */}
+        <div>
+          <label style={labelStyle}>Notulen (Pencatat Rapat)</label>
+          <select
+            value={notetakerId}
+            onChange={(e) => setNotetakerId(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="">-- Belum Ditentukan --</option>
+            {availableUsers.map((u) => (
+              <option key={u.id} value={u.id}>{u.name}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Submit */}
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "6px" }}>
           <button
             type="button"
             onClick={onClose}
