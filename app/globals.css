@@ -138,6 +138,37 @@ header {
   z-index: 50;
 }
 
+/* Dark Mode Logo Adaptation */
+.dark .logo-original {
+  filter: invert(1) hue-rotate(180deg) brightness(1.5) !important;
+  mix-blend-mode: screen !important;
+}
+
+/* Floating Pill Components (Sidebar) */
+.floating-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  overflow: hidden;
+}
+
+.floating-pill:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 140, 186, 0.12);
+}
+
+/* Page Transition Animation */
+@keyframes page-fade-in {
+  from { opacity: 0; filter: blur(4px); transform: translateY(8px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+.page-transition {
+  animation: page-fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
 .solid-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0,140,186,0.08);
