@@ -74,6 +74,7 @@ export default function AnggotaPage() {
           return rankA - rankB;
         });
 
+        console.log("DEBUG FIRST USER:", JSON.stringify(sortedUsers[0], null, 2));
         setMembers(sortedUsers);
       }
 
@@ -188,8 +189,10 @@ export default function AnggotaPage() {
             </thead>
             <tbody>
               {members.map((m) => {
-                const roleObj = Array.isArray(m.role) ? m.role[0] : m.role;
-                const deptObj = Array.isArray(m.department) ? m.department[0] : m.department;
+                const rawRole = m.role || m.roles;
+                const roleObj = Array.isArray(rawRole) ? rawRole[0] : rawRole;
+                const rawDept = m.department || m.departments;
+                const deptObj = Array.isArray(rawDept) ? rawDept[0] : rawDept;
                 
                 return (
                   <tr key={m.id} style={{ borderBottom: "1px solid var(--hover-bg)" }}>
@@ -197,7 +200,7 @@ export default function AnggotaPage() {
                     <td style={{ padding: "14px 20px", fontSize: "0.9rem", color: "var(--text-muted)" }}>{m.email}</td>
                     <td style={{ padding: "14px 20px" }}>
                       <span className="badge badge-primary">
-                        {roleObj?.name ? formatRoleName(roleObj.name) : "Anggota"}
+                        {roleObj?.name ? formatRoleName(roleObj.name) : (m.roles?.name ? formatRoleName(m.roles.name) : "Anggota")}
                       </span>
                     </td>
                     <td style={{ padding: "14px 20px", fontSize: "0.9rem", color: "var(--text-main)" }}>
