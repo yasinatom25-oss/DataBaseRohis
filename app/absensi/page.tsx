@@ -74,14 +74,18 @@ export default function AbsensiPage() {
   }
 
   async function handleMarkCompleted(meetingId: string) {
-    if (!confirm("Tandai rapat ini sebagai 'Sudah Terlaksana'? Rapat akan dipindahkan ke Riwayat Rapat.")) return;
+    const ok = window.confirm("Tandai rapat ini sebagai 'Sudah Terlaksana'? Rapat akan dipindahkan ke Riwayat Rapat.");
+    if (!ok) return;
     try {
-      const { error } = await supabase.from("attendances").update({ status: "Completed" }).eq("id", meetingId);
+      const { data, error } = await supabase.from("attendances").update({ status: "Completed" }).eq("id", meetingId).select();
       if (error) throw error;
+      if (!data || data.length === 0) throw new Error("Data rapat tidak ditemukan atau akses ditolak oleh server.");
+      
+      alert("Berhasil! Rapat telah dipindahkan ke Riwayat.");
       if (user) fetchMeetings(user);
     } catch (err: any) {
       console.error(err);
-      alert("Gagal mengupdate status: " + err.message);
+      alert("Gagal mengupdate status: " + (err.message || "Unknown error"));
     }
   }
 
@@ -261,7 +265,7 @@ export default function AbsensiPage() {
                         </span>
                         {canCreateRecords(user.role.name) ? (
                           <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "center" }}>
-                            <div onClick={() => handleMarkCompleted(m.id)} style={{ fontSize: "0.75rem", color: "#16a34a", fontWeight: 600, cursor: "pointer", background: "#dcfce7", padding: "4px 8px", borderRadius: "4px" }}>✓ Terlaksana</div>
+                            <button onClick={() => handleMarkCompleted(m.id)} style={{ border: "none", outline: "none", fontSize: "0.75rem", color: "#16a34a", fontWeight: 600, cursor: "pointer", background: "#dcfce7", padding: "4px 8px", borderRadius: "4px" }}>✓ Terlaksana</button>
                             <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Isi Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
                           </div>
