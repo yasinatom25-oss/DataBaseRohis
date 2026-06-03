@@ -46,6 +46,7 @@ export default function AbsensiPage() {
           eventType: d.event_type,
           eventName: d.event_name,
           eventDate: d.event_date,
+          status: d.status || "Scheduled",
           creatorId: d.creator_id,
           creatorName: d.creator?.name || "System",
           department: d.event_type === "Rapat Umum" ? "Seluruh Rohis" : currentUser.department?.name || "Divisi",
@@ -69,6 +70,18 @@ export default function AbsensiPage() {
     } catch (err: any) {
       console.error(err);
       alert("Gagal menghapus rapat: " + err.message);
+    }
+  }
+
+  async function handleMarkCompleted(meetingId: string) {
+    if (!confirm("Tandai rapat ini sebagai 'Sudah Terlaksana'? Rapat akan dipindahkan ke Riwayat Rapat.")) return;
+    try {
+      const { error } = await supabase.from("attendances").update({ status: "Completed" }).eq("id", meetingId);
+      if (error) throw error;
+      if (user) fetchMeetings(user);
+    } catch (err: any) {
+      console.error(err);
+      alert("Gagal mengupdate status: " + err.message);
     }
   }
 
@@ -218,44 +231,91 @@ export default function AbsensiPage() {
           </div>
           
           {/* Meetings Table */}
-          <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>
-            <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal & Riwayat Rapat</h2>
-            {filteredMeetings.length === 0 ? (
-              <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px" }}>Belum ada data rapat.</div>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {filteredMeetings.map((m) => (
-                  <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", border: "1px solid var(--border-color)", borderRadius: "10px", background: "var(--hover-bg)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                      <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
-                      </div>
-                      <div>
-                        <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "2px" }}>{m.eventName}</h3>
-                        <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px" }}>
-                          <span>{m.eventDate}</span>
-                          <span>•</span>
-                          <span>Oleh: {m.creatorName}</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            
+            {/* Jadwal Rapat */}
+            <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>
+              <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal Rapat (Akan Datang)</h2>
+              {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
+                <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
+                    <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", border: "1px solid var(--border-color)", borderRadius: "10px", background: "var(--hover-bg)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                        <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
+                        </div>
+                        <div>
+                          <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "2px" }}>{m.eventName}</h3>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px" }}>
+                            <span>{m.eventDate}</span>
+                            <span>•</span>
+                            <span>Oleh: {m.creatorName}</span>
+                          </div>
                         </div>
                       </div>
+                      <div style={{ textAlign: "right" }}>
+                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--hover-bg)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)", marginBottom: "6px" }}>
+                          {m.department}
+                        </span>
+                        {canCreateRecords(user.role.name) ? (
+                          <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "center" }}>
+                            <div onClick={() => handleMarkCompleted(m.id)} style={{ fontSize: "0.75rem", color: "#16a34a", fontWeight: 600, cursor: "pointer", background: "#dcfce7", padding: "4px 8px", borderRadius: "4px" }}>✓ Terlaksana</div>
+                            <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Isi Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
+                          </div>
+                        ) : (
+                          <div onClick={() => alert("Fitur detail presensi untuk anggota sedang dikembangkan.")} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Lihat Detail</div>
+                        )}
+                      </div>
                     </div>
-                    <div style={{ textAlign: "right" }}>
-                      <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--hover-bg)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
-                        {m.department}
-                      </span>
-                      {canCreateRecords(user.role.name) ? (
-                        <div style={{ display: "flex", gap: "10px", marginTop: "6px", justifyContent: "flex-end", alignItems: "center" }}>
-                          <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Isi Presensi</div>
-                          <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Riwayat Rapat */}
+            <div className="solid-card animate-fade-in-up animate-delay-400" style={{ padding: "24px" }}>
+              <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Riwayat Rapat (Selesai)</h2>
+              {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
+                <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px", opacity: 0.85 }}>
+                  {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
+                    <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", border: "1px solid var(--border-color)", borderRadius: "10px", background: "var(--hover-bg)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                        <div style={{ width: "42px", height: "42px", borderRadius: "10px", background: "#e5e7eb", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
                         </div>
-                      ) : (
-                        <div onClick={() => alert("Fitur detail presensi untuk anggota sedang dikembangkan.")} style={{ marginTop: "6px", fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Lihat Detail</div>
-                      )}
+                        <div>
+                          <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "2px", textDecoration: "line-through", textDecorationColor: "var(--text-muted)" }}>{m.eventName}</h3>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px" }}>
+                            <span>{m.eventDate}</span>
+                            <span>•</span>
+                            <span>Oleh: {m.creatorName}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: "var(--border-color)", color: "var(--text-muted)", marginBottom: "6px" }}>
+                          Selesai
+                        </span>
+                        {canCreateRecords(user.role.name) ? (
+                          <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "center" }}>
+                            <div onClick={() => setSelectedMeeting(m)} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Edit Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={15} color="var(--danger-text)" style={{ cursor: "pointer" }} />
+                          </div>
+                        ) : (
+                          <div onClick={() => alert("Fitur detail presensi untuk anggota sedang dikembangkan.")} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, cursor: "pointer" }}>Lihat Detail</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
+            
           </div>
         </div>
       </main>
