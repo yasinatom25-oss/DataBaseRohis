@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
 import type { User } from "@/lib/types";
 import { Search, ClipboardList } from "lucide-react";
 import AmanahList from "@/components/AmanahList";
@@ -126,11 +125,6 @@ export default function AmanahPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <Sidebar 
-        userName={user.name} 
-        userRole={formatRoleName(typeof user.role === 'string' ? user.role : user.role?.name) || user.role?.label || "Role"} 
-        userInitials={initials} 
-      />
       <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
         {/* Header */}
         <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>

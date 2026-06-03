@@ -7,7 +7,6 @@ import type { User } from "@/lib/types";
 import {
   mockTasks,
 } from "@/lib/mock-data";
-import Sidebar from "@/components/Sidebar";
 import ProgressBar from "@/components/ProgressBar";
 import AmanahList from "@/components/AmanahList";
 import AttendancePieChart from "@/components/AttendancePieChart";
@@ -216,11 +215,6 @@ export default function DashboardPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <Sidebar
-        userName={user.name}
-        userRole={formatRoleName(typeof user.role === 'string' ? user.role : user.role?.name) || user.role?.label || "Role"}
-        userInitials={initials}
-      />
 
       {/* Main */}
       <main

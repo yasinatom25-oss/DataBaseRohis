@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   keywords: ["rohis", "manajemen", "organisasi", "mutabaah", "amanah", "presensi"],
 };
 
+import Sidebar from "@/components/Sidebar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Sidebar />
+        {children}
+      </body>
     </html>
   );
 }

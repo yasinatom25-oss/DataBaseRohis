@@ -3,19 +3,19 @@ import { supabase } from "@/lib/supabase";
 import { X, Save } from "lucide-react";
 
 const MUTABAAH_PARAMS = [
-  { id: 1, name: "Shalat Tepat Waktu", unit: "kali" },
-  { id: 2, name: "Shalat Tahajud", unit: "kali" },
-  { id: 3, name: "Shalat Duha", unit: "kali" },
-  { id: 4, name: "Shalat Rawatib", unit: "kali" },
-  { id: 5, name: "Saum Sunnah", unit: "kali" },
-  { id: 6, name: "Tilawah", unit: "halaman" },
-  { id: 7, name: "Tambahan Hafalan", unit: "baris" },
-  { id: 8, name: "Capaian Hafalan", unit: "baris" },
-  { id: 9, name: "Al-Matsurat Pagi", unit: "kali" },
-  { id: 10, name: "Al-Matsurat Sore", unit: "kali" },
-  { id: 11, name: "Birrul Walidain", unit: "kali" },
-  { id: 12, name: "Infaq", unit: "kali" },
-  { id: 13, name: "Menambah Wawasan Islami", unit: "kali" },
+  { id: 1, name: "Shalat Tepat Waktu", unit: "kali", standard: 35 },
+  { id: 2, name: "Shalat Tahajud", unit: "kali", standard: 7 },
+  { id: 3, name: "Shalat Duha", unit: "kali", standard: 7 },
+  { id: 4, name: "Shalat Rawatib", unit: "kali", standard: 35 },
+  { id: 5, name: "Saum Sunnah", unit: "kali", standard: 2 },
+  { id: 6, name: "Tilawah", unit: "halaman", standard: 35 },
+  { id: 7, name: "Tambahan Hafalan", unit: "baris", standard: 15 },
+  { id: 8, name: "Capaian Hafalan", unit: "baris", standard: null },
+  { id: 9, name: "Al-Matsurat Pagi", unit: "kali", standard: 7 },
+  { id: 10, name: "Al-Matsurat Sore", unit: "kali", standard: 7 },
+  { id: 11, name: "Birrul Walidain", unit: "kali", standard: 7 },
+  { id: 12, name: "Infaq", unit: "kali", standard: 1 },
+  { id: 13, name: "Menambah Wawasan Islami", unit: "kali", standard: 1 },
 ];
 
 export default function MutabaahFormModal({ existingLog, userId, onClose, onSuccess }: any) {
@@ -113,9 +113,20 @@ export default function MutabaahFormModal({ existingLog, userId, onClose, onSucc
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
               {MUTABAAH_PARAMS.map(param => (
                 <div key={param.id} style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "8px" }}>
-                    {param.name}
-                  </label>
+                  <div style={{ marginBottom: "8px" }}>
+                    <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", display: "block" }}>
+                      {param.name}
+                    </label>
+                    {param.standard !== null ? (
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                        Target: {param.standard} {param.unit}/pekan
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                        (Opsional/Sesuai Kemampuan)
+                      </span>
+                    )}
+                  </div>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <input
                       type="number"

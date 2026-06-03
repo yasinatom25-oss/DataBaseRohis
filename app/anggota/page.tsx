@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
-import { Plus, Edit, Trash2, ShieldAlert } from "lucide-react";
+import { Plus, Edit, Trash2, ShieldAlert, ArrowLeft } from "lucide-react";
 import ManageMemberModal from "@/components/ManageMemberModal";
 
 export default function AnggotaPage() {
@@ -73,15 +73,37 @@ export default function AnggotaPage() {
   if (!currentUser) return null;
 
   return (
-    <div style={{ padding: "30px", maxWidth: "1200px", margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-        <div>
-          <h1 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "6px" }}>
-            Manajemen Anggota
-          </h1>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.95rem" }}>
-            Kelola susunan pengurus dan mutasi divisi.
-          </p>
+    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
+      <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+          <button
+            onClick={() => router.push("/dashboard")}
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
+              color: "var(--text-main)",
+              padding: "10px",
+              borderRadius: "10px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "4px"
+            }}
+            title="Kembali ke Dashboard"
+          >
+            <ArrowLeft size={20} />
+          </button>
+          <div>
+            <h1 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text-main)", margin: 0, marginBottom: "6px" }}>
+              Manajemen Anggota
+            </h1>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", margin: 0 }}>
+              Kelola susunan pengurus dan mutasi divisi.
+            </p>
+          </div>
         </div>
         <button
           onClick={() => {
@@ -176,6 +198,8 @@ export default function AnggotaPage() {
           onSuccess={fetchData}
         />
       )}
+        </div>
+      </main>
     </div>
   );
 }

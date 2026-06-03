@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { formatRoleName } from "@/lib/rbac";
-import { X } from "lucide-react";
+import { X, ArrowLeft } from "lucide-react";
 
 export default function ManageMemberModal({ member, roles, departments, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
@@ -97,9 +97,14 @@ export default function ManageMemberModal({ member, roles, departments, onClose,
         overflow: "hidden", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: "1px solid var(--border-color)" }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text-main)", margin: 0 }}>
-            {member ? "Edit Anggota" : "Tambah Anggota Baru"}
-          </h2>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <button type="button" onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center", justifyContent: "center", padding: "4px" }} title="Kembali">
+              <ArrowLeft size={22} />
+            </button>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text-main)", margin: 0 }}>
+              {member ? "Edit Anggota" : "Tambah Anggota Baru"}
+            </h2>
+          </div>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}>
             <X size={20} />
           </button>
@@ -159,7 +164,7 @@ export default function ManageMemberModal({ member, roles, departments, onClose,
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "32px" }}>
             <button type="button" onClick={onClose}
               style={{ padding: "10px 16px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, cursor: "pointer" }}>
-              Batal
+              Kembali
             </button>
             <button type="submit" disabled={loading}
               style={{ padding: "10px 16px", border: "none", background: "#008CBA", color: "#ffffff", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, cursor: loading ? "not-allowed" : "pointer" }}>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -15,12 +15,7 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
-
-interface SidebarProps {
-  userName: string;
-  userRole: string;
-  userInitials: string;
-}
+import { User } from "@/lib/types";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -30,14 +25,25 @@ const NAV_ITEMS = [
   { href: "/laporan", label: "Laporan", icon: BarChart3 },
 ];
 
-export default function Sidebar({
-  userName,
-  userRole,
-  userInitials,
-}: SidebarProps) {
+export default function Sidebar() {
   const pathname = usePathname();
-  const safeRole = userRole || "";
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("rohiser_user");
+    if (stored) {
+      setUser(JSON.parse(stored));
+    }
+  }, [pathname]);
+
+  if (pathname === "/login" || pathname === "/") return null;
+  if (!user) return null;
+
+  const safeRole = typeof user.role === 'string' ? user.role : (user.role?.name || user.role?.label || "");
   const isKetumOrPembina = safeRole.toLowerCase().includes("ketua umum") || safeRole.toLowerCase().includes("pembina");
+
+  const userName = user.name;
+  const userInitials = userName.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase();
 
   return (
     <>
@@ -64,81 +70,55 @@ export default function Sidebar({
           <Image src="/logo-original.png" alt="Rohani Islam Logo" width={120} height={120} className="logo-original" style={{ objectFit: "contain", borderRadius: "12px" }} priority />
         </div>
 
-        {/* Block 2: Menu Utama */}
-        <div className="floating-pill" style={{ padding: "16px 12px", display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div
-            style={{
-              fontSize: "0.65rem",
-              fontWeight: 600,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-              padding: "0 6px",
-            }}
-          >
-            Menu Utama
-          </div>
-          <nav style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            {NAV_ITEMS.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "11px",
-                    padding: "10px 14px",
-                    borderRadius: "12px",
-                    fontSize: "0.85rem",
-                    fontWeight: isActive ? 600 : 500,
-                    color: isActive ? "#008CBA" : "var(--text-muted)",
-                    background: isActive ? "var(--primary-50)" : "transparent",
-                    textDecoration: "none",
-                    transition: "all var(--transition-fast)",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = "var(--hover-bg)";
-                      e.currentTarget.style.color = "var(--text-main)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.style.color = "var(--text-muted)";
-                    }
-                  }}
-                >
-                  <Icon size={18} style={{ flexShrink: 0 }} />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+        {/* Menu Utama (Dipisah per item) */}
+        <nav style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {NAV_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="floating-pill"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "12px 16px",
+                  fontSize: "0.85rem",
+                  fontWeight: isActive ? 600 : 500,
+                  color: isActive ? "#008CBA" : "var(--text-muted)",
+                  background: isActive ? "var(--primary-50)" : "var(--bg-card)",
+                  borderLeft: isActive ? "4px solid #008CBA" : "4px solid transparent",
+                  textDecoration: "none",
+                }}
+              >
+                <Icon size={18} style={{ flexShrink: 0 }} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
 
         <div style={{ flex: 1 }} /> {/* Spacer */}
 
-        {/* Block 3: Pengaturan & Profil */}
-        <div className="floating-pill" style={{ padding: "12px", display: "flex", flexDirection: "column", gap: "4px" }}>
+        {/* Pengaturan & Profil (Dipisah per item) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {isKetumOrPembina && (
             <Link
               href="/anggota"
+              className="floating-pill"
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "11px",
-                padding: "10px 14px",
-                borderRadius: "12px",
+                gap: "12px",
+                padding: "12px 16px",
                 fontSize: "0.85rem",
                 fontWeight: pathname === "/anggota" ? 600 : 500,
                 color: pathname === "/anggota" ? "#008CBA" : "var(--text-muted)",
-                background: pathname === "/anggota" ? "var(--primary-50)" : "transparent",
+                background: pathname === "/anggota" ? "var(--primary-50)" : "var(--bg-card)",
+                borderLeft: pathname === "/anggota" ? "4px solid #008CBA" : "4px solid transparent",
                 textDecoration: "none",
-                transition: "all var(--transition-fast)",
               }}
             >
               <Users size={18} />
@@ -148,25 +128,17 @@ export default function Sidebar({
 
           <Link
             href="/settings"
+            className="floating-pill"
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "11px",
-              padding: "10px 14px",
-              borderRadius: "12px",
+              gap: "12px",
+              padding: "12px 16px",
               fontSize: "0.85rem",
               fontWeight: 500,
               color: "var(--text-muted)",
               textDecoration: "none",
-              transition: "all var(--transition-fast)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--hover-bg)";
-              e.currentTarget.style.color = "var(--text-main)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "var(--text-muted)";
+              borderLeft: "4px solid transparent",
             }}
           >
             <Settings size={18} />
@@ -175,26 +147,26 @@ export default function Sidebar({
 
           {/* User card mini */}
           <div
+            className="floating-pill"
             style={{
               display: "flex",
               alignItems: "center",
               gap: "10px",
-              padding: "10px",
-              marginTop: "4px",
-              borderRadius: "12px",
+              padding: "10px 12px",
               background: "var(--bg-main)",
+              marginTop: "4px",
             }}
           >
             <div
               style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "9px",
+                width: "36px",
+                height: "36px",
+                borderRadius: "10px",
                 background: "linear-gradient(135deg, #008CBA, #80c9de)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "0.72rem",
+                fontSize: "0.8rem",
                 fontWeight: 700,
                 color: "#ffffff",
                 flexShrink: 0,
@@ -205,7 +177,7 @@ export default function Sidebar({
             <div style={{ flex: 1, minWidth: 0 }}>
               <div
                 style={{
-                  fontSize: "0.8rem",
+                  fontSize: "0.85rem",
                   fontWeight: 600,
                   color: "var(--text-main)",
                   overflow: "hidden",
@@ -222,7 +194,7 @@ export default function Sidebar({
               style={{ color: "var(--danger-text)", transition: "all var(--transition-fast)", padding: "4px" }}
               title="Logout"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
             </Link>
           </div>
         </div>

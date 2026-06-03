@@ -165,7 +165,7 @@ header {
   to { opacity: 1; filter: blur(0); transform: translateY(0); }
 }
 
-.page-transition {
+main {
   animation: page-fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 

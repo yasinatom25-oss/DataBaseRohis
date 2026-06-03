@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
 import type { User } from "@/lib/types";
 import { Search, Bell, BookOpen, Clock, AlertCircle } from "lucide-react";
 import { mockMutabaahHistory } from "@/lib/mock-data";
@@ -82,10 +81,8 @@ export default function MutabaahPage() {
 
   const initials = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
-  // Logic: Mutabaah can only be filled from Sunday (0) to Monday (1)
-  const today = new Date().getDay();
-  // Sunday = 0, Monday = 1
-  const isTimeWindowOpen = today === 0 || today === 1;
+  // Logic: Mutabaah can be filled anytime, limit 1 per week (handled by myLatestLog edit logic)
+  const isTimeWindowOpen = true;
 
   // Filter Data Logic
   const filteredHistory = history.filter((log) => {
@@ -96,11 +93,6 @@ export default function MutabaahPage() {
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <Sidebar 
-        userName={user.name} 
-        userRole={formatRoleName(typeof user.role === 'string' ? user.role : user.role?.name) || user.role?.label || "Role"} 
-        userInitials={initials} 
-      />
       <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
         {/* Header */}
         <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
@@ -118,34 +110,33 @@ export default function MutabaahPage() {
         </header>
 
         {/* Time Window Card */}
-        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "20px", marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderLeft: isTimeWindowOpen ? "4px solid #16a34a" : "4px solid #d97706" }}>
+        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "20px", marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderLeft: "4px solid #16a34a" }}>
           <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-            <div style={{ padding: "10px", borderRadius: "10px", background: isTimeWindowOpen ? "#dcfce7" : "#fef3c7" }}>
-              {isTimeWindowOpen ? <Clock size={24} color="#15803d" /> : <AlertCircle size={24} color="#b45309" />}
+            <div style={{ padding: "10px", borderRadius: "10px", background: "#dcfce7" }}>
+              <Clock size={24} color="#15803d" />
             </div>
             <div>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "4px" }}>
-                {isTimeWindowOpen ? "Waktu Pengisian Dibuka" : "Waktu Pengisian Ditutup"}
+                Pengisian Mutabaah Dibuka
               </h2>
               <p style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
-                {isTimeWindowOpen 
-                  ? (myLatestLog ? "Anda sudah mengisi untuk pekan ini. Anda masih dapat mengeditnya hingga Senin batas akhir." : "Silakan isi mutabaah ibadah Anda untuk pekan ini. Batas waktu hingga Senin malam.")
-                  : "Pengisian maupun pengeditan mutabaah hanya dapat dilakukan pada hari Ahad hingga Senin."}
+                {myLatestLog 
+                  ? "Anda sudah mengisi mutabaah pekan ini. Anda dapat mengeditnya jika ada kesalahan." 
+                  : "Silakan isi mutabaah ibadah Anda untuk pekan ini. (Batas 1 kali pengisian per minggu)"}
               </p>
             </div>
           </div>
           <button 
             onClick={() => setIsModalOpen(true)}
-            disabled={!isTimeWindowOpen}
             style={{ 
               padding: "10px 20px", 
-              background: isTimeWindowOpen ? "#008CBA" : "var(--border-color)", 
-              color: isTimeWindowOpen ? "var(--bg-card)" : "var(--text-muted)", 
+              background: "#008CBA", 
+              color: "var(--bg-card)", 
               borderRadius: "8px", 
               border: "none", 
               fontSize: "0.9rem", 
               fontWeight: 600, 
-              cursor: isTimeWindowOpen ? "pointer" : "not-allowed",
+              cursor: "pointer",
               transition: "all 0.2s"
             }}
           >
