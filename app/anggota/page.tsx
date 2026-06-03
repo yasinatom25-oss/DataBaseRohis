@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { User } from "@/lib/types";
 import { Plus, Edit, Trash2, ShieldAlert, ArrowLeft } from "lucide-react";
 import ManageMemberModal from "@/components/ManageMemberModal";
+import { formatRoleName } from "@/lib/rbac";
 
 export default function AnggotaPage() {
   const router = useRouter();
@@ -162,7 +163,7 @@ export default function AnggotaPage() {
                     <td style={{ padding: "14px 20px", fontSize: "0.9rem", color: "var(--text-muted)" }}>{m.email}</td>
                     <td style={{ padding: "14px 20px" }}>
                       <span className="badge badge-primary">
-                        {roleObj?.label || "Anggota"}
+                        {roleObj?.name ? formatRoleName(roleObj.name) : "Anggota"}
                       </span>
                     </td>
                     <td style={{ padding: "14px 20px", fontSize: "0.9rem", color: "var(--text-main)" }}>
