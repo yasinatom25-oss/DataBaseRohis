@@ -32,6 +32,8 @@ export default function DashboardPage() {
   const [attendanceStats, setAttendanceStats] = useState({ hadir: 0, izin: 0, sakit: 0, alpa: 0, total: 0, percentage: 0 });
   const [mutabaahStats, setMutabaahStats] = useState<any[]>([]);
   const [mutabaahAverage, setMutabaahAverage] = useState(0);
+  const [mutabaahTimeframe, setMutabaahTimeframe] = useState<"pekan" | "bulan">("pekan");
+  const [rawMutabaahLogs, setRawMutabaahLogs] = useState<any[]>([]);
   const [trenIbadah, setTrenIbadah] = useState({ status: "Konsisten", sub: "Masih stabil minggu ini", trendUp: true });
 
   useEffect(() => {
@@ -85,58 +87,17 @@ export default function DashboardPage() {
       const percentage = total > 0 ? Math.round(((hadir + izin) / total) * 100) : 0;
       setAttendanceStats({ hadir, izin, sakit, alpa, total, percentage });
 
-      // 3. Fetch Mutabaah Targets
-      const { data: targetData } = await supabase
-        .from("mutabaah_targets")
-        .select("param_name, target_value")
-        .eq("gender", currentUser.gender);
-
-      const targetMap = new Map();
-      (targetData || []).forEach(t => targetMap.set(t.param_name, t.target_value));
-
-      // 4. Fetch Mutabaah Logs for current month
+      // 3. Fetch Mutabaah Logs for current month
       const today = new Date();
       const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
       const { data: logsData } = await supabase
         .from("mutabaah_logs")
         .select("*")
         .eq("user_id", currentUser.id)
-        .gte("log_date", firstDay);
+        .gte("log_date", firstDay)
+        .order("log_date", { ascending: false });
 
-      const PARAMS = [
-        { id: 1, name: "Shalat Tepat Waktu" }, { id: 2, name: "Shalat Tahajud" },
-        { id: 3, name: "Shalat Duha" }, { id: 4, name: "Shalat Rawatib" },
-        { id: 5, name: "Saum Sunnah" }, { id: 6, name: "Tilawah" },
-        { id: 7, name: "Tambahan Hafalan" }, { id: 8, name: "Capaian Hafalan" },
-        { id: 9, name: "Al-Matsurat Pagi" }, { id: 10, name: "Al-Matsurat Sore" },
-        { id: 11, name: "Birrul Walidain" }, { id: 12, name: "Infaq" },
-        { id: 13, name: "Menambah Wawasan Islami" },
-      ];
-
-      // Aggregate values
-      const currentVals: Record<number, number> = {};
-      PARAMS.forEach(p => currentVals[p.id] = 0);
-
-      (logsData || []).forEach((log: any) => {
-        for (let i = 1; i <= 13; i++) {
-          currentVals[i] += (log[`param_${i}_val`] || 0);
-        }
-      });
-
-      let totalPct = 0;
-      const mutabaahSummary = PARAMS.map(p => {
-        const tgt = targetMap.get(p.name) || 1; // Default to 1 to avoid div by zero if missing
-        // target is usually weekly/daily depending on how they filled it. If mutabaah_targets are monthly, we use as is.
-        // Assuming targets in DB are monthly targets:
-        const cur = currentVals[p.id];
-        let pct = Math.round((cur / tgt) * 100);
-        if (pct > 100) pct = 100;
-        totalPct += pct;
-        return { paramName: p.name, current: cur, target: tgt, percentage: pct };
-      });
-
-      setMutabaahStats(mutabaahSummary);
-      setMutabaahAverage(Math.round(totalPct / 13));
+      setRawMutabaahLogs(logsData || []);
 
       // 5. Tren Ibadah Simple Check
       const oneWeekAgo = new Date();
@@ -169,6 +130,65 @@ export default function DashboardPage() {
       console.error("Failed to fetch Supabase data:", e);
     }
   }
+
+  useEffect(() => {
+    if (!rawMutabaahLogs.length) {
+      setMutabaahStats([]);
+      setMutabaahAverage(0);
+      return;
+    }
+
+    const PARAMS = [
+      { id: 1, name: "Shalat Tepat Waktu" }, { id: 2, name: "Shalat Tahajud" },
+      { id: 3, name: "Shalat Duha" }, { id: 4, name: "Shalat Rawatib" },
+      { id: 5, name: "Saum Sunnah" }, { id: 6, name: "Tilawah" },
+      { id: 7, name: "Tambahan Hafalan" }, { id: 8, name: "Capaian Hafalan" },
+      { id: 9, name: "Al-Matsurat Pagi" }, { id: 10, name: "Al-Matsurat Sore" },
+      { id: 11, name: "Birrul Walidain" }, { id: 12, name: "Infaq" },
+      { id: 13, name: "Menambah Wawasan Islami" },
+    ];
+    
+    const standards: Record<number, number | null> = {
+      1: 35, 2: 7, 3: 7, 4: 35, 5: 2, 6: 35, 7: 15, 8: null, 9: 7, 10: 7, 11: 7, 12: 1, 13: 1
+    };
+
+    const currentVals: Record<number, number> = {};
+    PARAMS.forEach(p => currentVals[p.id] = 0);
+
+    let logsToProcess = rawMutabaahLogs;
+    if (mutabaahTimeframe === "pekan") {
+       const oneWeekAgo = new Date();
+       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+       const recentLog = rawMutabaahLogs.find(l => new Date(l.log_date) >= oneWeekAgo);
+       if (recentLog) logsToProcess = [recentLog];
+       else logsToProcess = [];
+    }
+    
+    logsToProcess.forEach((log: any) => {
+      for (let i = 1; i <= 13; i++) {
+        currentVals[i] += (log[`param_${i}_val`] || 0);
+      }
+    });
+
+    let totalScore = 0;
+    let count = 0;
+    
+    const mutabaahSummary = PARAMS.filter(p => standards[p.id] !== null).map(p => {
+      const baseStd = standards[p.id] as number;
+      const tgt = mutabaahTimeframe === "bulan" ? baseStd * 4 : baseStd;
+      const cur = currentVals[p.id];
+      let pct = Math.round((cur / tgt) * 100);
+      if (pct > 100) pct = 100;
+      
+      totalScore += pct;
+      count++;
+      
+      return { paramName: p.name, current: cur, target: tgt, percentage: pct };
+    });
+
+    setMutabaahStats(mutabaahSummary);
+    setMutabaahAverage(count > 0 ? Math.round(totalScore / count) : 0);
+  }, [rawMutabaahLogs, mutabaahTimeframe]);
 
   if (!mounted || !user) {
     return (
@@ -437,12 +457,30 @@ export default function DashboardPage() {
                   📖 Progres Mutabaah
                 </h2>
                 <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: "2px" }}>
-                  Ibadah bulan ini — rata-rata {mutabaahAverage}%
+                  Ibadah {mutabaahTimeframe === "pekan" ? "pekan ini" : "bulan ini"} — rata-rata {mutabaahAverage}%
                 </p>
               </div>
-              <Link href="/mutabaah" className="badge badge-primary" style={{ textDecoration: "none" }}>
-                Lihat Semua
-              </Link>
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <select
+                  value={mutabaahTimeframe}
+                  onChange={(e) => setMutabaahTimeframe(e.target.value as any)}
+                  style={{
+                    padding: "4px 8px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border-color)",
+                    fontSize: "0.75rem",
+                    background: "var(--bg-main)",
+                    color: "var(--text-main)",
+                    outline: "none"
+                  }}
+                >
+                  <option value="pekan">Pekan Ini</option>
+                  <option value="bulan">Bulan Ini</option>
+                </select>
+                <Link href="/mutabaah" className="badge badge-primary" style={{ textDecoration: "none" }}>
+                  Semua
+                </Link>
+              </div>
             </div>
             <div
               style={{
