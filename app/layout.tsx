@@ -15,6 +15,15 @@ export const metadata: Metadata = {
   keywords: ["rohis", "manajemen", "organisasi", "mutabaah", "amanah", "presensi"],
 };
 
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import Sidebar from "@/components/Sidebar";
 
 export default function RootLayout({

@@ -263,7 +263,7 @@ export default function LoginPage() {
                     border: "1px solid var(--border-color)",
                     borderRadius: "10px",
                     color: "var(--text-main)",
-                    fontSize: "0.88rem",
+                    fontSize: "16px",
                     outline: "none",
                     transition: "all var(--transition-fast)",
                   }}
@@ -320,7 +320,7 @@ export default function LoginPage() {
                     border: "1px solid var(--border-color)",
                     borderRadius: "10px",
                     color: "var(--text-main)",
-                    fontSize: "0.88rem",
+                    fontSize: "16px",
                     outline: "none",
                     transition: "all var(--transition-fast)",
                   }}
