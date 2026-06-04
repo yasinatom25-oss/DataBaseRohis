@@ -167,17 +167,17 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-[90vw] sm:w-[400px] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl z-50 overflow-hidden animate-fade-in-up flex flex-col">
+        <div className="absolute top-full right-0 mt-3 w-[90vw] sm:w-96 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl z-50 p-4 flex flex-col">
           {/* Header */}
-          <div className="p-5 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--bg-main)] shrink-0">
+          <div className="pt-2 pb-3 border-b border-[var(--border-color)] flex justify-between items-center shrink-0">
             <h3 className="font-bold text-sm text-[var(--text-main)] m-0">Notifikasi</h3>
-            <span className="text-xs bg-[var(--primary-100)] text-[var(--primary-800)] py-1 px-3 rounded-full font-bold">
+            <span className="bg-blue-50 text-blue-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">
               {notifications.length} Baru
             </span>
           </div>
           
           {/* List of Notifications */}
-          <div className="max-h-[350px] overflow-y-auto p-4 flex flex-col gap-3 shrink-0">
+          <div className="max-h-[350px] overflow-y-auto py-3 flex flex-col gap-4 shrink-0">
             {notifications.length === 0 ? (
               <div className="py-8 text-center text-sm text-[var(--text-muted)]">
                 Tidak ada notifikasi baru.
@@ -188,13 +188,13 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
                   key={notif.id}
                   href={notif.link}
                   onClick={() => setIsOpen(false)}
-                  className="flex gap-4 p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--primary-300)] hover:shadow-sm transition-all duration-200 group"
+                  className="flex gap-4 p-4 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)] hover:border-blue-300 hover:shadow-sm transition-all duration-200 group"
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.bgClass}`}>
                     {notif.icon}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-sm text-[var(--text-main)] mb-1 group-hover:text-[var(--primary-600)] transition-colors">
+                    <h4 className="font-semibold text-sm text-[var(--text-main)] mb-1 group-hover:text-blue-600 transition-colors">
                       {notif.title}
                     </h4>
                     <p className="text-xs text-[var(--text-muted)] leading-relaxed m-0">
@@ -210,11 +210,11 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
           </div>
 
           {/* Bottom Element */}
-          <div className="border-t border-[var(--border-color)] bg-[var(--bg-main)] shrink-0">
+          <div className="mt-2 shrink-0">
              <Link 
                href="#" 
                onClick={(e) => { e.preventDefault(); setIsOpen(false); }}
-               className="block text-center py-3.5 text-xs font-bold text-[#008CBA] hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors w-full"
+               className="block text-center py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors w-full"
              >
                Tandai Semua Sudah Dibaca
              </Link>
