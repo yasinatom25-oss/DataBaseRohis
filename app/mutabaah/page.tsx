@@ -385,10 +385,10 @@ export default function MutabaahPage() {
               {/* Mobile Card View */}
               <div className="md:hidden flex flex-col">
                 {filteredHistory.map((log, idx) => (
-                  <div key={idx} className="py-5 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-4 -mx-4 px-4 sm:-mx-6 sm:px-6 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                  <div key={idx} className="py-6 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-4.5 -mx-4 px-4 sm:-mx-6 sm:px-6 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                       <div className="flex justify-between items-start">
                         <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{log.name}</h3>
+                        <h3 className="font-bold text-[var(--text-main)] text-[1.05rem] leading-snug mb-1.5">{log.name}</h3>
                         <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] font-medium">
                           <span>{log.department}</span>
                           <span>•</span>
@@ -403,11 +403,11 @@ export default function MutabaahPage() {
                       </div>
                     </div>
                     
-                    <div className="mt-1 flex justify-end">
+                    <div className="mt-2 flex justify-end">
                       <button 
                         onClick={() => setSelectedDetailLog(log)}
                         className="w-full flex justify-center items-center"
-                        style={{ padding: "8px 12px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
+                        style={{ padding: "14px 20px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
                       >
                         Lihat Detail Mutabaah
                       </button>
