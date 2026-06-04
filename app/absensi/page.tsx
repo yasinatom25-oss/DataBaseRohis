@@ -214,8 +214,31 @@ export default function AbsensiPage() {
 
         {/* Tabs for Data Visibility (Kadiv & BPH & Pembina only) */}
         {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
-          <div className="animate-fade-in-up animate-delay-100" style={{ display: "flex", gap: "8px", marginBottom: "20px", borderBottom: "1px solid var(--border-color)", paddingBottom: "12px", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", gap: "8px" }}>
+          <div className="animate-fade-in-up animate-delay-100 flex flex-col md:flex-row gap-4 mb-5 border-b border-[var(--border-color)] pb-4 md:justify-between md:items-center">
+            
+            {/* Mobile Dropdown Tab */}
+            <div className="md:hidden w-full">
+              <select 
+                value={activeTab.startsWith("divisi_") && !isBPH(user.role.name) ? activeTab : activeTab} 
+                onChange={(e) => setActiveTab(e.target.value)}
+                className="w-full p-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-main)] text-[0.85rem] font-semibold text-[var(--text-main)] outline-none"
+              >
+                <option value="personal">Data Saya</option>
+                {isBPH(user.role.name) ? (
+                  <optgroup label="Data Per Divisi">
+                    {departments.map(d => <option key={d.id} value={`divisi_${d.name}`}>{d.name}</option>)}
+                  </optgroup>
+                ) : (
+                  <option value="divisi">Data Divisi ({user.department?.name})</option>
+                )}
+                {canViewGlobalData(user.role.name) && (
+                  <option value="semua">Data Seluruh Rohis</option>
+                )}
+              </select>
+            </div>
+
+            {/* Desktop Tabs */}
+            <div className="hidden md:flex gap-2 items-center">
               <button
                 onClick={() => setActiveTab("personal")}
                 style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "personal" ? "#008CBA" : "transparent", color: activeTab === "personal" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
@@ -227,17 +250,7 @@ export default function AbsensiPage() {
                 <select
                   value={activeTab.startsWith("divisi_") ? activeTab : "default"}
                   onChange={(e) => setActiveTab(e.target.value)}
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "8px",
-                    border: "1px solid var(--border-color)",
-                    fontSize: "0.85rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent",
-                    color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)",
-                    outline: "none"
-                  }}
+                  style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent", color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)", outline: "none" }}
                 >
                   <option value="default" disabled>Data Per Divisi...</option>
                   {departments.map(d => (
@@ -263,14 +276,14 @@ export default function AbsensiPage() {
             </div>
 
             {/* Action Buttons based on Role */}
-            <div style={{ display: "flex", gap: "10px" }}>
-              {canCreateRecords(user.role.name) && (
+            <div className="flex flex-col md:flex-row gap-2.5 w-full md:w-auto mt-2 md:mt-0">
+              {canCreateRecords(user.role.name) && user.role.name !== "ketua_umum" && (
                 <button
                   onClick={() => {
                     setMeetingType("Rapat Departemen");
                     setIsModalOpen(true);
                   }}
-                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 14px", background: "var(--hover-bg)", color: "#00688b", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}
+                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[var(--hover-bg)] text-[#00688b] border border-[var(--border-color)] rounded-lg text-[0.85rem] font-semibold cursor-pointer"
                 >
                   <Plus size={16} /> Rapat Departemen
                 </button>
@@ -281,7 +294,7 @@ export default function AbsensiPage() {
                     setMeetingType("Rapat Umum");
                     setIsModalOpen(true);
                   }}
-                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 14px", background: "#008CBA", color: "#ffffff", border: "none", borderRadius: "8px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}
+                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[#008CBA] text-white border-none rounded-lg text-[0.85rem] font-semibold cursor-pointer"
                 >
                   <Plus size={16} /> Rapat Umum
                 </button>
@@ -331,7 +344,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-3.5 md:p-4 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#008CBA" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#d97706" className="md:w-5 md:h-5" />}
@@ -345,7 +358,7 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start md:items-end gap-2.5 md:gap-3 mt-1 md:mt-0 w-full md:w-auto">
+                      <div className="flex flex-col items-start md:items-end gap-2.5 md:gap-3 mt-2 md:mt-0 w-full md:w-auto">
                         <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.65rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--bg-main)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
                           {m.department}
                         </span>
@@ -376,7 +389,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px", opacity: 0.85 }}>
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-3.5 md:p-4 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0 bg-[#e5e7eb]">
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#6b7280" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#6b7280" className="md:w-5 md:h-5" />}
@@ -390,7 +403,7 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start md:items-end gap-2.5 md:gap-3 mt-1 md:mt-0 w-full md:w-auto">
+                      <div className="flex flex-col items-start md:items-end gap-2.5 md:gap-3 mt-2 md:mt-0 w-full md:w-auto">
                         <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.65rem", fontWeight: 600, background: "var(--border-color)", color: "var(--text-muted)" }}>
                           Selesai
                         </span>
