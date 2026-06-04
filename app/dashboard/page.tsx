@@ -263,8 +263,11 @@ export default function DashboardPage() {
         style={{
           flex: 1,
           marginLeft: "256px",
-          padding: "24px 28px",
-          minHeight: "100vh",
+          padding: "20px 24px",
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
           background: "var(--bg-main)",
         }}
       >
@@ -272,10 +275,11 @@ export default function DashboardPage() {
         <header
           className="animate-fade-in-up"
           style={{
+            flexShrink: 0,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "28px",
+            marginBottom: "16px",
             position: "relative",
             zIndex: 100,
           }}
@@ -306,7 +310,7 @@ export default function DashboardPage() {
         </header>
 
         {/* ===== Profile Card ===== */}
-        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "20px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
+        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ flexShrink: 0, padding: "16px 20px", marginBottom: "16px", display: "flex", alignItems: "center", gap: "16px" }}>
           <div style={{ width: "60px", height: "60px", borderRadius: "12px", background: "linear-gradient(135deg, #008CBA, #80c9de)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontSize: "1.5rem", fontWeight: 700, flexShrink: 0 }}>
             {initials}
           </div>
@@ -347,11 +351,12 @@ export default function DashboardPage() {
           if (safeRole !== "pembina") {
             return (
               <div style={{
+                flexShrink: 0,
                 background: "#fee2e2",
                 border: "1px solid #fecaca",
                 borderRadius: "12px",
-                padding: "16px 20px",
-                marginBottom: "24px",
+                padding: "12px 16px",
+                marginBottom: "16px",
                 display: "flex",
                 alignItems: "center",
                 gap: "12px"
@@ -374,10 +379,11 @@ export default function DashboardPage() {
         {/* ===== Summary Cards ===== */}
         <div
           style={{
+            flexShrink: 0,
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "14px",
-            marginBottom: "24px",
+            gap: "12px",
+            marginBottom: "16px",
           }}
         >
           {[
@@ -424,7 +430,7 @@ export default function DashboardPage() {
                 key={card.label}
                 className="solid-card animate-fade-in-up"
                 style={{
-                  padding: "18px 20px",
+                  padding: "14px 16px",
                   animationDelay: card.delay,
                 }}
               >
@@ -476,19 +482,15 @@ export default function DashboardPage() {
           })}
         </div>
 
-        {/* ===== Widget Row ===== */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
-          }}
-        >
-          {/* Mutabaah Progress */}
-          <div
-            className="solid-card animate-fade-in-up animate-delay-300"
-            style={{ padding: "22px" }}
-          >
+        {/* ===== Dynamic Scrollable Area ===== */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px", minHeight: 0 }}>
+          {/* Top Row: Widgets */}
+          <div style={{ flex: 1, display: "flex", gap: "16px", minHeight: 0 }}>
+            {/* Mutabaah Progress */}
+            <div
+              className="solid-card animate-fade-in-up animate-delay-300"
+              style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
+            >
             <div
               style={{
                 display: "flex",
@@ -535,7 +537,7 @@ export default function DashboardPage() {
             </div>
             <div
               style={{
-                maxHeight: "370px",
+                flex: 1,
                 overflowY: "auto",
                 paddingRight: "4px",
               }}
@@ -557,7 +559,7 @@ export default function DashboardPage() {
           {/* Absensi Chart */}
           <div
             className="solid-card animate-fade-in-up animate-delay-400"
-            style={{ padding: "22px" }}
+            style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
           >
             <div
               style={{
@@ -645,14 +647,18 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+            </div>
           </div>
 
           {/* Amanah – full width */}
           <div
             className="solid-card animate-fade-in-up animate-delay-500"
             style={{
-              padding: "22px",
-              gridColumn: "1 / -1",
+              flex: 1,
+              padding: "16px 20px",
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
             }}
           >
             <div
@@ -695,15 +701,18 @@ export default function DashboardPage() {
                 Lihat Semua
               </Link>
             </div>
-            <AmanahList tasks={tasks} onTaskClick={(task) => setSelectedTask(task)} />
+            <div style={{ flex: 1, overflowY: "auto", paddingRight: "4px" }}>
+              <AmanahList tasks={tasks} onTaskClick={(task) => setSelectedTask(task)} />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
         <footer
           style={{
+            flexShrink: 0,
             textAlign: "center",
-            padding: "28px 0 14px",
+            padding: "12px 0 0",
             fontSize: "0.7rem",
             color: "var(--border-color)",
           }}
