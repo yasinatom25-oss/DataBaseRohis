@@ -327,26 +327,26 @@ export default function IkarisPage() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col gap-4 p-4">
+            <div className="md:hidden flex flex-col gap-3 p-4">
               {membersData.length === 0 ? (
                 <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
                   Tidak ada data anggota untuk departemen Anda.
                 </div>
               ) : (
                 membersData.map(m => (
-                  <div key={m.id} className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-main)]">
-                    <div className="flex justify-between items-start mb-3">
+                  <div key={m.id} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
+                    <div className="flex justify-between items-start mb-2.5">
                       <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-[1rem] leading-tight mb-1">{m.name}</h3>
-                        <p className="text-[0.8rem] text-[var(--text-muted)] font-medium">{m.departmentName}</p>
+                        <h3 className="font-bold text-[var(--text-main)] text-[0.95rem] leading-tight mb-0.5">{m.name}</h3>
+                        <p className="text-[0.75rem] text-[var(--text-muted)] font-medium">{m.departmentName}</p>
                       </div>
                       <div>
                         {m.status === "Sudah Bayar" ? (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#dcfce7", color: "#16a34a", padding: "4px 8px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#dcfce7", color: "#16a34a", padding: "4px 8px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 700 }}>
                             <CheckCircle size={12} /> Lunas
                           </span>
                         ) : (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#fee2e2", color: "#ef4444", padding: "4px 8px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#fee2e2", color: "#ef4444", padding: "4px 8px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 700 }}>
                             <XCircle size={12} /> Belum
                           </span>
                         )}
@@ -354,7 +354,7 @@ export default function IkarisPage() {
                     </div>
                     
                     {canEdit && (
-                      <div className="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-end">
+                      <div className="mt-2.5 pt-2.5 border-t border-[var(--border-color)] flex justify-end">
                         <button
                           onClick={() => togglePaymentStatus(m)}
                           className="w-full flex justify-center items-center"
@@ -362,11 +362,11 @@ export default function IkarisPage() {
                             background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
                             color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "white",
                             border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                            padding: "10px 16px",
+                            padding: "8px 12px",
                             borderRadius: "8px",
                             fontWeight: 600,
                             cursor: "pointer",
-                            fontSize: "0.85rem",
+                            fontSize: "0.8rem",
                             transition: "all 0.2s"
                           }}
                         >

@@ -302,7 +302,7 @@ export default function DashboardPage() {
           
           {/* Avatar and Info */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
-            <div style={{ width: "60px", height: "60px", borderRadius: "12px", background: "linear-gradient(135deg, #008CBA, #80c9de)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontSize: "1.5rem", fontWeight: 700, flexShrink: 0 }}>
+            <div className="w-12 h-12 md:w-[60px] md:h-[60px] text-[1.2rem] md:text-[1.5rem] rounded-xl flex items-center justify-center font-bold flex-shrink-0 text-white" style={{ background: "linear-gradient(135deg, #008CBA, #80c9de)" }}>
               {initials}
             </div>
             <div className="flex-1 min-w-0">
@@ -322,20 +322,20 @@ export default function DashboardPage() {
 
           {/* Stats Boxes */}
           <div className="grid grid-cols-4 gap-2 md:flex md:gap-3 w-full md:w-auto">
-            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
-              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
+            <div className="text-center p-2 md:p-2.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1">
+              <div className="text-[1rem] md:text-[1.1rem] font-bold text-[#16a34a]">{attendanceStats.hadir}</div>
               <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Hadir</div>
             </div>
-            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
-              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
+            <div className="text-center p-2 md:p-2.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1">
+              <div className="text-[1rem] md:text-[1.1rem] font-bold text-[#008CBA]">{attendanceStats.izin}</div>
               <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Izin</div>
             </div>
-            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
-              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
+            <div className="text-center p-2 md:p-2.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1">
+              <div className="text-[1rem] md:text-[1.1rem] font-bold text-[#d97706]">{attendanceStats.sakit}</div>
               <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Sakit</div>
             </div>
-            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
-              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
+            <div className="text-center p-2 md:p-2.5 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1">
+              <div className="text-[1rem] md:text-[1.1rem] font-bold text-[var(--danger-text)]">{attendanceStats.alpa}</div>
               <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Alpa</div>
             </div>
           </div>

@@ -403,31 +403,31 @@ export default function MutabaahPage() {
               </div>
 
               {/* Mobile Card View */}
-              <div className="md:hidden flex flex-col gap-4 p-4">
+              <div className="md:hidden flex flex-col gap-3 p-4">
                 {filteredHistory.map((log, idx) => (
-                  <div key={idx} className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-main)]">
-                    <div className="flex justify-between items-start mb-3">
+                  <div key={idx} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
+                    <div className="flex justify-between items-start mb-2.5">
                       <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-[1rem] leading-tight mb-1">{log.name}</h3>
-                        <div className="flex items-center gap-2 text-[0.8rem] text-[var(--text-muted)] font-medium">
+                        <h3 className="font-bold text-[var(--text-main)] text-[0.95rem] leading-tight mb-0.5">{log.name}</h3>
+                        <div className="flex items-center gap-2 text-[0.75rem] text-[var(--text-muted)] font-medium">
                           <span>{log.department}</span>
                           <span>•</span>
                           <span>{log.date}</span>
                         </div>
                       </div>
                       <div className="flex flex-col items-end">
-                        <span style={{ fontSize: "1.2rem", fontWeight: 800, color: log.average >= 80 ? "#16a34a" : log.average >= 50 ? "#008CBA" : "#d97706" }}>
+                        <span style={{ fontSize: "1.1rem", fontWeight: 800, color: log.average >= 80 ? "#16a34a" : log.average >= 50 ? "#008CBA" : "#d97706" }}>
                           {log.average}%
                         </span>
-                        <span className="text-[0.65rem] text-[var(--text-muted)] uppercase tracking-wider">Capaian</span>
+                        <span className="text-[0.65rem] text-[var(--text-muted)] uppercase tracking-wider mt-[-2px]">Capaian</span>
                       </div>
                     </div>
                     
-                    <div className="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-end">
+                    <div className="mt-2.5 pt-2.5 border-t border-[var(--border-color)] flex justify-end">
                       <button 
                         onClick={() => setSelectedDetailLog(log)}
                         className="w-full flex justify-center items-center"
-                        style={{ padding: "10px 16px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
+                        style={{ padding: "8px 12px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
                       >
                         Lihat Detail Mutabaah
                       </button>
