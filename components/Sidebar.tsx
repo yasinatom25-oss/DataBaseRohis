@@ -11,9 +11,11 @@ import {
   ClipboardList,
   CalendarCheck,
   Wallet,
+  BarChart3,
   Settings,
   LogOut,
   Users,
+  Bell,
   Search,
 } from "lucide-react";
 import { User } from "@/lib/types";
@@ -50,31 +52,31 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ========== Desktop Sidebar ========== */}
-      <aside className="sidebar-desktop fixed top-0 left-0 w-64 min-h-screen bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col p-6 gap-6 z-50">
-        
-        {/* Block 1: Logo & Branding */}
-        <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm gap-3">
-          <Image 
-            src="/logo-original.png" 
-            alt="Rohani Islam Logo" 
-            width={72} 
-            height={72} 
-            className="object-contain rounded-xl" 
-            priority 
-          />
-          <div className="text-center">
-            <h1 className="font-extrabold text-slate-800 dark:text-slate-100 text-lg leading-tight">
-              Rohani Islam
-            </h1>
-            <p className="text-[0.65rem] font-medium text-slate-500 dark:text-slate-400 mt-1 uppercase tracking-widest">
-              Let's return to the right way
-            </p>
-          </div>
+      {/* ========== Desktop Sidebar – White & Blue ========== */}
+      <aside
+        className="sidebar-desktop"
+        style={{
+          width: "256px",
+          minHeight: "100vh",
+          background: "transparent",
+          border: "none",
+          display: "flex",
+          flexDirection: "column",
+          padding: "24px 16px",
+          gap: "16px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 50,
+        }}
+      >
+        {/* Block 1: Logo */}
+        <div className="floating-pill" style={{ display: "flex", justifyContent: "center", padding: "16px 8px" }}>
+          <Image src="/logo-original.png" alt="Rohani Islam Logo" width={120} height={120} className="logo-original" style={{ objectFit: "contain", borderRadius: "12px" }} priority />
         </div>
 
-        {/* Menu Utama */}
-        <nav className="flex flex-col gap-2">
+        {/* Menu Utama (Dipisah per item) */}
+        <nav style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {(() => {
             const items = [...BASE_NAV_ITEMS];
             if (canViewIkaris(safeRole)) {
@@ -87,32 +89,48 @@ export default function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 border ${
-                    isActive 
-                      ? "font-bold text-blue-700 bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 shadow-sm" 
-                      : "font-medium text-slate-600 bg-white border-slate-200 hover:border-blue-200 hover:bg-slate-50 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-800/80 shadow-sm"
-                  }`}
-                >
-                  <Icon size={18} className="shrink-0" />
-                  {item.label}
-                </Link>
-              );
+                className="floating-pill"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "12px 16px",
+                  fontSize: "0.85rem",
+                  fontWeight: isActive ? 600 : 500,
+                  color: isActive ? "#008CBA" : "var(--text-muted)",
+                  background: isActive ? "var(--primary-50)" : "var(--bg-card)",
+                  borderLeft: isActive ? "4px solid #008CBA" : "4px solid transparent",
+                  textDecoration: "none",
+                }}
+              >
+                <Icon size={18} style={{ flexShrink: 0 }} />
+                {item.label}
+              </Link>
+            );
             });
           })()}
         </nav>
 
-        <div className="flex-1" /> {/* Spacer */}
+        <div style={{ flex: 1 }} /> {/* Spacer */}
 
-        {/* Pengaturan & Profil */}
-        <div className="flex flex-col gap-2">
+        {/* Pengaturan & Profil (Dipisah per item) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {isKetumOrPembina && (
             <Link
               href="/anggota"
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 border ${
-                pathname === "/anggota"
-                  ? "font-bold text-blue-700 bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 shadow-sm" 
-                  : "font-medium text-slate-600 bg-white border-slate-200 hover:border-blue-200 hover:bg-slate-50 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 dark:hover:bg-slate-800/80 shadow-sm"
-              }`}
+              className="floating-pill"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "12px 16px",
+                fontSize: "0.85rem",
+                fontWeight: pathname === "/anggota" ? 600 : 500,
+                color: pathname === "/anggota" ? "#008CBA" : "var(--text-muted)",
+                background: pathname === "/anggota" ? "var(--primary-50)" : "var(--bg-card)",
+                borderLeft: pathname === "/anggota" ? "4px solid #008CBA" : "4px solid transparent",
+                textDecoration: "none",
+              }}
             >
               <Users size={18} />
               Anggota
@@ -121,29 +139,70 @@ export default function Sidebar() {
 
           <Link
             href="/settings"
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 border font-medium text-slate-600 bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600 shadow-sm`}
+            className="floating-pill"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "12px 16px",
+              fontSize: "0.85rem",
+              fontWeight: 500,
+              color: "var(--text-muted)",
+              textDecoration: "none",
+              borderLeft: "4px solid transparent",
+            }}
           >
             <Settings size={18} />
             Pengaturan
           </Link>
 
           {/* User card mini */}
-          <div className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm mt-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-sm">
+          <div
+            className="floating-pill"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "10px 12px",
+              background: "var(--bg-main)",
+              marginTop: "4px",
+            }}
+          >
+            <div
+              style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, #008CBA, #80c9de)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#ffffff",
+                flexShrink: 0,
+              }}
+            >
               {userInitials}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                style={{
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  color: "var(--text-main)",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {userName}
-              </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                {safeRole}
               </div>
             </div>
             <Link
               href="/login"
               onClick={() => localStorage.removeItem("rohiser_user")}
-              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+              style={{ color: "var(--danger-text)", transition: "all var(--transition-fast)", padding: "4px" }}
               title="Logout"
             >
               <LogOut size={18} />
@@ -153,27 +212,53 @@ export default function Sidebar() {
       </aside>
 
       {/* ========== Mobile Top Header ========== */}
-      <div className="mobile-header fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-50 px-5 flex justify-between items-center hidden">
-        <div className="flex items-center gap-3">
-          <Image src="/logo-original.png" alt="Logo" width={32} height={32} className="rounded-lg" />
-          <div className="flex flex-col">
-            <span className="font-extrabold text-[1.1rem] text-slate-800 dark:text-slate-100 leading-none">Rohani Islam</span>
-          </div>
+      <div
+        className="mobile-header"
+        style={{
+          display: "none",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "60px",
+          background: "var(--bg-main)",
+          borderBottom: "1px solid var(--border-color)",
+          zIndex: 50,
+          padding: "0 16px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Image src="/logo-original.png" alt="Logo" width={32} height={32} style={{ borderRadius: "6px" }} />
+          <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
         </div>
-        <div className="flex items-center gap-4">
-          <Search size={20} className="text-slate-500 dark:text-slate-400 cursor-pointer" />
-          <NotificationDropdown currentUser={user} />
-          <Link href="/settings" className="text-slate-500 dark:text-slate-400">
-            <Settings size={22} />
-          </Link>
-          <Link href="/login" onClick={() => localStorage.removeItem("rohiser_user")} className="text-red-500">
-            <LogOut size={22} />
-          </Link>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <Search size={20} style={{ color: "var(--text-muted)", cursor: "pointer" }} />
+          <div style={{ marginTop: "4px" }}><NotificationDropdown currentUser={user} /></div>
+          <Link href="/settings" style={{ color: "var(--text-muted)" }}><Settings size={22} /></Link>
+          <Link href="/login" onClick={() => localStorage.removeItem("rohiser_user")} style={{ color: "var(--danger-text)" }}><LogOut size={22} /></Link>
         </div>
       </div>
 
       {/* ========== Mobile Navigation Bar ========== */}
-      <nav className="mobile-nav fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50 px-4 py-2 flex justify-around items-center shadow-[0_-4px_12px_rgba(0,0,0,0.05)] hidden pb-safe">
+      <nav
+        className="mobile-nav"
+        style={{
+          display: "none",
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: "var(--bg-main)",
+          borderTop: "1px solid var(--border-color)",
+          zIndex: 50,
+          padding: "10px 16px",
+          justifyContent: "space-around",
+          alignItems: "center",
+          boxShadow: "0 -4px 12px rgba(0,0,0,0.05)",
+        }}
+      >
         {(() => {
           const items = [...BASE_NAV_ITEMS];
           if (canViewIkaris(safeRole)) {
@@ -188,24 +273,44 @@ export default function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="relative flex flex-col items-center gap-1 p-2"
-                  >
-                    {isActive && (
-                      <div className="absolute -top-2 w-8 h-1 rounded-b-full bg-blue-500" />
-                    )}
-                    <Icon size={22} className={isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500"} />
-                    <span className={`text-[0.65rem] ${isActive ? "font-bold text-blue-600 dark:text-blue-400" : "font-medium text-slate-400 dark:text-slate-500"}`}>
-                      {item.label}
-                    </span>
-                  </Link>
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "2px",
+                    padding: "4px 8px",
+                    fontSize: "0.6rem",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#008CBA" : "var(--text-muted)",
+                    textDecoration: "none",
+                    transition: "color var(--transition-fast)",
+                    position: "relative",
+                  }}
+                >
+                  {isActive && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "-6px",
+                        width: "20px",
+                        height: "3px",
+                        borderRadius: "0 0 3px 3px",
+                        background: "#008CBA",
+                      }}
+                    />
+                  )}
+                  <Icon size={20} />
+                  {item.label}
+                </Link>
                 );
               })}
+
             </>
           );
         })()}
       </nav>
 
-      {/* Responsive Styles (hiding elements based on viewport) */}
+      {/* Responsive */}
       <style jsx global>{`
         @media (max-width: 768px) {
           .sidebar-desktop {
@@ -216,11 +321,6 @@ export default function Sidebar() {
           }
           .mobile-header {
             display: flex !important;
-          }
-        }
-        @supports (padding-bottom: env(safe-area-inset-bottom)) {
-          .pb-safe {
-            padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
           }
         }
       `}</style>
