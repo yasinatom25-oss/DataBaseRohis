@@ -361,13 +361,23 @@ export default function AbsensiPage() {
                         </div>
                       </div>
                       <div className="flex flex-col items-start md:items-end gap-3 mt-2 md:mt-0 w-full md:w-auto">
-                        <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--bg-main)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
-                          {m.department}
-                        </span>
+                        <div className="flex items-center gap-2 pr-2 md:pr-4">
+                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--bg-main)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
+                            {m.department}
+                          </span>
+                          {canCreateRecords(user.role.name) && (
+                            <button 
+                              onClick={() => handleMarkCompleted(m.id)} 
+                              style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "#10b981", color: "#ffffff", border: "none", cursor: "pointer" }}
+                              className="hover:bg-[#059669] transition-colors"
+                            >
+                              ✓ Terlaksana
+                            </button>
+                          )}
+                        </div>
                         {canCreateRecords(user.role.name) ? (
                           <div className="flex flex-wrap gap-x-4 gap-y-3 md:gap-4 items-center w-full md:w-auto md:justify-end mt-1">
                             <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
-                            <button onClick={() => handleMarkCompleted(m.id)} className="border-none outline-none text-sm font-semibold text-[#16a34a] cursor-pointer bg-[#dcfce7] px-3 py-1.5 md:px-4 md:py-2 rounded-lg whitespace-nowrap">✓ Terlaksana</button>
                             <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Isi Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={18} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer" />
                           </div>
