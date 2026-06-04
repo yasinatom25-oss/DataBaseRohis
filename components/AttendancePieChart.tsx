@@ -30,15 +30,15 @@ export default function AttendancePieChart({ data }: AttendancePieChartProps) {
   })).filter((d) => d.value > 0);
 
   return (
-    <div style={{ width: "100%", height: "240px" }}>
+    <div style={{ width: "100%", flex: 1, minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsPie>
           <Pie
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={55}
-            outerRadius={85}
+            innerRadius="60%"
+            outerRadius="90%"
             paddingAngle={4}
             dataKey="value"
             strokeWidth={0}
