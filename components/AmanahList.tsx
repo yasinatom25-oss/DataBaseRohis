@@ -75,7 +75,7 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
         return (
           <div
             key={task.id}
-            className="animate-fade-in-up flex flex-col md:flex-row gap-3 md:gap-4 p-4 md:px-5 md:py-4 md:items-center"
+            className="animate-fade-in-up flex flex-col md:flex-row md:items-center gap-3 md:gap-[16px] p-4 md:p-[16px_20px]"
             style={{
               animationDelay: `${idx * 80}ms`,
               background: isUrgent ? "var(--danger-bg)" : "var(--bg-main)",
@@ -109,7 +109,7 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
             </div>
 
             {/* --- Main Content Row --- */}
-            <div className="flex items-start md:items-center gap-3 md:gap-4 w-full">
+            <div className="flex items-start md:items-center gap-3 md:gap-[16px] w-full">
               {/* Status icon */}
               <div
                 style={{
@@ -144,16 +144,48 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
               {/* Info Details */}
               <div style={{ flex: 1, minWidth: 0 }}>
                 {/* Desktop Title */}
-                <div className="hidden md:block font-semibold text-[0.85rem] text-[var(--text-main)] mb-[2px] truncate">
+                <div 
+                  className="hidden md:block"
+                  style={{
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    color: "var(--text-main)",
+                    overflow: "hidden",
+                    marginBottom: "2px",
+                  }}
+                >
                   {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.75rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
                   {task.title}
                 </div>
                 
-                <div className="flex flex-col md:flex-row md:items-center gap-1.5 md:gap-2 text-[0.7rem] md:text-[0.72rem] text-[var(--text-muted)] md:mt-[2px] md:flex-wrap">
+                <div 
+                  className="flex flex-col md:hidden text-[0.7rem] text-[var(--text-muted)] gap-1.5"
+                >
                   <span>Dari: {task.assignerName}</span>
-                  <span className="hidden md:inline">•</span>
                   <span>Untuk: {task.assigneeName}</span>
-                  <span className="hidden md:inline">•</span>
+                  <span
+                    style={{
+                      color: isUrgent ? "var(--danger-text)" : "var(--text-muted)",
+                      fontWeight: isUrgent ? 600 : 400,
+                    }}
+                  >
+                    {task.isTemplate ? "Siklus Rutin" : formatDate(task.deadline)}
+                    {isUrgent && days > 0 && ` (${days} hari lagi)`}
+                    {isUrgent && days <= 0 && " (Lewat deadline!)"}
+                  </span>
+                </div>
+                <div 
+                  className="hidden md:flex md:flex-wrap md:items-center gap-[8px]"
+                  style={{
+                    fontSize: "0.72rem",
+                    color: "var(--text-muted)",
+                    marginTop: "2px",
+                  }}
+                >
+                  <span>Dari: {task.assignerName}</span>
+                  <span>•</span>
+                  <span>Untuk: {task.assigneeName}</span>
+                  <span>•</span>
                   <span
                     style={{
                       color: isUrgent ? "var(--danger-text)" : "var(--text-muted)",
