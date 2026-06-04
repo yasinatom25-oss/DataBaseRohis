@@ -313,20 +313,20 @@ export default function AbsensiPage() {
             </h2>
             <div>
               <AttendancePieChart data={attendanceStats} />
-              <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
-                <div style={{ textAlign: "center" }}>
+              <div className="grid grid-cols-4 gap-2 w-full mt-4">
+                <div className="text-center flex flex-col items-center justify-center">
                   <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
                 </div>
-                <div style={{ textAlign: "center" }}>
+                <div className="text-center flex flex-col items-center justify-center">
                   <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
                 </div>
-                <div style={{ textAlign: "center" }}>
+                <div className="text-center flex flex-col items-center justify-center">
                   <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
                 </div>
-                <div style={{ textAlign: "center" }}>
+                <div className="text-center flex flex-col items-center justify-center">
                   <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
                 </div>

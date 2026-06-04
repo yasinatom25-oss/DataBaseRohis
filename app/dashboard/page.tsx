@@ -321,20 +321,20 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats Boxes */}
-          <div className="grid grid-cols-4 gap-2 md:flex md:gap-3 w-full md:w-auto">
-            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1 flex flex-col justify-center">
+          <div className="grid grid-cols-4 gap-2 w-full">
+            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex flex-col items-center justify-center">
               <div className="text-[1.1rem] md:text-[1.25rem] font-bold text-[#16a34a]">{attendanceStats.hadir}</div>
               <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: "2px" }}>Hadir</div>
             </div>
-            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1 flex flex-col justify-center">
+            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex flex-col items-center justify-center">
               <div className="text-[1.1rem] md:text-[1.25rem] font-bold text-[#008CBA]">{attendanceStats.izin}</div>
               <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: "2px" }}>Izin</div>
             </div>
-            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1 flex flex-col justify-center">
+            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex flex-col items-center justify-center">
               <div className="text-[1.1rem] md:text-[1.25rem] font-bold text-[#d97706]">{attendanceStats.sakit}</div>
               <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: "2px" }}>Sakit</div>
             </div>
-            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex-1 flex flex-col justify-center">
+            <div className="text-center p-4 md:p-6 bg-[var(--bg-main)] rounded-lg border border-[var(--border-color)] flex flex-col items-center justify-center">
               <div className="text-[1.1rem] md:text-[1.25rem] font-bold text-[var(--danger-text)]">{attendanceStats.alpa}</div>
               <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: "2px" }}>Alpa</div>
             </div>
@@ -506,14 +506,7 @@ export default function DashboardPage() {
             <AttendancePieChart data={attendanceStats} />
 
             {/* Stats */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                gap: "8px",
-                marginTop: "10px",
-              }}
-            >
+            <div className="grid grid-cols-4 gap-2 mt-3 w-full">
               {[
                 { label: "Hadir", value: attendanceStats.hadir, color: "#16a34a" },
                 { label: "Izin", value: attendanceStats.izin, color: "#008CBA" },
@@ -522,30 +515,12 @@ export default function DashboardPage() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  style={{
-                    textAlign: "center",
-                    padding: "6px 0",
-                    borderRadius: "8px",
-                    background: "var(--bg-main)",
-                    border: "1px solid var(--hover-bg)",
-                  }}
+                  className="flex flex-col items-center justify-center text-center p-1.5 rounded-lg bg-[var(--bg-main)] border border-[var(--hover-bg)]"
                 >
-                  <div
-                    style={{
-                      fontSize: "1.05rem",
-                      fontWeight: 700,
-                      color: stat.color,
-                    }}
-                  >
+                  <div style={{ fontSize: "0.9rem", fontWeight: 700, color: stat.color }}>
                     {stat.value}
                   </div>
-                  <div
-                    style={{
-                      fontSize: "0.65rem",
-                      color: "var(--text-muted)",
-                      marginTop: "2px",
-                    }}
-                  >
+                  <div style={{ fontSize: "0.6rem", color: "var(--text-muted)", marginTop: "2px" }}>
                     {stat.label}
                   </div>
                 </div>
