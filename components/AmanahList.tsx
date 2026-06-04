@@ -80,8 +80,8 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
               animationDelay: `${idx * 80}ms`,
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              padding: "12px 16px",
+              gap: "16px",
+              padding: "16px 20px",
               background: isUrgent ? "var(--danger-bg)" : "var(--bg-main)",
               borderRadius: "10px",
               border: isUrgent

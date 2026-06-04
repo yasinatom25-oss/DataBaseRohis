@@ -383,9 +383,9 @@ export default function MutabaahPage() {
               </div>
 
               {/* Mobile Card View */}
-              <div className="md:hidden flex flex-col px-4 sm:px-5">
+              <div className="md:hidden flex flex-col">
                 {filteredHistory.map((log, idx) => (
-                  <div key={idx} className="py-4 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-3">
+                  <div key={idx} className="py-5 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-4 -mx-4 px-4 sm:-mx-6 sm:px-6 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                       <div className="flex justify-between items-start">
                         <div>
                         <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{log.name}</h3>
