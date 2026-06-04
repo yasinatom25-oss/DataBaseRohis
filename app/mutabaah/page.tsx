@@ -361,44 +361,81 @@ export default function MutabaahPage() {
           {filteredHistory.length === 0 ? (
             <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "40px" }}>Belum ada data mutabaah yang diisi.</div>
           ) : (
-            <div className="overflow-x-auto w-full">
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", textAlign: "left", minWidth: "600px" }}>
-                <thead>
-                  <tr style={{ borderBottom: "1px solid var(--border-color)", color: "var(--text-muted)" }}>
-                    <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Nama Anggota</th>
-                    <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Divisi</th>
-                    <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Tanggal Isi</th>
-                    <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Pencapaian Rata-rata</th>
-                    <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600, textAlign: "right" }}>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredHistory.map((log, idx) => (
-                    <tr key={idx} style={{ borderBottom: "1px solid var(--hover-bg)" }}>
-                      <td className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600, color: "var(--text-main)" }}>{log.name}</td>
-                      <td className="whitespace-nowrap" style={{ padding: "12px", color: "var(--text-muted)" }}>{log.department}</td>
-                      <td className="whitespace-nowrap" style={{ padding: "12px", color: "var(--text-muted)" }}>{log.date}</td>
-                      <td className="whitespace-nowrap" style={{ padding: "12px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "150px" }}>
-                          <div style={{ flex: 1, height: "6px", background: "var(--hover-bg)", borderRadius: "3px", overflow: "hidden" }}>
-                            <div style={{ width: `${log.average}%`, height: "100%", background: log.average >= 80 ? "#16a34a" : log.average >= 50 ? "#008CBA" : "#d97706", borderRadius: "3px" }} />
-                          </div>
-                          <span style={{ fontWeight: 600, color: "var(--text-main)", width: "40px" }}>{log.average}%</span>
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap" style={{ padding: "12px", textAlign: "right" }}>
-                        <button 
-                          onClick={() => setSelectedDetailLog(log)}
-                          style={{ padding: "6px 12px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "6px", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer", whiteSpace: "nowrap" }}
-                        >
-                          Detail
-                        </button>
-                      </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto w-full">
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", textAlign: "left", minWidth: "600px" }}>
+                  <thead>
+                    <tr style={{ borderBottom: "1px solid var(--border-color)", color: "var(--text-muted)" }}>
+                      <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Nama Anggota</th>
+                      <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Divisi</th>
+                      <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Tanggal Isi</th>
+                      <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600 }}>Pencapaian Rata-rata</th>
+                      <th className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600, textAlign: "right" }}>Aksi</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {filteredHistory.map((log, idx) => (
+                      <tr key={idx} style={{ borderBottom: "1px solid var(--hover-bg)" }}>
+                        <td className="whitespace-nowrap" style={{ padding: "12px", fontWeight: 600, color: "var(--text-main)" }}>{log.name}</td>
+                        <td className="whitespace-nowrap" style={{ padding: "12px", color: "var(--text-muted)" }}>{log.department}</td>
+                        <td className="whitespace-nowrap" style={{ padding: "12px", color: "var(--text-muted)" }}>{log.date}</td>
+                        <td className="whitespace-nowrap" style={{ padding: "12px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: "150px" }}>
+                            <div style={{ flex: 1, height: "6px", background: "var(--hover-bg)", borderRadius: "3px", overflow: "hidden" }}>
+                              <div style={{ width: `${log.average}%`, height: "100%", background: log.average >= 80 ? "#16a34a" : log.average >= 50 ? "#008CBA" : "#d97706", borderRadius: "3px" }} />
+                            </div>
+                            <span style={{ fontWeight: 600, color: "var(--text-main)", width: "40px" }}>{log.average}%</span>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap" style={{ padding: "12px", textAlign: "right" }}>
+                          <button 
+                            onClick={() => setSelectedDetailLog(log)}
+                            style={{ padding: "6px 12px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "6px", fontSize: "0.8rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer", whiteSpace: "nowrap" }}
+                          >
+                            Detail
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden flex flex-col gap-4 p-4">
+                {filteredHistory.map((log, idx) => (
+                  <div key={idx} className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-main)]">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="font-bold text-[var(--text-main)] text-[1rem] leading-tight mb-1">{log.name}</h3>
+                        <div className="flex items-center gap-2 text-[0.8rem] text-[var(--text-muted)] font-medium">
+                          <span>{log.department}</span>
+                          <span>•</span>
+                          <span>{log.date}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span style={{ fontSize: "1.2rem", fontWeight: 800, color: log.average >= 80 ? "#16a34a" : log.average >= 50 ? "#008CBA" : "#d97706" }}>
+                          {log.average}%
+                        </span>
+                        <span className="text-[0.65rem] text-[var(--text-muted)] uppercase tracking-wider">Capaian</span>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-end">
+                      <button 
+                        onClick={() => setSelectedDetailLog(log)}
+                        className="w-full flex justify-center items-center"
+                        style={{ padding: "10px 16px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", cursor: "pointer" }}
+                      >
+                        Lihat Detail Mutabaah
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </main>

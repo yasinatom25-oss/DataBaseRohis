@@ -263,66 +263,122 @@ export default function IkarisPage() {
         {loading ? (
           <div style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris...</div>
         ) : (
-          <div className="overflow-x-auto w-full">
-            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
-              <thead>
-                <tr style={{ background: "var(--bg-main)", borderBottom: "1px solid var(--border-color)" }}>
-                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>NAMA ANGGOTA</th>
-                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>DEPARTEMEN</th>
-                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>STATUS</th>
-                  {canEdit && <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right", fontSize: "0.85rem", color: "var(--text-muted)" }}>AKSI</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {membersData.map(m => (
-                  <tr key={m.id} style={{ borderBottom: "1px solid var(--border-color)", transition: "background 0.2s" }} className="hover-row">
-                    <td className="whitespace-nowrap" style={{ padding: "16px 20px", fontWeight: 500, color: "var(--text-main)" }}>{m.name}</td>
-                    <td className="whitespace-nowrap" style={{ padding: "16px 20px", color: "var(--text-muted)", fontSize: "0.9rem" }}>{m.departmentName}</td>
-                    <td className="whitespace-nowrap" style={{ padding: "16px 20px" }}>
-                      {m.status === "Sudah Bayar" ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#dcfce7", color: "#16a34a", padding: "6px 12px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 600 }}>
-                          <CheckCircle size={14} /> Lunas
-                        </span>
-                      ) : (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#fee2e2", color: "#ef4444", padding: "6px 12px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 600 }}>
-                          <XCircle size={14} /> Belum
-                        </span>
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto w-full">
+              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
+                <thead>
+                  <tr style={{ background: "var(--bg-main)", borderBottom: "1px solid var(--border-color)" }}>
+                    <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>NAMA ANGGOTA</th>
+                    <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>DEPARTEMEN</th>
+                    <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>STATUS</th>
+                    {canEdit && <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right", fontSize: "0.85rem", color: "var(--text-muted)" }}>AKSI</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {membersData.map(m => (
+                    <tr key={m.id} style={{ borderBottom: "1px solid var(--border-color)", transition: "background 0.2s" }} className="hover-row">
+                      <td className="whitespace-nowrap" style={{ padding: "16px 20px", fontWeight: 500, color: "var(--text-main)" }}>{m.name}</td>
+                      <td className="whitespace-nowrap" style={{ padding: "16px 20px", color: "var(--text-muted)", fontSize: "0.9rem" }}>{m.departmentName}</td>
+                      <td className="whitespace-nowrap" style={{ padding: "16px 20px" }}>
+                        {m.status === "Sudah Bayar" ? (
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#dcfce7", color: "#16a34a", padding: "6px 12px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 600 }}>
+                            <CheckCircle size={14} /> Lunas
+                          </span>
+                        ) : (
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#fee2e2", color: "#ef4444", padding: "6px 12px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 600 }}>
+                            <XCircle size={14} /> Belum
+                          </span>
+                        )}
+                      </td>
+                      {canEdit && (
+                        <td className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right" }}>
+                          <button
+                            onClick={() => togglePaymentStatus(m)}
+                            style={{
+                              background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
+                              color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "white",
+                              border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
+                              padding: "8px 16px",
+                              borderRadius: "8px",
+                              fontWeight: 600,
+                              cursor: "pointer",
+                              fontSize: "0.85rem",
+                              transition: "all 0.2s",
+                              whiteSpace: "nowrap"
+                            }}
+                          >
+                            {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
+                          </button>
+                        </td>
                       )}
-                    </td>
+                    </tr>
+                  ))}
+                  
+                  {membersData.length === 0 && (
+                    <tr>
+                      <td colSpan={canEdit ? 4 : 3} style={{ padding: "30px", textAlign: "center", color: "var(--text-muted)" }}>
+                        Tidak ada data anggota untuk departemen Anda.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden flex flex-col gap-4 p-4">
+              {membersData.length === 0 ? (
+                <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
+                  Tidak ada data anggota untuk departemen Anda.
+                </div>
+              ) : (
+                membersData.map(m => (
+                  <div key={m.id} className="border border-[var(--border-color)] rounded-xl p-4 bg-[var(--bg-main)]">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="font-bold text-[var(--text-main)] text-[1rem] leading-tight mb-1">{m.name}</h3>
+                        <p className="text-[0.8rem] text-[var(--text-muted)] font-medium">{m.departmentName}</p>
+                      </div>
+                      <div>
+                        {m.status === "Sudah Bayar" ? (
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#dcfce7", color: "#16a34a", padding: "4px 8px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                            <CheckCircle size={12} /> Lunas
+                          </span>
+                        ) : (
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#fee2e2", color: "#ef4444", padding: "4px 8px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700 }}>
+                            <XCircle size={12} /> Belum
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
                     {canEdit && (
-                      <td className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right" }}>
+                      <div className="mt-3 pt-3 border-t border-[var(--border-color)] flex justify-end">
                         <button
                           onClick={() => togglePaymentStatus(m)}
+                          className="w-full flex justify-center items-center"
                           style={{
                             background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
                             color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "white",
                             border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                            padding: "8px 16px",
+                            padding: "10px 16px",
                             borderRadius: "8px",
                             fontWeight: 600,
                             cursor: "pointer",
                             fontSize: "0.85rem",
-                            transition: "all 0.2s",
-                            whiteSpace: "nowrap"
+                            transition: "all 0.2s"
                           }}
                         >
                           {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
                         </button>
-                      </td>
+                      </div>
                     )}
-                  </tr>
-                ))}
-                
-                {membersData.length === 0 && (
-                  <tr>
-                    <td colSpan={canEdit ? 4 : 3} style={{ padding: "30px", textAlign: "center", color: "var(--text-muted)" }}>
-                      Tidak ada data anggota untuk departemen Anda.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
         )}
       </div>
       </main>
