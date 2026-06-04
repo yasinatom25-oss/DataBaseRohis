@@ -12,6 +12,7 @@ import { mockAttendanceSummary } from "@/lib/mock-data";
 import { canViewGlobalData, isKadiv, isBPH, canCreateRecords, formatRoleName } from "@/lib/rbac";
 import NotificationDropdown from "@/components/NotificationDropdown";
 import { supabase } from "@/lib/supabase";
+import { verifyUserSession } from "@/lib/auth";
 
 export default function AbsensiPage() {
   const router = useRouter();
@@ -31,8 +32,14 @@ export default function AbsensiPage() {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsedUser = JSON.parse(stored);
-      setUser(parsedUser);
-      fetchMeetings(parsedUser);
+      verifyUserSession(
+        parsedUser,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setUser(updatedUser);
+          fetchMeetings(updatedUser);
+        }
+      );
     } else {
       router.push("/login");
     }

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { verifyUserSession } from "@/lib/auth";
 import type { User } from "@/lib/types";
 import { canViewIkaris, canEditIkaris, isBPH } from "@/lib/rbac";
 import { Wallet, CheckCircle, XCircle } from "lucide-react";
@@ -25,14 +26,18 @@ export default function IkarisPage() {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsed = JSON.parse(stored);
-      setCurrentUser(parsed);
-      
-      if (!canViewIkaris(parsed.role.name)) {
-        router.push("/dashboard");
-        return;
-      }
-      
-      fetchIkarisData(parsed, currentMonth);
+      verifyUserSession(
+        parsed,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setCurrentUser(updatedUser);
+          if (!canViewIkaris(updatedUser.role.name)) {
+            router.push("/dashboard");
+            return;
+          }
+          fetchIkarisData(updatedUser, currentMonth);
+        }
+      );
     } else {
       router.push("/login");
     }

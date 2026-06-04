@@ -7,6 +7,7 @@ import { User } from "@/lib/types";
 import { Plus, Edit, Trash2, ShieldAlert, ArrowLeft } from "lucide-react";
 import ManageMemberModal from "@/components/ManageMemberModal";
 import { formatRoleName } from "@/lib/rbac";
+import { verifyUserSession } from "@/lib/auth";
 
 export default function AnggotaPage() {
   const router = useRouter();
@@ -22,12 +23,18 @@ export default function AnggotaPage() {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsed = JSON.parse(stored);
-      setCurrentUser(parsed);
-      if (parsed.role.name !== "ketua_umum" && parsed.role.name !== "pembina") {
-        router.push("/dashboard"); // Kick out unauthorized users
-        return;
-      }
-      fetchData();
+      verifyUserSession(
+        parsed,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setCurrentUser(updatedUser);
+          if (updatedUser.role.name !== "ketua_umum" && updatedUser.role.name !== "pembina") {
+            router.push("/dashboard"); // Kick out unauthorized users
+            return;
+          }
+          fetchData();
+        }
+      );
     } else {
       router.push("/login");
     }

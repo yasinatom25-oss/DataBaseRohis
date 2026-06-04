@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { formatRoleName } from "@/lib/rbac";
+import { verifyUserSession } from "@/lib/auth";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -42,8 +43,14 @@ export default function DashboardPage() {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsedUser = JSON.parse(stored);
-      setUser(parsedUser);
-      fetchDashboardData(parsedUser);
+      verifyUserSession(
+        parsedUser,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setUser(updatedUser);
+          fetchDashboardData(updatedUser);
+        }
+      );
     } else {
       router.push("/login");
     }

@@ -11,6 +11,7 @@ import MutabaahFormModal from "@/components/MutabaahFormModal";
 import MutabaahDetailModal from "@/components/MutabaahDetailModal";
 import NotificationDropdown from "@/components/NotificationDropdown";
 import { supabase } from "@/lib/supabase";
+import { verifyUserSession } from "@/lib/auth";
 
 export default function MutabaahPage() {
   const router = useRouter();
@@ -33,8 +34,14 @@ export default function MutabaahPage() {
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
       const parsedUser = JSON.parse(stored);
-      setUser(parsedUser);
-      fetchMutabaah(parsedUser);
+      verifyUserSession(
+        parsedUser,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setUser(updatedUser);
+          fetchMutabaah(updatedUser);
+        }
+      );
     } else {
       router.push("/login");
     }

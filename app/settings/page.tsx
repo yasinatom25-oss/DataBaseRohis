@@ -6,6 +6,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import NotificationDropdown from "@/components/NotificationDropdown";
 import type { User } from "@/lib/types";
 import { Search, Bell, Settings } from "lucide-react";
+import { verifyUserSession } from "@/lib/auth";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -16,7 +17,14 @@ export default function SettingsPage() {
     setMounted(true);
     const stored = localStorage.getItem("rohiser_user");
     if (stored) {
-      setUser(JSON.parse(stored));
+      const parsedUser = JSON.parse(stored);
+      verifyUserSession(
+        parsedUser,
+        () => router.push("/login"),
+        (updatedUser) => {
+          setUser(updatedUser);
+        }
+      );
     } else {
       router.push("/login");
     }
