@@ -304,11 +304,7 @@ export default function Sidebar() {
                 </Link>
                 );
               })}
-              {/* Notification bell */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", padding: "4px 8px", fontSize: "0.6rem", color: "var(--text-muted)" }}>
-                <NotificationDropdown currentUser={user} />
-                <span>Notif</span>
-              </div>
+
             </>
           );
         })()}
