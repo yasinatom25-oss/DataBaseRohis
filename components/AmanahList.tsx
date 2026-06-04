@@ -73,43 +73,117 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
         const isUrgent = !task.isTemplate && days <= 3 && task.status !== "completed";
 
         return (
-          <div
-            key={task.id}
-            className="animate-fade-in-up flex flex-col md:flex-row md:items-center gap-3 md:gap-[16px] p-4 md:p-[16px_20px]"
-            style={{
-              animationDelay: `${idx * 80}ms`,
-              background: isUrgent ? "var(--danger-bg)" : "var(--bg-main)",
-              borderRadius: "10px",
-              border: isUrgent
-                ? "1px solid var(--danger-border)"
-                : "1px solid var(--border-color)",
-              cursor: "pointer",
-              transition: "all var(--transition-base)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--primary-50)";
-              e.currentTarget.style.borderColor = "#b3deec";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = isUrgent ? "var(--danger-bg)" : "var(--bg-main)";
-              e.currentTarget.style.borderColor = isUrgent ? "var(--danger-border)" : "var(--border-color)";
-            }}
-            onClick={() => onTaskClick?.(task)}
-          >
-            {/* --- Mobile Header: Title & Badge --- */}
-            <div className="flex md:hidden justify-between items-start gap-3 w-full">
-              <div className="font-semibold text-sm text-[var(--text-main)] leading-snug">
-                {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.7rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
-                {task.title}
+          <React.Fragment key={task.id}>
+            {/* ========================================================
+                MOBILE VIEW (refactored)
+               ======================================================== */}
+            <div
+              className="animate-fade-in-up flex flex-col md:hidden gap-3 p-4"
+              style={{
+                animationDelay: `${idx * 80}ms`,
+                background: isUrgent ? "var(--danger-bg)" : "var(--bg-main)",
+                borderRadius: "10px",
+                border: isUrgent
+                  ? "1px solid var(--danger-border)"
+                  : "1px solid var(--border-color)",
+                cursor: "pointer",
+                transition: "all var(--transition-base)",
+              }}
+              onClick={() => onTaskClick?.(task)}
+            >
+              {/* --- Mobile Header: Title & Badge --- */}
+              <div className="flex justify-between items-start gap-3 w-full">
+                <div className="font-semibold text-sm text-[var(--text-main)] leading-snug">
+                  {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.7rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
+                  {task.title}
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <span className={`badge ${cfg.badgeClass}`} style={{ fontSize: "0.65rem", padding: "3px 6px" }}>{cfg.label}</span>
+                  <ChevronRight size={14} style={{ color: "var(--border-color)" }} />
+                </div>
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
-                <span className={`badge ${cfg.badgeClass}`} style={{ fontSize: "0.65rem", padding: "3px 6px" }}>{cfg.label}</span>
-                <ChevronRight size={14} style={{ color: "var(--border-color)" }} />
+
+              {/* --- Mobile Content Row --- */}
+              <div className="flex items-start gap-3 w-full">
+                {/* Status icon */}
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "9px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background:
+                      task.status === "pending"
+                        ? "var(--status-pending-bg)"
+                        : task.status === "in_progress"
+                          ? "var(--status-progress-bg)"
+                          : task.status === "waiting_approval"
+                            ? "var(--status-waiting-bg)"
+                            : "var(--status-completed-bg)",
+                    color:
+                      task.status === "pending"
+                        ? "var(--status-pending-text)"
+                        : task.status === "in_progress"
+                          ? "var(--status-progress-text)"
+                          : task.status === "waiting_approval"
+                            ? "var(--status-waiting-text)"
+                            : "var(--status-completed-text)",
+                    flexShrink: 0,
+                  }}
+                >
+                  {cfg.icon}
+                </div>
+
+                {/* Info Details Mobile */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="flex flex-col text-[0.7rem] text-[var(--text-muted)] gap-1.5">
+                    <span>Dari: {task.assignerName}</span>
+                    <span>Untuk: {task.assigneeName}</span>
+                    <span
+                      style={{
+                        color: isUrgent ? "var(--danger-text)" : "var(--text-muted)",
+                        fontWeight: isUrgent ? 600 : 400,
+                      }}
+                    >
+                      {task.isTemplate ? "Siklus Rutin" : formatDate(task.deadline)}
+                      {isUrgent && days > 0 && ` (${days} hari lagi)`}
+                      {isUrgent && days <= 0 && " (Lewat deadline!)"}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* --- Main Content Row --- */}
-            <div className="flex items-start md:items-center gap-3 md:gap-[16px] w-full">
+            {/* ========================================================
+                DESKTOP VIEW (exact replica of original)
+               ======================================================== */}
+            <div
+              className="animate-fade-in-up hidden md:flex"
+              style={{
+                animationDelay: `${idx * 80}ms`,
+                alignItems: "center",
+                gap: "16px",
+                padding: "16px 20px",
+                background: isUrgent ? "var(--danger-bg)" : "var(--bg-main)",
+                borderRadius: "10px",
+                border: isUrgent
+                  ? "1px solid var(--danger-border)"
+                  : "1px solid var(--border-color)",
+                cursor: "pointer",
+                transition: "all var(--transition-base)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--primary-50)";
+                e.currentTarget.style.borderColor = "#b3deec";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = isUrgent ? "var(--danger-bg)" : "var(--bg-main)";
+                e.currentTarget.style.borderColor = isUrgent ? "var(--danger-border)" : "var(--border-color)";
+              }}
+              onClick={() => onTaskClick?.(task)}
+            >
               {/* Status icon */}
               <div
                 style={{
@@ -141,11 +215,9 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
                 {cfg.icon}
               </div>
 
-              {/* Info Details */}
+              {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
-                {/* Desktop Title */}
-                <div 
-                  className="hidden md:block"
+                <div
                   style={{
                     fontSize: "0.85rem",
                     fontWeight: 600,
@@ -157,29 +229,15 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
                   {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.75rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
                   {task.title}
                 </div>
-                
-                <div 
-                  className="flex flex-col md:hidden text-[0.7rem] text-[var(--text-muted)] gap-1.5"
-                >
-                  <span>Dari: {task.assignerName}</span>
-                  <span>Untuk: {task.assigneeName}</span>
-                  <span
-                    style={{
-                      color: isUrgent ? "var(--danger-text)" : "var(--text-muted)",
-                      fontWeight: isUrgent ? 600 : 400,
-                    }}
-                  >
-                    {task.isTemplate ? "Siklus Rutin" : formatDate(task.deadline)}
-                    {isUrgent && days > 0 && ` (${days} hari lagi)`}
-                    {isUrgent && days <= 0 && " (Lewat deadline!)"}
-                  </span>
-                </div>
-                <div 
-                  className="hidden md:flex md:flex-wrap md:items-center gap-[8px]"
+                <div
                   style={{
                     fontSize: "0.72rem",
                     color: "var(--text-muted)",
                     marginTop: "2px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    flexWrap: "wrap",
                   }}
                 >
                   <span>Dari: {task.assignerName}</span>
@@ -199,13 +257,20 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
                 </div>
               </div>
 
-              {/* Desktop Badge + arrow */}
-              <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+              {/* Badge + arrow */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  flexShrink: 0,
+                }}
+              >
                 <span className={`badge ${cfg.badgeClass}`}>{cfg.label}</span>
                 <ChevronRight size={16} style={{ color: "var(--border-color)" }} />
               </div>
             </div>
-          </div>
+          </React.Fragment>
         );
       })}
 
