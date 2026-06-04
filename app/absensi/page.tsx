@@ -251,23 +251,25 @@ export default function AbsensiPage() {
             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : "Rohis"}
             </h2>
-            <AttendancePieChart data={attendanceStats} />
-            <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
-              </div>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
-                <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
+            <div key={activeTab} className="animate-fade-in-up">
+              <AttendancePieChart data={attendanceStats} />
+              <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
+                </div>
               </div>
             </div>
           </div>
@@ -278,10 +280,11 @@ export default function AbsensiPage() {
             {/* Jadwal Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal Rapat (Akan Datang)</h2>
-              {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
-                <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div key={activeTab} className="animate-fade-in-up">
+                {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
+                  <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
                     <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", border: "1px solid var(--border-color)", borderRadius: "10px", background: "var(--hover-bg)" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -315,16 +318,18 @@ export default function AbsensiPage() {
                     </div>
                   ))}
                 </div>
-              )}
+                )}
+              </div>
             </div>
 
             {/* Riwayat Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-400" style={{ padding: "24px" }}>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Riwayat Rapat (Selesai)</h2>
-              {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
-                <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px", opacity: 0.85 }}>
+              <div key={activeTab} className="animate-fade-in-up">
+                {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
+                  <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px", opacity: 0.85 }}>
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
                     <div key={m.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", border: "1px solid var(--border-color)", borderRadius: "10px", background: "var(--hover-bg)" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -357,7 +362,8 @@ export default function AbsensiPage() {
                     </div>
                   ))}
                 </div>
-              )}
+                )}
+              </div>
             </div>
 
           </div>
