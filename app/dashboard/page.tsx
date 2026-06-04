@@ -378,12 +378,12 @@ export default function DashboardPage() {
 
 
         {/* ===== Dynamic Scrollable Area ===== */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px", minHeight: 0 }}>
+        <div className="mobile-stack" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px", minHeight: 0 }}>
           {/* Top Row: Widgets */}
-          <div style={{ flex: 1, display: "flex", gap: "16px", minHeight: 0 }}>
+          <div className="mobile-stack" style={{ flex: 1, display: "flex", gap: "16px", minHeight: 0 }}>
             {/* Mutabaah Progress */}
             <div
-              className="solid-card animate-fade-in-up animate-delay-300"
+              className="solid-card animate-fade-in-up animate-delay-300 mobile-auto-height"
               style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
             >
             <div
@@ -453,7 +453,7 @@ export default function DashboardPage() {
 
           {/* Absensi Chart */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-400"
+            className="solid-card animate-fade-in-up animate-delay-400 mobile-auto-height"
             style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
           >
             <div
@@ -547,7 +547,7 @@ export default function DashboardPage() {
 
           {/* Amanah – full width */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-500"
+            className="solid-card animate-fade-in-up animate-delay-500 mobile-auto-height"
             style={{
               flex: 1,
               padding: "16px 20px",
@@ -641,7 +641,18 @@ export default function DashboardPage() {
         @media (max-width: 768px) {
           main {
             margin-left: 0 !important;
-            padding: 16px 12px 80px !important;
+            padding: 76px 12px 80px !important;
+            height: auto !important;
+            overflow: visible !important;
+          }
+          .mobile-stack {
+            flex-direction: column !important;
+            height: auto !important;
+          }
+          .mobile-auto-height {
+            flex: none !important;
+            height: auto !important;
+            overflow: visible !important;
           }
           div[style*="grid-template-columns: 1fr 1fr"] {
             grid-template-columns: 1fr !important;

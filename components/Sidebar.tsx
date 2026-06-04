@@ -208,6 +208,34 @@ export default function Sidebar() {
         </div>
       </aside>
 
+      {/* ========== Mobile Top Header ========== */}
+      <div
+        className="mobile-header"
+        style={{
+          display: "none",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "60px",
+          background: "var(--bg-main)",
+          borderBottom: "1px solid var(--border-color)",
+          zIndex: 50,
+          padding: "0 16px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Image src="/logo-original.png" alt="Logo" width={32} height={32} style={{ borderRadius: "6px" }} />
+          <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
+        </div>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <Link href="/settings" style={{ color: "var(--text-muted)" }}><Settings size={22} /></Link>
+          <Link href="/login" onClick={() => localStorage.removeItem("rohiser_user")} style={{ color: "var(--danger-text)" }}><LogOut size={22} /></Link>
+        </div>
+      </div>
+
       {/* ========== Mobile Navigation Bar ========== */}
       <nav
         className="mobile-nav"
@@ -281,9 +309,15 @@ export default function Sidebar() {
           .mobile-nav {
             display: flex !important;
           }
+          .mobile-header {
+            display: flex !important;
+          }
           .main-content {
             margin-left: 0 !important;
+            padding-top: 76px !important;
             padding-bottom: 80px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
           }
         }
       `}</style>
