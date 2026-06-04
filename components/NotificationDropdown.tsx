@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bell, ClipboardList, BookOpen } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@/lib/types";
+import { isBPH, isKadiv } from "@/lib/rbac";
 
 export default function NotificationDropdown({ currentUser }: { currentUser: User | null }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,12 +93,15 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
 
       const { data: upcomingMeetings } = await supabase
         .from("attendances")
-        .select("id, event_name, event_date, event_time, event_type, notetaker_id")
+        .select("id, event_name, event_date, event_time, event_type, notetaker_id, target_audience")
         .eq("event_date", todayStr)
         .eq("status", "Scheduled")
         .not("event_time", "is", null);
 
       if (upcomingMeetings) {
+        const userIsBPH = isBPH(currentUser.role.name);
+        const userIsKadiv = isKadiv(currentUser.role.name);
+
         for (const m of upcomingMeetings) {
           // Hitung selisih waktu
           const [hour, minute] = (m.event_time as string).split(":").map(Number);
@@ -109,8 +113,19 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
           // Hanya tampilkan jika 0–75 menit lagi
           if (diffMin < 0 || diffMin > 75) continue;
 
-          // Filter: Rapat Departemen hanya untuk anggota departemen yang sama
-          if (m.event_type === "Rapat Departemen") {
+          // Target Audience filtering
+          if (m.event_type === "Rapat Umum") {
+            const aud = m.target_audience || "Semua Pengurus";
+            if (aud !== "Semua Pengurus") {
+              if (aud === "BPH + Kadiv" && !userIsBPH && !userIsKadiv) continue;
+              if (aud.startsWith("Divisi: ")) {
+                const targetDept = aud.replace("Divisi: ", "");
+                if (targetDept === "BPH" && !userIsBPH) continue;
+                if (targetDept !== "BPH" && currentUser.department?.name !== targetDept) continue;
+              }
+            }
+          } else if (m.event_type === "Rapat Departemen") {
+            // Rapat Departemen hanya untuk anggota departemen yang sama
             const deptName = currentUser.department?.name;
             if (!deptName) continue; // BPH tidak punya departemen, skip
           }

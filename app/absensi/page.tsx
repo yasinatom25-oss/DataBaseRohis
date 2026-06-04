@@ -69,7 +69,8 @@ export default function AbsensiPage() {
         notetakerId: d.notetaker_id || null,
         locationType: d.location_type || null,
         locationDetail: d.location_detail || null,
-        department: d.event_type === "Rapat Umum" ? "Seluruh Rohis" : currentUser.department?.name || "Divisi",
+        targetAudience: d.target_audience || "Semua Pengurus",
+        department: d.event_type === "Rapat Umum" ? (d.target_audience || "Semua Pengurus") : currentUser.department?.name || "Divisi",
       })));
     } catch (e) {
       console.error("fetchMeetings exception:", e);
@@ -149,8 +150,26 @@ export default function AbsensiPage() {
 
   // Filter meetings logic
   const filteredMeetings = meetings.filter((m) => {
-    if (activeTab === "personal") return true;
-    if (activeTab === "divisi") return m.department === user.department?.name || m.department === "Seluruh Rohis";
+    // Basic visibility by tab
+    if (activeTab === "divisi") return m.department === user.department?.name || m.department === "Semua Pengurus" || m.department === `Divisi: ${user.department?.name}`;
+    
+    // For regular users (personal tab) or default view, check if they are in the target audience
+    if (m.eventType === "Rapat Umum") {
+      const aud = m.targetAudience;
+      if (aud === "Semua Pengurus") return true;
+      if (aud === "BPH + Kadiv") {
+        return isBPH(user.role.name) || isKadiv(user.role.name);
+      }
+      if (aud.startsWith("Divisi: ")) {
+        const targetDept = aud.replace("Divisi: ", "");
+        if (targetDept === "BPH") return isBPH(user.role.name);
+        return user.department?.name === targetDept;
+      }
+    } else {
+      // Rapat Departemen
+      return m.department === user.department?.name || m.department === `Divisi: ${user.department?.name}`;
+    }
+    
     return true;
   });
 

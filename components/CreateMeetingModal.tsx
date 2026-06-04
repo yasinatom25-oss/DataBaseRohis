@@ -30,7 +30,10 @@ export default function CreateMeetingModal({
   const [locationPreset, setLocationPreset] = useState("");
   const [locationCustom, setLocationCustom] = useState("");
   const [notetakerId, setNotetakerId] = useState("");
+  const [targetAudienceType, setTargetAudienceType] = useState("Semua Pengurus");
+  const [targetDepartment, setTargetDepartment] = useState("");
   const [availableUsers, setAvailableUsers] = useState<{ id: string; name: string }[]>([]);
+  const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -45,6 +48,8 @@ export default function CreateMeetingModal({
     setLocationPreset("");
     setLocationCustom("");
     setNotetakerId("");
+    setTargetAudienceType("Semua Pengurus");
+    setTargetDepartment("");
     setError("");
 
     // Fetch users for notetaker dropdown
@@ -57,7 +62,13 @@ export default function CreateMeetingModal({
       if (data) setAvailableUsers(data);
     };
 
+    const fetchDepartments = async () => {
+      const { data } = await supabase.from("departments").select("id, name").order("name");
+      if (data) setDepartments(data);
+    };
+
     fetchUsers();
+    fetchDepartments();
   }, [isOpen, meetingType, currentUser]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,6 +83,19 @@ export default function CreateMeetingModal({
     // Build location detail: use custom if "Lainnya", otherwise preset
     const locationDetail = locationPreset === "Lainnya" ? locationCustom : locationPreset;
 
+    // Target audience resolution
+    let finalTargetAudience = "Semua Pengurus";
+    if (meetingType === "Rapat Umum") {
+      if (targetAudienceType === "Per Divisi" && targetDepartment) {
+        finalTargetAudience = `Divisi: ${targetDepartment}`;
+      } else {
+        finalTargetAudience = targetAudienceType;
+      }
+    } else {
+      // For Rapat Departemen, it is implicitly for that department
+      finalTargetAudience = `Divisi: ${currentUser.department?.name}`;
+    }
+
     setLoading(true);
     try {
       const { error: insertError } = await supabase.from("attendances").insert([
@@ -84,6 +108,7 @@ export default function CreateMeetingModal({
           location_type: locationType,
           location_detail: locationDetail || null,
           notetaker_id: notetakerId || null,
+          target_audience: finalTargetAudience,
         },
       ]);
 
@@ -136,6 +161,44 @@ export default function CreateMeetingModal({
             ? `(Departemen ${currentUser.department.name})`
             : ""}
         </div>
+
+        {/* Target Audience (Only for Rapat Umum) */}
+        {meetingType === "Rapat Umum" && (
+          <div style={{ background: "var(--primary-50)", padding: "14px", borderRadius: "8px", border: "1px solid #bae6fd", display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div>
+              <label style={labelStyle}>Peserta Rapat (Target Audiens)</label>
+              <select
+                value={targetAudienceType}
+                onChange={(e) => {
+                  setTargetAudienceType(e.target.value);
+                  setTargetDepartment("");
+                }}
+                style={{ ...inputStyle, borderColor: "#7dd3fc" }}
+              >
+                <option value="Semua Pengurus">Semua Pengurus</option>
+                <option value="BPH + Kadiv">BPH + Kadiv</option>
+                <option value="Per Divisi">Per Divisi (Departemen Tertentu)</option>
+              </select>
+            </div>
+            {targetAudienceType === "Per Divisi" && (
+              <div>
+                <label style={labelStyle}>Pilih Departemen</label>
+                <select
+                  value={targetDepartment}
+                  onChange={(e) => setTargetDepartment(e.target.value)}
+                  style={{ ...inputStyle, borderColor: "#7dd3fc" }}
+                  required
+                >
+                  <option value="">-- Pilih --</option>
+                  <option value="BPH">BPH</option>
+                  {departments.map((d) => (
+                    <option key={d.id} value={d.name}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Event Name */}
         <div>
