@@ -239,13 +239,13 @@ export default function IkarisPage() {
         </div>
       </div>
 
-      <div className="solid-card" style={{ padding: 0, overflow: "hidden" }}>
+      <div className="w-full">
         {loading ? (
-          <div style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris...</div>
+          <div className="solid-card" style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris...</div>
         ) : (
           <>
             {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto w-full">
+            <div className="solid-card hidden md:block overflow-x-auto w-full" style={{ padding: 0, overflow: "hidden" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
                 <thead>
                   <tr style={{ background: "var(--bg-main)", borderBottom: "1px solid var(--border-color)" }}>
@@ -306,17 +306,17 @@ export default function IkarisPage() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col px-4 sm:px-5">
+            <div className="md:hidden flex flex-col gap-3.5 pb-20">
               {membersData.length === 0 ? (
                 <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
                   Tidak ada data anggota untuk departemen Anda.
                 </div>
               ) : (
                 membersData.map(m => (
-                  <div key={m.id} className="py-4 pb-5 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-2.5">
+                  <div key={m.id} className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm p-4 flex flex-col gap-3.5">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
+                        <h3 className="font-bold text-[var(--text-main)] text-[1.05rem] leading-snug mb-1.5">{m.name}</h3>
                         <p className="text-sm text-[var(--text-muted)] font-medium">{m.departmentName}</p>
                       </div>
                       <div>
@@ -333,16 +333,17 @@ export default function IkarisPage() {
                     </div>
                     
                     {canEdit && (
-                      <div className="flex justify-end">
+                      <div className="flex justify-end mt-1">
                         <button
                           onClick={() => togglePaymentStatus(m)}
+                          className="w-full sm:w-auto"
                           style={{
-                            padding: "8px 16px",
+                            padding: "14px 20px",
                             background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
                             color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "#ffffff",
                             border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                            borderRadius: "8px",
-                            fontSize: "0.8rem",
+                            borderRadius: "10px",
+                            fontSize: "0.85rem",
                             fontWeight: 600,
                             cursor: "pointer",
                             whiteSpace: "nowrap"
