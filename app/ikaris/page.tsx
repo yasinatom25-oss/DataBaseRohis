@@ -241,7 +241,7 @@ export default function IkarisPage() {
 
       <div className="w-full">
         {loading ? (
-          <div className="solid-card" style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris...</div>
+          <div className="solid-card" style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris terbaru...</div>
         ) : (
           <>
             {/* Desktop Table View */}
@@ -306,7 +306,7 @@ export default function IkarisPage() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col gap-3.5 pb-20 px-4 pt-2">
+            <div className="md:hidden flex flex-col gap-3.5 pb-20 px-5 pt-3">
               {membersData.length === 0 ? (
                 <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
                   Tidak ada data anggota untuk departemen Anda.
