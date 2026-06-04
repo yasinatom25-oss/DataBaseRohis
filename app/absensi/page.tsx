@@ -17,7 +17,8 @@ export default function AbsensiPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<"personal" | "divisi" | "semua">("personal");
+  const [activeTab, setActiveTab] = useState<string>("personal");
+  const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
   const [meetings, setMeetings] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [meetingType, setMeetingType] = useState<"Rapat Umum" | "Rapat Departemen">("Rapat Departemen");
@@ -39,6 +40,9 @@ export default function AbsensiPage() {
 
   async function fetchMeetings(currentUser: User) {
     try {
+      const { data: deptData } = await supabase.from("departments").select("id, name").order("name");
+      if (deptData) setDepartments(deptData);
+
       const { data, error } = await supabase
         .from("attendances")
         .select("*")
@@ -125,6 +129,12 @@ export default function AbsensiPage() {
             const deptName = Array.isArray(r.user?.department) ? r.user.department[0]?.name : r.user?.department?.name;
             return deptName === user!.department?.name;
           });
+        } else if (activeTab.startsWith("divisi_")) {
+          const targetDept = activeTab.replace("divisi_", "");
+          filtered = filtered.filter((r: any) => {
+            const deptName = Array.isArray(r.user?.department) ? r.user.department[0]?.name : r.user?.department?.name;
+            return deptName === targetDept;
+          });
         }
 
         const stats = { hadir: 0, izin: 0, sakit: 0, alpa: 0, total: 0, percentage: 0 };
@@ -152,6 +162,10 @@ export default function AbsensiPage() {
   const filteredMeetings = meetings.filter((m) => {
     // Basic visibility by tab
     if (activeTab === "divisi") return m.department === user.department?.name || m.department === "Semua Pengurus" || m.department === `Divisi: ${user.department?.name}`;
+    if (activeTab.startsWith("divisi_")) {
+      const targetDept = activeTab.replace("divisi_", "");
+      return m.department === targetDept || m.department === "Semua Pengurus" || m.department === `Divisi: ${targetDept}`;
+    }
     
     // For regular users (personal tab) or default view, check if they are in the target audience
     if (m.eventType === "Rapat Umum") {
@@ -201,12 +215,36 @@ export default function AbsensiPage() {
               >
                 Data Saya
               </button>
-              <button
-                onClick={() => setActiveTab("divisi")}
-                style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "divisi" ? "#008CBA" : "transparent", color: activeTab === "divisi" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
-              >
-                Data Divisi ({user.department?.name})
-              </button>
+
+              {isBPH(user.role.name) ? (
+                <select
+                  value={activeTab.startsWith("divisi_") ? activeTab : "default"}
+                  onChange={(e) => setActiveTab(e.target.value)}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "8px",
+                    border: "1px solid var(--border-color)",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent",
+                    color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)",
+                    outline: "none"
+                  }}
+                >
+                  <option value="default" disabled>Data Per Divisi...</option>
+                  {departments.map(d => (
+                    <option key={d.id} value={`divisi_${d.name}`}>{d.name}</option>
+                  ))}
+                </select>
+              ) : (
+                <button
+                  onClick={() => setActiveTab("divisi")}
+                  style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "divisi" ? "#008CBA" : "transparent", color: activeTab === "divisi" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
+                >
+                  Data Divisi ({user.department?.name})
+                </button>
+              )}
               {canViewGlobalData(user.role.name) && (
                 <button
                   onClick={() => setActiveTab("semua")}
@@ -249,7 +287,7 @@ export default function AbsensiPage() {
           {/* Chart */}
           <div className="solid-card animate-fade-in-up animate-delay-200" style={{ padding: "24px" }}>
             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
-              Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : "Rohis"}
+              Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : activeTab.startsWith("divisi_") ? activeTab.replace("divisi_", "") : "Rohis"}
             </h2>
             <div>
               <AttendancePieChart data={attendanceStats} />
