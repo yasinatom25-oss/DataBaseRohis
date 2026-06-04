@@ -39,25 +39,40 @@ export default function AbsensiPage() {
 
   async function fetchMeetings(currentUser: User) {
     try {
-      // Basic fetch
-      const { data, error } = await supabase.from("attendances").select("*, creator:users!creator_id(name)");
-      if (data) {
-        setMeetings(data.map((d: any) => ({
-          id: d.id,
-          eventType: d.event_type,
-          eventName: d.event_name,
-          eventDate: d.event_date,
-          status: d.status || "Scheduled",
-          creatorId: d.creator_id,
-          creatorName: d.creator?.name || "System",
-          notetakerId: d.notetaker_id || null,
-          locationType: d.location_type || null,
-          locationDetail: d.location_detail || null,
-          department: d.event_type === "Rapat Umum" ? "Seluruh Rohis" : currentUser.department?.name || "Divisi",
-        })));
+      const { data, error } = await supabase
+        .from("attendances")
+        .select("*")
+        .order("event_date", { ascending: false });
+      
+      if (error) { console.error("fetchMeetings error:", error); return; }
+      if (!data) return;
+
+      // Fetch creator names separately to avoid FK join issues
+      const creatorIds = [...new Set(data.map((d: any) => d.creator_id).filter(Boolean))];
+      let creatorMap: Record<string, string> = {};
+      if (creatorIds.length > 0) {
+        const { data: creators } = await supabase
+          .from("users")
+          .select("id, name")
+          .in("id", creatorIds);
+        if (creators) creators.forEach((c: any) => { creatorMap[c.id] = c.name; });
       }
+
+      setMeetings(data.map((d: any) => ({
+        id: d.id,
+        eventType: d.event_type,
+        eventName: d.event_name,
+        eventDate: d.event_date,
+        status: d.status || "Scheduled",
+        creatorId: d.creator_id,
+        creatorName: creatorMap[d.creator_id] || "System",
+        notetakerId: d.notetaker_id || null,
+        locationType: d.location_type || null,
+        locationDetail: d.location_detail || null,
+        department: d.event_type === "Rapat Umum" ? "Seluruh Rohis" : currentUser.department?.name || "Divisi",
+      })));
     } catch (e) {
-      console.error(e);
+      console.error("fetchMeetings exception:", e);
     }
   }
 

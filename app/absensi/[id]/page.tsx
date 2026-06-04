@@ -49,9 +49,10 @@ export default function MeetingDetailPage() {
 
   const fetchMeetingDetails = async () => {
     try {
+      // Try with join first
       const { data, error } = await supabase
         .from("attendances")
-        .select(`*, notetaker:users!attendances_notetaker_id_fkey(name)`)
+        .select("*")
         .eq("id", id)
         .single();
 
@@ -60,8 +61,15 @@ export default function MeetingDetailPage() {
       setMeeting(data as MeetingDetail);
       setNotes(data.notes_content || "");
 
-      const nd = data.notetaker as any;
-      if (nd?.name) setNotetakerName(nd.name);
+      // Fetch notetaker name separately to avoid FK join issues
+      if (data.notetaker_id) {
+        const { data: notetakerData } = await supabase
+          .from("users")
+          .select("name")
+          .eq("id", data.notetaker_id)
+          .single();
+        if (notetakerData?.name) setNotetakerName(notetakerData.name);
+      }
     } catch (err: any) {
       console.error(err);
     } finally {
