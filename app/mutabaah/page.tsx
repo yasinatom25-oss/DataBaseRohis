@@ -6,7 +6,7 @@ import type { User } from "@/lib/types";
 import { Search, Bell, BookOpen, Clock, AlertCircle, Download } from "lucide-react";
 import * as XLSX from "xlsx";
 import { mockMutabaahHistory } from "@/lib/mock-data";
-import { canViewGlobalData, isKadiv, formatRoleName } from "@/lib/rbac";
+import { canViewGlobalData, isKadiv, isBPH, formatRoleName } from "@/lib/rbac";
 import MutabaahFormModal from "@/components/MutabaahFormModal";
 import MutabaahDetailModal from "@/components/MutabaahDetailModal";
 import NotificationDropdown from "@/components/NotificationDropdown";
@@ -16,7 +16,8 @@ export default function MutabaahPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<"personal" | "divisi" | "semua">("personal");
+  const [activeTab, setActiveTab] = useState<string>("personal");
+  const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [myLatestLog, setMyLatestLog] = useState<any>(null);
@@ -41,6 +42,9 @@ export default function MutabaahPage() {
 
   async function fetchMutabaah(currentUser: User) {
     try {
+      const { data: deptData } = await supabase.from("departments").select("id, name").order("name");
+      if (deptData) setDepartments(deptData);
+
       const { data, error } = await supabase
         .from("mutabaah_logs")
         .select("*, user:users!user_id(name, department:departments!department_id(name))")
@@ -166,6 +170,10 @@ export default function MutabaahPage() {
   const filteredHistory = history.filter((log) => {
     if (activeTab === "personal" && log.userId !== user.id) return false;
     if (activeTab === "divisi" && log.department !== user.department?.name) return false;
+    if (activeTab.startsWith("divisi_")) {
+      const targetDept = activeTab.replace("divisi_", "");
+      if (log.department !== targetDept) return false;
+    }
     
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
@@ -298,12 +306,35 @@ export default function MutabaahPage() {
             >
               Data Saya
             </button>
-            <button 
-              onClick={() => setActiveTab("divisi")}
-              style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "divisi" ? "#008CBA" : "transparent", color: activeTab === "divisi" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
-            >
-              Data Divisi ({user.department?.name})
-            </button>
+            {isBPH(user.role.name) ? (
+              <select
+                value={activeTab.startsWith("divisi_") ? activeTab : "default"}
+                onChange={(e) => setActiveTab(e.target.value)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  border: "1px solid var(--border-color)",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent",
+                  color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)",
+                  outline: "none"
+                }}
+              >
+                <option value="default" disabled>Data Per Divisi...</option>
+                {departments.map(d => (
+                  <option key={d.id} value={`divisi_${d.name}`}>{d.name}</option>
+                ))}
+              </select>
+            ) : (
+              <button 
+                onClick={() => setActiveTab("divisi")}
+                style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "divisi" ? "#008CBA" : "transparent", color: activeTab === "divisi" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
+              >
+                Data Divisi ({user.department?.name})
+              </button>
+            )}
             {canViewGlobalData(user.role.name) && (
               <button 
                 onClick={() => setActiveTab("semua")}
