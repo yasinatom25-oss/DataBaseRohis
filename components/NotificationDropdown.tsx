@@ -51,8 +51,8 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
           message: `Anda memiliki ${pendingTasks.length} amanah yang belum dikerjakan.`,
           link: "/amanah",
           time: "Baru saja",
-          icon: <ClipboardList size={18} color="#d97706" />,
-          iconBg: "#fef3c7"
+          icon: <ClipboardList size={18} className="text-amber-600 dark:text-amber-400" />,
+          bgClass: "bg-amber-100 dark:bg-amber-900/30"
         });
       }
 
@@ -80,8 +80,8 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
             message: "Anda belum mengisi Mutabaah ibadah untuk pekan ini. Yuk isi sekarang!",
             link: "/mutabaah",
             time: "Baru saja",
-            icon: <BookOpen size={18} color="#008CBA" />,
-            iconBg: "var(--primary-50)"
+            icon: <BookOpen size={18} className="text-blue-600 dark:text-blue-400" />,
+            bgClass: "bg-blue-100 dark:bg-blue-900/30"
           });
         }
       }
@@ -140,8 +140,8 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
             message: `"${m.event_name}" akan dimulai pukul ${m.event_time} — ${timeLabel}`,
             link: `/absensi/${m.id}`,
             time: `Hari ini ${m.event_time}`,
-            icon: <span style={{ fontSize: "1.2rem" }}>📅</span>,
-            iconBg: "#fef9c3",
+            icon: <span className="text-lg leading-none">📅</span>,
+            bgClass: "bg-yellow-100 dark:bg-yellow-900/30",
           });
         }
       }
@@ -153,67 +153,31 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
   }
 
   return (
-    <div className="notification-container" style={{ position: "relative" }} ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        style={{
-          width: "38px",
-          height: "38px",
-          borderRadius: "10px",
-          background: "var(--bg-card)",
-          border: "1px solid var(--border-color)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          position: "relative",
-          transition: "all 0.2s"
-        }}
+        className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200"
       >
-        <Bell size={17} style={{ color: "var(--text-muted)" }} />
+        <Bell size={18} className="text-slate-500 dark:text-slate-400" />
         {notifications.length > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: "6px",
-              right: "8px",
-              width: "8px",
-              height: "8px",
-              background: "var(--danger-text)",
-              borderRadius: "50%",
-              border: "2px solid var(--bg-card)"
-            }}
-          />
+          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-800" />
         )}
       </button>
 
       {isOpen && (
-        <div
-          className="animate-fade-in-up"
-          style={{
-            position: "absolute",
-            top: "100%",
-            right: 0,
-            marginTop: "10px",
-            width: "320px",
-            background: "var(--bg-card)",
-            border: "1px solid var(--border-color)",
-            borderRadius: "12px",
-            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
-            zIndex: 9999,
-            overflow: "hidden"
-          }}
-        >
-          <div style={{ padding: "16px", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: "var(--text-main)" }}>Notifikasi</h3>
-            <span style={{ fontSize: "0.75rem", background: "var(--primary-50)", color: "#008CBA", padding: "2px 8px", borderRadius: "10px", fontWeight: 600 }}>
+        <div className="absolute top-full right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden animate-fade-in-up">
+          {/* Header */}
+          <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+            <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 m-0">Notifikasi</h3>
+            <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 py-1 px-3 rounded-full font-semibold">
               {notifications.length} Baru
             </span>
           </div>
           
-          <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+          {/* List of Notifications */}
+          <div className="max-h-[350px] overflow-y-auto p-3 flex flex-col gap-3">
             {notifications.length === 0 ? (
-              <div style={{ padding: "30px 16px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.85rem" }}>
+              <div className="py-8 text-center text-sm text-slate-500 dark:text-slate-400">
                 Tidak ada notifikasi baru.
               </div>
             ) : (
@@ -222,24 +186,21 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
                   key={notif.id}
                   href={notif.link}
                   onClick={() => setIsOpen(false)}
-                  style={{
-                    display: "flex",
-                    gap: "12px",
-                    padding: "16px",
-                    borderBottom: "1px solid var(--border-color)",
-                    textDecoration: "none",
-                    transition: "background 0.2s"
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.background = "var(--bg-main)")}
-                  onMouseOut={(e) => (e.currentTarget.style.background = "var(--bg-card)")}
+                  className="flex gap-4 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-md transition-all duration-200 group"
                 >
-                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: notif.iconBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.bgClass}`}>
                     {notif.icon}
                   </div>
-                  <div>
-                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.9rem", fontWeight: 600, color: "var(--text-main)" }}>{notif.title}</h4>
-                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.4 }}>{notif.message}</p>
-                    <span style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: "6px", display: "block" }}>{notif.time}</span>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-sm text-slate-800 dark:text-slate-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {notif.title}
+                    </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
+                      {notif.message}
+                    </p>
+                    <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2 block uppercase tracking-wider">
+                      {notif.time}
+                    </span>
                   </div>
                 </Link>
               ))
