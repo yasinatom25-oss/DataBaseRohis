@@ -147,16 +147,27 @@ export default function CreateMeetingModal({
           />
         </div>
 
-        {/* Date */}
-        <div>
-          <label style={labelStyle}>Tanggal Pelaksanaan *</label>
-          <input
-            type="date"
-            value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
-            style={inputStyle}
-            required
-          />
+        {/* Date + Time */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+          <div>
+            <label style={labelStyle}>Tanggal Pelaksanaan *</label>
+            <input
+              type="date"
+              value={eventDate}
+              onChange={(e) => setEventDate(e.target.value)}
+              style={inputStyle}
+              required
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Jam Mulai</label>
+            <input
+              type="time"
+              value={eventTime}
+              onChange={(e) => setEventTime(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
         </div>
 
         {/* Location Type */}
