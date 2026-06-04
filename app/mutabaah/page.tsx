@@ -115,7 +115,14 @@ export default function MutabaahPage() {
       return;
     }
 
-    const depts: Record<string, any[]> = {};
+    // Sort by department, then by name
+    dataToExport.sort((a, b) => {
+      const deptA = a.department || "Lainnya";
+      const deptB = b.department || "Lainnya";
+      if (deptA < deptB) return -1;
+      if (deptA > deptB) return 1;
+      return a.name.localeCompare(b.name);
+    });
     
     // Parameter names for headers
     const paramNames = [
@@ -124,12 +131,10 @@ export default function MutabaahPage() {
       "Al-Matsurat Pagi", "Al-Matsurat Sore", "Birrul Walidain", "Infaq", "Menambah Wawasan Islami"
     ];
 
-    dataToExport.forEach(log => {
-      const dept = log.department || "Lainnya";
-      if (!depts[dept]) depts[dept] = [];
-      
+    const rows = dataToExport.map(log => {
       const row: any = {
         "Tanggal Pengisian": new Date(log.date).toLocaleDateString("id-ID"),
+        "Departemen": log.department || "Lainnya",
         "Nama Anggota": log.name,
         "Rata-rata Capaian (%)": log.average,
       };
@@ -139,27 +144,24 @@ export default function MutabaahPage() {
         row[paramNames[i-1]] = log.raw[`param_${i}_val`] || 0;
       }
       row["Keterangan Hafalan"] = log.raw.hafalan_text || "-";
-
-      depts[dept].push(row);
+      return row;
     });
 
     const wb = XLSX.utils.book_new();
-    Object.keys(depts).forEach(deptName => {
-      const ws = XLSX.utils.json_to_sheet(depts[deptName]);
-      // Make columns wider
-      const wscols = [
-        {wch: 15}, // Tanggal
-        {wch: 25}, // Nama
-        {wch: 20}, // Rata-rata
-        ...Array(13).fill({wch: 20}), // 13 params
-        {wch: 40}  // Keterangan
-      ];
-      ws['!cols'] = wscols;
-      
-      const safeSheetName = deptName.substring(0, 31).replace(/[\\/?*\[\]]/g, "_");
-      XLSX.utils.book_append_sheet(wb, ws, safeSheetName);
-    });
-
+    const ws = XLSX.utils.json_to_sheet(rows);
+    
+    // Make columns wider
+    const wscols = [
+      {wch: 15}, // Tanggal
+      {wch: 20}, // Departemen
+      {wch: 25}, // Nama
+      {wch: 20}, // Rata-rata
+      ...Array(13).fill({wch: 20}), // 13 params
+      {wch: 40}  // Keterangan
+    ];
+    ws['!cols'] = wscols;
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Rekap Mutabaah");
     XLSX.writeFile(wb, `Laporan_Mutabaah_${exportMonth}.xlsx`);
   };
 
