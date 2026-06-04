@@ -272,28 +272,30 @@ export default function MutabaahPage() {
         </header>
 
         {/* Time Window Card */}
-        <div className="solid-card animate-fade-in-up animate-delay-100 p-5 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between border-l-4 border-l-[#16a34a] gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 rounded-lg bg-[#dcfce7] shrink-0">
-              <Clock size={24} color="#15803d" />
+        <div className="solid-card animate-fade-in-up animate-delay-100 mb-6" style={{ padding: "24px" }}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-lg bg-[#dcfce7] shrink-0">
+                <Clock size={24} color="#15803d" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-[var(--text-main)] mb-1">
+                  Pengisian Mutabaah Dibuka
+                </h2>
+                <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+                  {myLatestLog 
+                    ? "Anda sudah mengisi mutabaah pekan ini. Anda dapat mengeditnya jika ada kesalahan." 
+                    : "Silakan isi mutabaah ibadah Anda untuk pekan ini. (Batas 1 kali pengisian per minggu)"}
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-[1.05rem] font-semibold text-[var(--text-main)] mb-1">
-                Pengisian Mutabaah Dibuka
-              </h2>
-              <p className="text-[0.85rem] text-[var(--text-muted)]">
-                {myLatestLog 
-                  ? "Anda sudah mengisi mutabaah pekan ini. Anda dapat mengeditnya jika ada kesalahan." 
-                  : "Silakan isi mutabaah ibadah Anda untuk pekan ini. (Batas 1 kali pengisian per minggu)"}
-              </p>
-            </div>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full md:w-auto mt-2 md:mt-0 px-5 py-2.5 bg-[#008CBA] text-[var(--bg-card)] rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
+            >
+              {myLatestLog ? "Edit Mutabaah Pekan Ini" : "+ Isi Mutabaah Pekan Ini"}
+            </button>
           </div>
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="w-full md:w-auto px-5 py-2.5 bg-[#008CBA] text-[var(--bg-card)] rounded-lg text-[0.9rem] font-semibold cursor-pointer transition-colors hover:bg-[#007ba3] mt-2 md:mt-0"
-          >
-            {myLatestLog ? "Edit Mutabaah Pekan Ini" : "+ Isi Mutabaah Pekan Ini"}
-          </button>
         </div>
 
         {/* Tabs for Data Visibility */}
