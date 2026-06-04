@@ -252,14 +252,14 @@ export default function MutabaahPage() {
                 </button>
               </div>
             )}
-            <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl w-full md:w-64">
+            <div className="flex items-center gap-2 px-3 h-[38px] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg w-full md:w-64">
               <Search size={16} className="text-[var(--text-muted)] shrink-0" />
               <input 
                 type="text"
                 placeholder="Cari anggota..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-transparent border-none outline-none text-sm text-[var(--text-main)] w-full placeholder:text-[var(--text-muted)]"
+                className="bg-transparent border-none outline-none text-sm text-[var(--text-main)] w-full placeholder:text-[var(--text-muted)] h-full"
               />
             </div>
             <div className="hidden md:block">
