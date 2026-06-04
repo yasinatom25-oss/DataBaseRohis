@@ -23,11 +23,15 @@ const COLORS = [
 ];
 
 export default function AttendancePieChart({ data }: AttendancePieChartProps) {
-  const chartData = COLORS.map((c) => ({
+  let chartData = COLORS.map((c) => ({
     name: c.label,
     value: data[c.key as keyof AttendanceSummary] as number,
     color: c.color,
   })).filter((d) => d.value > 0);
+
+  if (chartData.length === 0) {
+    chartData = [{ name: "Belum Ada Data", value: 1, color: "#e2e8f0" }];
+  }
 
   return (
     <div style={{ width: "100%", flex: 1, minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center" }}>

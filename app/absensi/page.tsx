@@ -305,14 +305,16 @@ export default function AbsensiPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+        <div key={activeTab} className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full animate-fade-in-up" style={{ animationDuration: "0.4s" }}>
           {/* Chart */}
-          <div className="solid-card animate-fade-in-up animate-delay-200 col-span-1" style={{ padding: "24px" }}>
+          <div className="solid-card col-span-1" style={{ padding: "24px" }}>
             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : activeTab.startsWith("divisi_") ? activeTab.replace("divisi_", "") : "Rohis"}
             </h2>
-            <div>
-              <AttendancePieChart data={attendanceStats} />
+            <div className="flex flex-col items-center">
+              <div style={{ height: "180px", width: "100%", position: "relative", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <AttendancePieChart data={attendanceStats} />
+              </div>
               <div className="grid grid-cols-4 gap-2 w-full mt-4">
                 <div className="text-center flex flex-col items-center justify-center">
                   <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
