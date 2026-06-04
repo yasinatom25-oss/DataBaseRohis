@@ -346,7 +346,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 hover:bg-sky-50/60 dark:hover:bg-sky-900/20 transition-colors -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 -mx-6 px-6">
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
@@ -377,13 +377,13 @@ export default function AbsensiPage() {
                         </div>
                         {canCreateRecords(user.role.name) ? (
                           <div className="flex flex-wrap gap-x-4 gap-y-3 md:gap-4 items-center w-full md:w-auto md:justify-end mt-1">
-                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
-                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Isi Presensi</div>
-                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={18} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer" />
+                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap hover:text-[#059669] hover:underline transition-all">Detail & Notulensi</Link>
+                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap hover:text-[#005f80] hover:underline transition-all">Isi Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={18} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer hover:opacity-70 transition-opacity" />
                           </div>
                         ) : (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end mt-1">
-                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline">Lihat Detail & Notulensi</Link>
+                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline hover:text-[#005f80] hover:underline transition-all">Lihat Detail & Notulensi</Link>
                           </div>
                         )}
                       </div>
@@ -403,7 +403,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 hover:opacity-100 transition-opacity -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 -mx-6 px-6">
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0 bg-[#e5e7eb] dark:bg-slate-700">
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
@@ -428,13 +428,13 @@ export default function AbsensiPage() {
                         </div>
                         {canCreateRecords(user.role.name) ? (
                           <div className="flex flex-wrap gap-x-4 gap-y-3 md:gap-4 items-center w-full md:w-auto md:justify-end mt-1">
-                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
-                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Edit Presensi</div>
-                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={18} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer" />
+                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap hover:text-[#059669] hover:underline transition-all">Detail & Notulensi</Link>
+                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap hover:text-[#005f80] hover:underline transition-all">Edit Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={18} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer hover:opacity-70 transition-opacity" />
                           </div>
                         ) : (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end mt-1">
-                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline">Lihat Detail & Notulensi</Link>
+                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline hover:text-[#005f80] hover:underline transition-all">Lihat Detail & Notulensi</Link>
                           </div>
                         )}
                       </div>
