@@ -26,7 +26,7 @@ const BASE_NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/mutabaah", label: "Mutabaah", icon: BookOpen },
   { href: "/amanah", label: "Amanah", icon: ClipboardList },
-  { href: "/absensi", label: "Absensi", icon: CalendarCheck },
+  { href: "/absensi", label: "Rapat", icon: CalendarCheck },
 ];
 
 export default function Sidebar() {
