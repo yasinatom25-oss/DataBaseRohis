@@ -163,21 +163,21 @@ export default function IkarisPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-main)]">
       <main className="main-content fade-in min-h-screen bg-[var(--bg-main)]">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "16px" }}>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--text-main)", display: "flex", alignItems: "center", gap: "10px" }}>
-            <Wallet size={28} color="#008CBA" /> Manajemen Uang Kas (Ikaris)
+          <h1 className="text-xl font-bold text-[var(--text-main)] flex items-center gap-2">
+            <Wallet size={22} color="#008CBA" /> Manajemen Ikaris
           </h1>
-          <p style={{ color: "var(--text-muted)", marginTop: "4px" }}>
+          <p className="text-sm text-[var(--text-muted)] mt-1">
             {isBPH(currentUser.role.name) 
               ? "Pantau pembayaran uang kas seluruh anggota Rohis." 
               : "Pantau pembayaran uang kas anggota di departemen Anda."}
           </p>
         </div>
         
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <label style={{ fontWeight: 600, color: "var(--text-main)" }}>Pilih Bulan:</label>
-          <div style={{ display: "flex", gap: "8px" }}>
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <label className="text-sm font-semibold text-[var(--text-muted)]">Bulan:</label>
+          <div className="flex gap-2 flex-1 md:flex-none">
             <select
               value={selectedMonth.split("-")[1]}
               onChange={(e) => {
@@ -187,7 +187,7 @@ export default function IkarisPage() {
                 setSelectedMonth(val);
                 fetchIkarisData(currentUser, val);
               }}
-              className="form-select"
+              className="form-select flex-1 md:flex-none"
             >
               <option value="01">Januari</option>
               <option value="02">Februari</option>
@@ -211,7 +211,7 @@ export default function IkarisPage() {
                 setSelectedMonth(val);
                 fetchIkarisData(currentUser, val);
               }}
-              className="form-select"
+              className="form-select flex-1 md:flex-none"
             >
               {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
                 <option key={year} value={year}>{year}</option>
@@ -221,23 +221,21 @@ export default function IkarisPage() {
         </div>
       </div>
 
-      <div style={{ 
+      <div className="rounded-2xl mb-5" style={{ 
         background: "linear-gradient(135deg, #008CBA 0%, #005f7a 100%)", 
-        borderRadius: "16px", 
-        padding: "24px", 
+        padding: "20px 24px", 
         color: "white",
-        marginBottom: "24px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center"
       }}>
         <div>
-          <h2 style={{ fontSize: "1.2rem", fontWeight: 600, opacity: 0.9 }}>Status Terkumpul ({selectedMonth})</h2>
-          <div style={{ fontSize: "2.5rem", fontWeight: 800, marginTop: "4px" }}>{paidMembers} <span style={{ fontSize: "1.2rem", fontWeight: 500, opacity: 0.8 }}>/ {totalMembers} Anggota</span></div>
+          <p className="text-sm font-medium opacity-80">Status Terkumpul — {selectedMonth}</p>
+          <div className="text-3xl font-bold mt-0.5">{paidMembers} <span className="text-base font-normal opacity-70">/ {totalMembers} Anggota</span></div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: "2rem", fontWeight: 800 }}>{percentage}%</div>
-          <div style={{ fontSize: "0.9rem", opacity: 0.8 }}>Tingkat Partisipasi</div>
+        <div className="text-right">
+          <div className="text-3xl font-bold">{percentage}%</div>
+          <div className="text-xs opacity-75 mt-0.5">Tingkat Partisipasi</div>
         </div>
       </div>
 
@@ -274,21 +272,14 @@ export default function IkarisPage() {
                         )}
                       </td>
                       {canEdit && (
-                        <td className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right" }}>
+                        <td className="whitespace-nowrap" style={{ padding: "12px 16px", textAlign: "right" }}>
                           <button
                             onClick={() => togglePaymentStatus(m)}
-                            style={{
-                              background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
-                              color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "white",
-                              border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                              padding: "8px 16px",
-                              borderRadius: "8px",
-                              fontWeight: 600,
-                              cursor: "pointer",
-                              fontSize: "0.85rem",
-                              transition: "all 0.2s",
-                              whiteSpace: "nowrap"
-                            }}
+                            className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                              m.status === "Sudah Bayar"
+                                ? "bg-transparent text-[var(--text-muted)] border-[var(--border-color)] hover:bg-[var(--hover-bg)]"
+                                : "bg-[#008CBA] text-white border-transparent hover:bg-[#007ba3]"
+                            }`}
                           >
                             {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
                           </button>
@@ -336,21 +327,14 @@ export default function IkarisPage() {
                     </div>
                     
                     {canEdit && (
-                      <div className="mt-1 flex justify-end">
+                      <div className="flex justify-end">
                         <button
                           onClick={() => togglePaymentStatus(m)}
-                          className="w-full flex justify-center items-center"
-                          style={{
-                            background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
-                            color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "white",
-                            border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                            padding: "8px 12px",
-                            borderRadius: "8px",
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            fontSize: "0.8rem",
-                            transition: "all 0.2s"
-                          }}
+                          className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
+                            m.status === "Sudah Bayar"
+                              ? "bg-transparent text-[var(--text-muted)] border-[var(--border-color)]"
+                              : "bg-[#008CBA] text-white border-transparent"
+                          }`}
                         >
                           {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
                         </button>

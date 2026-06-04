@@ -276,16 +276,16 @@ export default function AbsensiPage() {
             </div>
 
             {/* Action Buttons based on Role */}
-            <div className="flex flex-col md:flex-row gap-2.5 w-full md:w-auto mt-2 md:mt-0">
+            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto mt-2 md:mt-0">
               {canCreateRecords(user.role.name) && user.role.name !== "ketua_umum" && (
                 <button
                   onClick={() => {
                     setMeetingType("Rapat Departemen");
                     setIsModalOpen(true);
                   }}
-                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[var(--hover-bg)] text-[#00688b] border border-[var(--border-color)] rounded-lg text-[0.85rem] font-semibold cursor-pointer"
+                  className="w-full sm:w-auto flex justify-center items-center gap-1.5 px-4 py-2 bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-color)] rounded-lg text-sm font-semibold cursor-pointer hover:bg-[var(--hover-bg)] transition-colors"
                 >
-                  <Plus size={16} /> Rapat Departemen
+                  <Plus size={15} /> Rapat Departemen
                 </button>
               )}
               {isBPH(user.role.name) && (
@@ -294,9 +294,9 @@ export default function AbsensiPage() {
                     setMeetingType("Rapat Umum");
                     setIsModalOpen(true);
                   }}
-                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[#008CBA] text-white border border-transparent rounded-lg text-[0.85rem] font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
+                  className="w-full sm:w-auto flex justify-center items-center gap-1.5 px-4 py-2 bg-[#008CBA] text-white border border-transparent rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
                 >
-                  <Plus size={16} /> Rapat Umum
+                  <Plus size={15} /> Rapat Umum
                 </button>
               )}
             </div>
@@ -342,9 +342,9 @@ export default function AbsensiPage() {
                 {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-[var(--border-color)] last:border-0 gap-3 md:gap-4">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#008CBA" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#d97706" className="md:w-5 md:h-5" />}
@@ -389,9 +389,9 @@ export default function AbsensiPage() {
                 {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "16px", opacity: 0.85 }}>
+                  <div className="flex flex-col opacity-85">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-4 border-b border-[var(--border-color)] last:border-0 gap-3 md:gap-4">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0 bg-[#e5e7eb]">
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#6b7280" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#6b7280" className="md:w-5 md:h-5" />}
