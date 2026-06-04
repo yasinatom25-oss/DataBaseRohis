@@ -251,7 +251,7 @@ export default function AbsensiPage() {
             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : "Rohis"}
             </h2>
-            <div key={activeTab} className="animate-fade-in-up">
+            <div>
               <AttendancePieChart data={attendanceStats} />
               <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "16px" }}>
                 <div style={{ textAlign: "center" }}>
