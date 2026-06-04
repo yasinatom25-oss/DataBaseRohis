@@ -306,7 +306,7 @@ export default function IkarisPage() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col gap-3.5 pb-20">
+            <div className="md:hidden flex flex-col gap-3.5 pb-20 px-4 pt-2">
               {membersData.length === 0 ? (
                 <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
                   Tidak ada data anggota untuk departemen Anda.
@@ -316,17 +316,17 @@ export default function IkarisPage() {
                   <div key={m.id} className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm p-4 flex flex-col gap-3.5">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-[1.05rem] leading-snug mb-1.5">{m.name}</h3>
-                        <p className="text-sm text-[var(--text-muted)] font-medium">{m.departmentName}</p>
+                        <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
+                        <p className="text-[0.75rem] text-[var(--text-muted)] font-medium">{m.departmentName}</p>
                       </div>
                       <div>
                         {m.status === "Sudah Bayar" ? (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#dcfce7", color: "#16a34a", padding: "4px 8px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 700 }}>
-                            <CheckCircle size={12} /> Lunas
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "3px", background: "#dcfce7", color: "#16a34a", padding: "3px 6px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700 }}>
+                            <CheckCircle size={11} /> Lunas
                           </span>
                         ) : (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#fee2e2", color: "#ef4444", padding: "4px 8px", borderRadius: "20px", fontSize: "0.7rem", fontWeight: 700 }}>
-                            <XCircle size={12} /> Belum
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "3px", background: "#fee2e2", color: "#ef4444", padding: "3px 6px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700 }}>
+                            <XCircle size={11} /> Belum
                           </span>
                         )}
                       </div>
@@ -338,12 +338,12 @@ export default function IkarisPage() {
                           onClick={() => togglePaymentStatus(m)}
                           className="w-full sm:w-auto"
                           style={{
-                            padding: "14px 20px",
+                            padding: "10px 16px",
                             background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
                             color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "#ffffff",
                             border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
-                            borderRadius: "10px",
-                            fontSize: "0.85rem",
+                            borderRadius: "8px",
+                            fontSize: "0.8rem",
                             fontWeight: 600,
                             cursor: "pointer",
                             whiteSpace: "nowrap"
