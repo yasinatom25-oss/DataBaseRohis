@@ -62,12 +62,14 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
       const sunday = new Date(today);
       sunday.setDate(today.getDate() - today.getDay());
       sunday.setHours(0, 0, 0, 0);
+      
+      const sundayStr = `${sunday.getFullYear()}-${String(sunday.getMonth() + 1).padStart(2, "0")}-${String(sunday.getDate()).padStart(2, "0")}`;
 
       const { data: logsData, error: logError } = await supabase
         .from("mutabaah_logs")
         .select("id")
         .eq("user_id", currentUser.id)
-        .gte("log_date", sunday.toISOString().split("T")[0]);
+        .gte("log_date", sundayStr);
 
       if (!logsData || logsData.length === 0) {
         // Hanya ingatkan jika hari ini adalah Sabtu, Ahad, atau Senin
@@ -89,11 +91,11 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
       // 3. Cek rapat yang akan dimulai dalam 1 jam ke depan
       const now = new Date();
       // Generate range: now → now + 75 menit (pakai 75 menit agar tidak terlalu ketat)
-      const todayStr = now.toISOString().split("T")[0];
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
       const { data: upcomingMeetings } = await supabase
         .from("attendances")
-        .select("id, event_name, event_date, event_time, event_type, notetaker_id, target_audience")
+        .select("id, event_name, event_date, event_time, event_type, notetaker_id, target_audience, department")
         .eq("event_date", todayStr)
         .eq("status", "Scheduled")
         .not("event_time", "is", null);
@@ -127,7 +129,7 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
           } else if (m.event_type === "Rapat Departemen") {
             // Rapat Departemen hanya untuk anggota departemen yang sama
             const deptName = currentUser.department?.name;
-            if (!deptName) continue; // BPH tidak punya departemen, skip
+            if (!deptName || m.department !== deptName) continue;
           }
 
           const minsLeft = Math.round(diffMin);
