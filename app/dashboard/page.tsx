@@ -310,39 +310,47 @@ export default function DashboardPage() {
         </header>
 
         {/* ===== Profile Card ===== */}
-        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ flexShrink: 0, padding: "16px 20px", marginBottom: "16px", display: "flex", alignItems: "center", gap: "16px" }}>
-          <div style={{ width: "60px", height: "60px", borderRadius: "12px", background: "linear-gradient(135deg, #008CBA, #80c9de)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontSize: "1.5rem", fontWeight: 700, flexShrink: 0 }}>
-            {initials}
-          </div>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: "1.15rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "4px" }}>{user.name}</h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", fontSize: "0.82rem", color: "var(--text-muted)" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#008CBA" }} />
-                {formatRoleName(typeof user.role === 'string' ? user.role : user.role?.name) || user.role?.label || "Role"}
-              </span>
-              <span style={{ color: "var(--border-color)" }}>•</span>
-              <span>Departemen {user.department?.name || "BPH"}</span>
-              <span style={{ color: "var(--border-color)" }}>•</span>
-              <span>{user.email}</span>
+        <div className="solid-card animate-fade-in-up animate-delay-100 flex flex-col md:flex-row md:items-center justify-between gap-6" style={{ flexShrink: 0, padding: "16px 20px", marginBottom: "16px" }}>
+          
+          {/* Avatar and Info */}
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div style={{ width: "60px", height: "60px", borderRadius: "12px", background: "linear-gradient(135deg, #008CBA, #80c9de)", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontSize: "1.5rem", fontWeight: 700, flexShrink: 0 }}>
+              {initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 className="truncate" style={{ fontSize: "1.15rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "4px" }}>{user.name}</h2>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", fontSize: "0.82rem", color: "var(--text-muted)" }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#008CBA" }} />
+                  {formatRoleName(typeof user.role === 'string' ? user.role : user.role?.name) || user.role?.label || "Role"}
+                </span>
+                <span style={{ color: "var(--border-color)" }}>•</span>
+                <span>Departemen {user.department?.name || "BPH"}</span>
+                <span style={{ color: "var(--border-color)" }}>•</span>
+                <span className="truncate max-w-full">{user.email}</span>
+              </div>
             </div>
           </div>
-          <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
-                <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Hadir</div>
-              </div>
-              <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
-                <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Izin</div>
-              </div>
-              <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
-                <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Sakit</div>
-              </div>
-              <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
-                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
-                <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Alpa</div>
-              </div>
+
+          {/* Stats Boxes */}
+          <div className="grid grid-cols-4 gap-2 md:flex md:gap-3 w-full md:w-auto">
+            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Hadir</div>
+            </div>
+            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Izin</div>
+            </div>
+            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Sakit</div>
+            </div>
+            <div style={{ textAlign: "center", padding: "10px", background: "var(--bg-main)", borderRadius: "8px", border: "1px solid var(--border-color)", flex: "1" }}>
+              <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "2px" }}>Alpa</div>
+            </div>
+          </div>
         </div>
 
         {/* ===== Ikaris Reminder ===== */}
