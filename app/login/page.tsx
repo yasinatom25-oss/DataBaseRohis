@@ -36,12 +36,6 @@ export default function LoginPage() {
         };
       }
 
-      // 2. Fallback to mock data if Supabase is empty/fails
-      if (!userToLogin) {
-        const found = mockUsers.find((u) => u.user.name.toLowerCase() === name.trim().toLowerCase() && u.password === password);
-        if (found) userToLogin = found.user;
-      }
-
       if (userToLogin) {
         localStorage.setItem("rohiser_user", JSON.stringify(userToLogin));
         router.push("/dashboard");
@@ -437,61 +431,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Demo accounts */}
-          <div
-            style={{
-              marginTop: "28px",
-              padding: "16px",
-              background: "var(--primary-50)",
-              border: "1px solid #b3deec",
-              borderRadius: "10px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "0.72rem",
-                fontWeight: 600,
-                color: "#00688b",
-                marginBottom: "10px",
-                textTransform: "uppercase",
-                letterSpacing: "0.04em",
-              }}
-            >
-              🔑 Demo Accounts
-            </div>
-            {mockUsers.map((u) => (
-              <button
-                key={u.email}
-                type="button"
-                onClick={() => {
-                  setName(u.user.name);
-                  setPassword(u.password);
-                }}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  textAlign: "left",
-                  background: "none",
-                  border: "none",
-                  padding: "5px 0",
-                  color: "var(--text-main)",
-                  fontSize: "0.78rem",
-                  cursor: "pointer",
-                  transition: "color var(--transition-fast)",
-                }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget).style.color = "#008CBA")
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget).style.color = "var(--text-main)")
-                }
-              >
-                <strong style={{ color: "var(--text-main)" }}>{u.user.name}</strong>{" "}
-                — {u.password}
-                <span style={{ color: "var(--text-muted)" }}> ({u.user.role.label})</span>
-              </button>
-            ))}
-          </div>
+
         </div>
       </div>
 
