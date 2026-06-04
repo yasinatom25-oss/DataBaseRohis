@@ -278,8 +278,8 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div style={{ textAlign: "right" }}>
-                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--hover-bg)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)", marginBottom: "6px" }}>
+                      <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--hover-bg)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
                           {m.department}
                         </span>
                         {canCreateRecords(user.role.name) ? (
@@ -321,8 +321,8 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div style={{ textAlign: "right" }}>
-                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: "var(--border-color)", color: "var(--text-muted)", marginBottom: "6px" }}>
+                      <div style={{ textAlign: "right", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+                        <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "6px", fontSize: "0.7rem", fontWeight: 600, background: "var(--border-color)", color: "var(--text-muted)" }}>
                           Selesai
                         </span>
                         {canCreateRecords(user.role.name) ? (
