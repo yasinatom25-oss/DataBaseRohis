@@ -25,6 +25,7 @@ export default function CreateMeetingModal({
 }: CreateMeetingModalProps) {
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState("");
+  const [eventTime, setEventTime] = useState("");
   const [locationType, setLocationType] = useState<"Offline" | "Online">("Offline");
   const [locationPreset, setLocationPreset] = useState("");
   const [locationCustom, setLocationCustom] = useState("");
@@ -39,6 +40,7 @@ export default function CreateMeetingModal({
     // Reset form
     setEventName("");
     setEventDate("");
+    setEventTime("");
     setLocationType("Offline");
     setLocationPreset("");
     setLocationCustom("");
@@ -77,6 +79,7 @@ export default function CreateMeetingModal({
           event_type: meetingType,
           event_name: eventName,
           event_date: eventDate,
+          event_time: eventTime || null,
           creator_id: currentUser.id,
           location_type: locationType,
           location_detail: locationDetail || null,
@@ -147,16 +150,27 @@ export default function CreateMeetingModal({
           />
         </div>
 
-        {/* Date */}
-        <div>
-          <label style={labelStyle}>Tanggal Pelaksanaan *</label>
-          <input
-            type="date"
-            value={eventDate}
-            onChange={(e) => setEventDate(e.target.value)}
-            style={inputStyle}
-            required
-          />
+        {/* Date + Time in one row */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+          <div>
+            <label style={labelStyle}>Tanggal Pelaksanaan *</label>
+            <input
+              type="date"
+              value={eventDate}
+              onChange={(e) => setEventDate(e.target.value)}
+              style={inputStyle}
+              required
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Jam Mulai</label>
+            <input
+              type="time"
+              value={eventTime}
+              onChange={(e) => setEventTime(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
         </div>
 
         {/* Location Type */}

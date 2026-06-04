@@ -12,6 +12,7 @@ interface MeetingDetail {
   event_type: string;
   event_name: string;
   event_date: string;
+  event_time?: string;
   creator_id: string;
   created_at: string;
   location_type?: string;
@@ -133,6 +134,7 @@ export default function MeetingDetailPage() {
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Calendar size={16} />
               {new Date(meeting.event_date).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+              {meeting.event_time && <span style={{ opacity: 0.85 }}>• 🕐 {meeting.event_time} WIB</span>}
             </div>
             {meeting.location_type && (
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
