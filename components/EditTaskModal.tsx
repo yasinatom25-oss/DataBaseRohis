@@ -195,15 +195,7 @@ export default function EditTaskModal({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                style={{
-                  width: "100%",
-                  padding: "10px 14px",
-                  border: "1px solid var(--border-color)",
-                  borderRadius: "8px",
-                  fontSize: "0.9rem",
-                  outline: "none",
-                  backgroundColor: "var(--bg-card)",
-                }}
+                className="form-select w-full"
                 disabled={loading}
               >
                 {STATUS_OPTIONS.map((opt) => (

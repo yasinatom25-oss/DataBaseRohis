@@ -197,7 +197,7 @@ export default function CreateTaskModal({
           <select
             value={assigneeId}
             onChange={(e) => setAssigneeId(e.target.value)}
-            style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none", backgroundColor: "var(--bg-card)" }}
+            className="form-select w-full"
             required
             disabled={loadingMembers}
           >
@@ -230,7 +230,7 @@ export default function CreateTaskModal({
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
               <div>
                 <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-main)", marginBottom: "4px" }}>Siklus</label>
-                <select value={recurrenceInterval} onChange={e => setRecurrenceInterval(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }}>
+                <select value={recurrenceInterval} onChange={e => setRecurrenceInterval(e.target.value)} className="form-select w-full">
                   <option value="monthly">Bulanan</option>
                   <option value="weekly">Pekanan</option>
                 </select>

@@ -221,7 +221,7 @@ export default function AbsensiPage() {
               <select 
                 value={activeTab.startsWith("divisi_") && !isBPH(user.role.name) ? activeTab : activeTab} 
                 onChange={(e) => setActiveTab(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-main)] text-[0.85rem] font-semibold text-[var(--text-main)] outline-none"
+                className="form-select w-full"
               >
                 <option value="personal">Data Saya</option>
                 {isBPH(user.role.name) ? (
@@ -250,7 +250,7 @@ export default function AbsensiPage() {
                 <select
                   value={activeTab.startsWith("divisi_") ? activeTab : "default"}
                   onChange={(e) => setActiveTab(e.target.value)}
-                  style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent", color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)", outline: "none" }}
+                  className="form-select"
                 >
                   <option value="default" disabled>Data Per Divisi...</option>
                   {departments.map(d => (
@@ -350,8 +350,8 @@ export default function AbsensiPage() {
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#008CBA" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#d97706" className="md:w-5 md:h-5" />}
                         </div>
                         <div>
-                          <h3 className="text-[0.9rem] md:text-[0.95rem] font-semibold text-[var(--text-main)] mb-0.5">{m.eventName}</h3>
-                          <div className="flex flex-wrap gap-1 md:gap-3 text-[0.7rem] md:text-[0.75rem] text-[var(--text-muted)]">
+                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1">{m.eventName}</h3>
+                          <div className="flex flex-wrap gap-1 md:gap-3 text-sm text-[var(--text-muted)]">
                             <span>{m.eventDate}</span>
                             <span>•</span>
                             <span>Oleh: {m.creatorName}</span>
@@ -364,14 +364,14 @@ export default function AbsensiPage() {
                         </span>
                         {canCreateRecords(user.role.name) ? (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
-                            <Link href={`/absensi/${m.id}`} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
-                            <button onClick={() => handleMarkCompleted(m.id)} className="border-none outline-none text-[0.7rem] md:text-[0.75rem] font-semibold text-[#16a34a] cursor-pointer bg-[#dcfce7] px-2 py-1 md:px-2 md:py-1 rounded whitespace-nowrap">✓ Terlaksana</button>
-                            <div onClick={() => setSelectedMeeting(m)} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Isi Presensi</div>
-                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={14} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer md:w-[15px] md:h-[15px]" />
+                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
+                            <button onClick={() => handleMarkCompleted(m.id)} className="border-none outline-none text-sm font-semibold text-[#16a34a] cursor-pointer bg-[#dcfce7] px-2 py-1 md:px-3 md:py-1.5 rounded-lg whitespace-nowrap">✓ Terlaksana</button>
+                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Isi Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={16} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer" />
                           </div>
                         ) : (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end">
-                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline">Lihat Detail & Notulensi</Link>
                           </div>
                         )}
                       </div>
@@ -397,8 +397,8 @@ export default function AbsensiPage() {
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#6b7280" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#6b7280" className="md:w-5 md:h-5" />}
                         </div>
                         <div>
-                          <h3 className="text-[0.9rem] md:text-[0.95rem] font-semibold text-[var(--text-main)] mb-0.5 line-through decoration-[var(--text-muted)]">{m.eventName}</h3>
-                          <div className="flex flex-wrap gap-1 md:gap-3 text-[0.7rem] md:text-[0.75rem] text-[var(--text-muted)]">
+                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1 line-through decoration-[var(--text-muted)]">{m.eventName}</h3>
+                          <div className="flex flex-wrap gap-1 md:gap-3 text-sm text-[var(--text-muted)]">
                             <span>{m.eventDate}</span>
                             <span>•</span>
                             <span>Oleh: {m.creatorName}</span>
@@ -411,13 +411,13 @@ export default function AbsensiPage() {
                         </span>
                         {canCreateRecords(user.role.name) ? (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
-                            <Link href={`/absensi/${m.id}`} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
-                            <div onClick={() => setSelectedMeeting(m)} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Edit Presensi</div>
-                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={14} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer md:w-[15px] md:h-[15px]" />
+                            <Link href={`/absensi/${m.id}`} className="text-sm font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
+                            <div onClick={() => setSelectedMeeting(m)} className="text-sm font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Edit Presensi</div>
+                            <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={16} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer" />
                           </div>
                         ) : (
                           <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end">
-                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                            <Link href={`/absensi/${m.id}`} className="text-sm text-[#008CBA] font-semibold no-underline">Lihat Detail & Notulensi</Link>
                           </div>
                         )}
                       </div>

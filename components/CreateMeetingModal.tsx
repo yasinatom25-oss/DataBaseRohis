@@ -173,7 +173,7 @@ export default function CreateMeetingModal({
                   setTargetAudienceType(e.target.value);
                   setTargetDepartment("");
                 }}
-                style={{ ...inputStyle, borderColor: "#7dd3fc" }}
+                className="form-select w-full !border-[#7dd3fc]"
               >
                 <option value="Semua Pengurus">Semua Pengurus</option>
                 <option value="BPH + Kadiv">BPH + Kadiv</option>
@@ -186,7 +186,7 @@ export default function CreateMeetingModal({
                 <select
                   value={targetDepartment}
                   onChange={(e) => setTargetDepartment(e.target.value)}
-                  style={{ ...inputStyle, borderColor: "#7dd3fc" }}
+                  className="form-select w-full !border-[#7dd3fc]"
                   required
                 >
                   <option value="">-- Pilih --</option>
@@ -246,7 +246,7 @@ export default function CreateMeetingModal({
               setLocationPreset("");
               setLocationCustom("");
             }}
-            style={inputStyle}
+            className="form-select w-full"
           >
             <option value="Offline">🏫 Tatap Muka (Offline)</option>
             <option value="Online">💻 Daring (Online)</option>
@@ -261,7 +261,7 @@ export default function CreateMeetingModal({
           <select
             value={locationPreset}
             onChange={(e) => setLocationPreset(e.target.value)}
-            style={inputStyle}
+            className="form-select w-full"
           >
             <option value="">-- Pilih --</option>
             {presetOptions.map((opt) => (
@@ -292,7 +292,7 @@ export default function CreateMeetingModal({
           <select
             value={notetakerId}
             onChange={(e) => setNotetakerId(e.target.value)}
-            style={inputStyle}
+            className="form-select w-full"
           >
             <option value="">-- Belum Ditentukan --</option>
             {availableUsers.map((u) => (

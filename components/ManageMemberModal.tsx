@@ -134,7 +134,7 @@ export default function ManageMemberModal({ member, roles, departments, onClose,
           <div style={{ marginBottom: "16px" }}>
             <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "8px" }}>Gender</label>
             <select value={gender} onChange={e => setGender(e.target.value)}
-              style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none", background: "var(--bg-card)" }}>
+              className="form-select w-full">
               <option value="ikhwan">Ikhwan</option>
               <option value="akhwat">Akhwat</option>
             </select>
@@ -144,7 +144,7 @@ export default function ManageMemberModal({ member, roles, departments, onClose,
             <div style={{ flex: 1 }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "8px" }}>Jabatan</label>
               <select value={roleId} onChange={e => setRoleId(e.target.value)}
-                style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none", background: "var(--bg-card)" }}>
+                className="form-select w-full">
                 {roles.map((r: any) => (
                   <option key={r.id} value={r.id}>{formatRoleName(r.name)}</option>
                 ))}
@@ -153,7 +153,7 @@ export default function ManageMemberModal({ member, roles, departments, onClose,
             <div style={{ flex: 1 }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "8px" }}>Divisi</label>
               <select value={departmentId} onChange={e => setDepartmentId(e.target.value)}
-                style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none", background: "var(--bg-card)" }}>
+                className="form-select w-full">
                 {departments.map((d: any) => (
                   <option key={d.id} value={d.id}>{d.name}</option>
                 ))}

@@ -214,7 +214,7 @@ export default function MutabaahPage() {
                       const newY = exportMonth.split("-")[0] || new Date().getFullYear().toString();
                       setExportMonth(`${newY}-${newM}`);
                     }}
-                    style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px" }}
+                    className="form-select"
                   >
                     <option value="01">Jan</option>
                     <option value="02">Feb</option>
@@ -236,7 +236,7 @@ export default function MutabaahPage() {
                       const newM = exportMonth.split("-")[1] || "01";
                       setExportMonth(`${newY}-${newM}`);
                     }}
-                    style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.85rem", color: "var(--text-main)", padding: "4px" }}
+                    className="form-select"
                   >
                     {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
                       <option key={year} value={year}>{year}</option>
@@ -309,7 +309,7 @@ export default function MutabaahPage() {
               <select
                 value={activeTab.startsWith("divisi_") ? activeTab : "default"}
                 onChange={(e) => setActiveTab(e.target.value)}
-                style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent", color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)", outline: "none" }}
+                className="form-select"
               >
                 <option value="default" disabled>Data Per Divisi...</option>
                 {departments.map(d => (
@@ -386,10 +386,10 @@ export default function MutabaahPage() {
               <div className="md:hidden flex flex-col gap-3 p-4">
                 {filteredHistory.map((log, idx) => (
                   <div key={idx} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
-                    <div className="flex justify-between items-start mb-2.5">
-                      <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-[0.95rem] leading-tight mb-0.5">{log.name}</h3>
-                        <div className="flex items-center gap-2 text-[0.75rem] text-[var(--text-muted)] font-medium">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                        <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{log.name}</h3>
+                        <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] font-medium">
                           <span>{log.department}</span>
                           <span>•</span>
                           <span>{log.date}</span>

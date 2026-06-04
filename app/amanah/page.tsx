@@ -150,8 +150,7 @@ export default function AmanahPage() {
                <select
                  value={statusFilter}
                  onChange={(e) => setStatusFilter(e.target.value)}
-                 className="flex-1 md:flex-none"
-                 style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.8rem", outline: "none", cursor: "pointer" }}
+                 className="form-select flex-1 md:flex-none"
                >
                  <option value="Semua">Semua Status</option>
                  <option value="pending">Pending</option>

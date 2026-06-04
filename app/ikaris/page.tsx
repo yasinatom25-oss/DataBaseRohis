@@ -187,16 +187,7 @@ export default function IkarisPage() {
                 setSelectedMonth(val);
                 fetchIkarisData(currentUser, val);
               }}
-              style={{
-                padding: "10px 14px",
-                borderRadius: "8px",
-                border: "1px solid var(--border-color)",
-                background: "var(--bg-card)",
-                color: "var(--text-main)",
-                outline: "none",
-                fontWeight: 500,
-                cursor: "pointer",
-              }}
+              className="form-select"
             >
               <option value="01">Januari</option>
               <option value="02">Februari</option>
@@ -220,16 +211,7 @@ export default function IkarisPage() {
                 setSelectedMonth(val);
                 fetchIkarisData(currentUser, val);
               }}
-              style={{
-                padding: "10px 14px",
-                borderRadius: "8px",
-                border: "1px solid var(--border-color)",
-                background: "var(--bg-card)",
-                color: "var(--text-main)",
-                outline: "none",
-                fontWeight: 500,
-                cursor: "pointer",
-              }}
+              className="form-select"
             >
               {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
                 <option key={year} value={year}>{year}</option>
@@ -335,10 +317,10 @@ export default function IkarisPage() {
               ) : (
                 membersData.map(m => (
                   <div key={m.id} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
-                    <div className="flex justify-between items-start mb-2.5">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="font-bold text-[var(--text-main)] text-[0.95rem] leading-tight mb-0.5">{m.name}</h3>
-                        <p className="text-[0.75rem] text-[var(--text-muted)] font-medium">{m.departmentName}</p>
+                        <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
+                        <p className="text-sm text-[var(--text-muted)] font-medium">{m.departmentName}</p>
                       </div>
                       <div>
                         {m.status === "Sudah Bayar" ? (
