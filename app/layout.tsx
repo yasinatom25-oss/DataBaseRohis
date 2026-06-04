@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col w-full overflow-x-hidden bg-background text-foreground">
         <Sidebar />
         {children}
       </body>

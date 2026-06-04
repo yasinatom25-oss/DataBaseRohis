@@ -115,8 +115,6 @@
 
 html { 
   scroll-behavior: smooth; 
-  overflow-x: hidden;
-  touch-action: pan-y;
 }
 
 input, textarea, select {
@@ -129,7 +127,6 @@ body {
   font-family: var(--font-sans, 'Inter', 'Segoe UI', sans-serif);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 /* Cards */

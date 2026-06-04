@@ -54,10 +54,9 @@ export default function LoginPage() {
     <div
       style={{
         minHeight: "100vh",
-        width: "100vw",
+        width: "100%",
         display: "flex",
         position: "relative",
-        overflowX: "hidden",
         background: "var(--bg-card)",
       }}
     >
@@ -443,10 +442,9 @@ export default function LoginPage() {
             display: none !important;
           }
           .login-right-panel {
-            flex: none !important;
-            width: 100vw !important;
-            max-width: 100vw !important;
-            padding: 24px 20px !important;
+            flex: 1 1 100% !important;
+            width: 100% !important;
+            padding: 24px 16px !important;
           }
         }
       `}</style>
