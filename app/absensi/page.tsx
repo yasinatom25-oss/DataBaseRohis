@@ -345,16 +345,16 @@ export default function AbsensiPage() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
                     <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#008CBA" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#d97706" className="md:w-5 md:h-5" />}
                         </div>
-                        <div>
-                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1">{m.eventName}</h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1 truncate">{m.eventName}</h3>
                           <div className="flex flex-wrap gap-1 md:gap-3 text-sm text-[var(--text-muted)]">
-                            <span>{m.eventDate}</span>
+                            <span className="truncate">{m.eventDate}</span>
                             <span>•</span>
-                            <span>Oleh: {m.creatorName}</span>
+                            <span className="truncate">Oleh: {m.creatorName}</span>
                           </div>
                         </div>
                       </div>
@@ -392,16 +392,16 @@ export default function AbsensiPage() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "16px", opacity: 0.85 }}>
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
                     <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="w-10 h-10 md:w-[42px] md:h-[42px] rounded-lg md:rounded-[10px] flex items-center justify-center shrink-0 bg-[#e5e7eb]">
                           {m.eventType === "Rapat Umum" ? <Users size={18} color="#6b7280" className="md:w-5 md:h-5" /> : <LayoutDashboard size={18} color="#6b7280" className="md:w-5 md:h-5" />}
                         </div>
-                        <div>
-                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1 line-through decoration-[var(--text-muted)]">{m.eventName}</h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1 line-through decoration-[var(--text-muted)] truncate">{m.eventName}</h3>
                           <div className="flex flex-wrap gap-1 md:gap-3 text-sm text-[var(--text-muted)]">
-                            <span>{m.eventDate}</span>
+                            <span className="truncate">{m.eventDate}</span>
                             <span>•</span>
-                            <span>Oleh: {m.creatorName}</span>
+                            <span className="truncate">Oleh: {m.creatorName}</span>
                           </div>
                         </div>
                       </div>

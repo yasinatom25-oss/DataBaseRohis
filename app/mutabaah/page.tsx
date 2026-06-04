@@ -198,15 +198,15 @@ export default function MutabaahPage() {
     <div className="min-h-screen bg-[var(--bg-main)]">
       <main className="main-content min-h-screen bg-[var(--bg-main)]">
         {/* Header */}
-        <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
+        <header className="animate-fade-in-up flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-7 relative z-50 w-full">
           <div>
-            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-main)", letterSpacing: "-0.02em" }}>Mutabaah Ibadah</h1>
-            <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Pantau dan catat target ibadah mingguan Anda</p>
+            <h1 className="text-2xl font-bold text-[var(--text-main)] tracking-tight">Mutabaah Ibadah</h1>
+            <p className="text-sm text-[var(--text-muted)] mt-1">Pantau dan catat target ibadah mingguan Anda</p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
             {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "var(--bg-card)", padding: "4px", borderRadius: "10px", border: "1px solid var(--border-color)" }}>
-                <div style={{ display: "flex", gap: "4px" }}>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto bg-[var(--bg-card)] p-1.5 rounded-xl border border-[var(--border-color)]">
+                <div className="flex gap-2 flex-1">
                   <select
                     value={exportMonth.split("-")[1] || "01"}
                     onChange={(e) => {
@@ -245,26 +245,21 @@ export default function MutabaahPage() {
                 </div>
                 <button 
                   onClick={handleExportExcel}
-                  style={{ 
-                    display: "flex", alignItems: "center", gap: "6px", 
-                    padding: "6px 12px", background: "#10b981", color: "#ffffff", 
-                    border: "none", borderRadius: "6px", fontSize: "0.85rem", 
-                    fontWeight: 600, cursor: "pointer", transition: "all 0.2s" 
-                  }}
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#10b981] text-white rounded-lg text-sm font-semibold hover:bg-[#059669] transition-colors w-full sm:w-auto shrink-0"
                   title="Export data bulan ini ke Excel"
                 >
                   <Download size={16} /> Export
                 </button>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 14px", background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "10px" }}>
-              <Search size={15} style={{ color: "var(--text-muted)" }} />
+            <div className="flex items-center gap-2 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl w-full md:w-64">
+              <Search size={16} className="text-[var(--text-muted)] shrink-0" />
               <input 
                 type="text"
                 placeholder="Cari anggota..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ border: "none", background: "transparent", outline: "none", fontSize: "0.8rem", color: "var(--text-main)", width: "120px" }}
+                className="bg-transparent border-none outline-none text-sm text-[var(--text-main)] w-full placeholder:text-[var(--text-muted)]"
               />
             </div>
             <NotificationDropdown currentUser={user} />
@@ -385,10 +380,10 @@ export default function MutabaahPage() {
               </div>
 
               {/* Mobile Card View */}
-              <div className="md:hidden flex flex-col gap-3 p-4">
+              <div className="md:hidden flex flex-col px-4 sm:px-5">
                 {filteredHistory.map((log, idx) => (
-                  <div key={idx} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
-                      <div className="flex justify-between items-start mb-3">
+                  <div key={idx} className="py-4 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-3">
+                      <div className="flex justify-between items-start">
                         <div>
                         <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{log.name}</h3>
                         <div className="flex items-center gap-2 text-sm text-[var(--text-muted)] font-medium">
@@ -405,7 +400,7 @@ export default function MutabaahPage() {
                       </div>
                     </div>
                     
-                    <div className="mt-2.5 pt-2.5 border-t border-[var(--border-color)] flex justify-end">
+                    <div className="mt-1 flex justify-end">
                       <button 
                         onClick={() => setSelectedDetailLog(log)}
                         className="w-full flex justify-center items-center"

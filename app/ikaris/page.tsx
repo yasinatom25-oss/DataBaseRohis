@@ -309,15 +309,15 @@ export default function IkarisPage() {
             </div>
 
             {/* Mobile Card View */}
-            <div className="md:hidden flex flex-col gap-3 p-4">
+            <div className="md:hidden flex flex-col px-4 sm:px-5">
               {membersData.length === 0 ? (
                 <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>
                   Tidak ada data anggota untuk departemen Anda.
                 </div>
               ) : (
                 membersData.map(m => (
-                  <div key={m.id} className="border border-[var(--border-color)] rounded-xl p-3.5 bg-[var(--bg-main)]">
-                    <div className="flex justify-between items-start mb-3">
+                  <div key={m.id} className="py-4 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-3">
+                    <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
                         <p className="text-sm text-[var(--text-muted)] font-medium">{m.departmentName}</p>
@@ -336,7 +336,7 @@ export default function IkarisPage() {
                     </div>
                     
                     {canEdit && (
-                      <div className="mt-2.5 pt-2.5 border-t border-[var(--border-color)] flex justify-end">
+                      <div className="mt-1 flex justify-end">
                         <button
                           onClick={() => togglePaymentStatus(m)}
                           className="w-full flex justify-center items-center"
