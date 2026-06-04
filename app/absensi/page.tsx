@@ -407,12 +407,12 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start md:items-end gap-3 mt-2 md:mt-0 w-full md:w-auto pr-2 md:pr-4">
+                      <div className="flex flex-col items-start md:items-end gap-3 mt-2 md:mt-0 w-full md:w-auto pr-4 md:pr-6">
                         <div className="flex items-center gap-2">
                           <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "var(--bg-main)", color: "var(--text-main)" }}>
                             {m.department}
                           </span>
-                          <span className="px-3 py-1.5 rounded-lg text-[0.75rem] font-bold bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100">
+                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "#475569", color: "#ffffff" }}>
                             Selesai
                           </span>
                         </div>
