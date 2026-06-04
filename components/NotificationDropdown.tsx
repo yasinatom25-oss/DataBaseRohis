@@ -14,6 +14,9 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
   useEffect(() => {
     if (currentUser) {
       fetchNotifications();
+      // Refresh setiap 5 menit agar pengingat rapat selalu akurat
+      const interval = setInterval(fetchNotifications, 5 * 60 * 1000);
+      return () => clearInterval(interval);
     }
   }, [currentUser]);
 
@@ -78,6 +81,52 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
             time: "Baru saja",
             icon: <BookOpen size={18} color="#008CBA" />,
             iconBg: "var(--primary-50)"
+          });
+        }
+      }
+
+      // 3. Cek rapat yang akan dimulai dalam 1 jam ke depan
+      const now = new Date();
+      // Generate range: now → now + 75 menit (pakai 75 menit agar tidak terlalu ketat)
+      const todayStr = now.toISOString().split("T")[0];
+
+      const { data: upcomingMeetings } = await supabase
+        .from("attendances")
+        .select("id, event_name, event_date, event_time, event_type, notetaker_id")
+        .eq("event_date", todayStr)
+        .eq("status", "Scheduled")
+        .not("event_time", "is", null);
+
+      if (upcomingMeetings) {
+        for (const m of upcomingMeetings) {
+          // Hitung selisih waktu
+          const [hour, minute] = (m.event_time as string).split(":").map(Number);
+          const meetingTime = new Date(now);
+          meetingTime.setHours(hour, minute, 0, 0);
+          const diffMs = meetingTime.getTime() - now.getTime();
+          const diffMin = diffMs / 60000;
+
+          // Hanya tampilkan jika 0–75 menit lagi
+          if (diffMin < 0 || diffMin > 75) continue;
+
+          // Filter: Rapat Departemen hanya untuk anggota departemen yang sama
+          if (m.event_type === "Rapat Departemen") {
+            const deptName = currentUser.department?.name;
+            if (!deptName) continue; // BPH tidak punya departemen, skip
+          }
+
+          const minsLeft = Math.round(diffMin);
+          const timeLabel = minsLeft <= 5 ? "Sebentar lagi!" : `${minsLeft} menit lagi`;
+
+          notifs.push({
+            id: `meeting-${m.id}`,
+            type: "rapat",
+            title: `🔔 Rapat Segera Dimulai`,
+            message: `"${m.event_name}" akan dimulai pukul ${m.event_time} — ${timeLabel}`,
+            link: `/absensi/${m.id}`,
+            time: `Hari ini ${m.event_time}`,
+            icon: <span style={{ fontSize: "1.2rem" }}>📅</span>,
+            iconBg: "#fef9c3",
           });
         }
       }

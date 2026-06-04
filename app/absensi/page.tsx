@@ -43,7 +43,7 @@ export default function AbsensiPage() {
         .from("attendances")
         .select("*")
         .order("event_date", { ascending: false });
-      
+
       if (error) { console.error("fetchMeetings error:", error); return; }
       if (!data) return;
 
@@ -63,7 +63,6 @@ export default function AbsensiPage() {
         eventType: d.event_type,
         eventName: d.event_name,
         eventDate: d.event_date,
-        eventTime: d.event_time || null,
         status: d.status || "Scheduled",
         creatorId: d.creator_id,
         creatorName: creatorMap[d.creator_id] || "System",
@@ -272,10 +271,10 @@ export default function AbsensiPage() {
                         </div>
                         <div>
                           <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "2px" }}>{m.eventName}</h3>
-                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                            <span>{new Date(m.eventDate).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</span>
-                            {m.eventTime && <span>• 🕐 {m.eventTime}</span>}
-                            <span>• Oleh: {m.creatorName}</span>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px" }}>
+                            <span>{m.eventDate}</span>
+                            <span>•</span>
+                            <span>Oleh: {m.creatorName}</span>
                           </div>
                         </div>
                       </div>
@@ -315,10 +314,10 @@ export default function AbsensiPage() {
                         </div>
                         <div>
                           <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "2px", textDecoration: "line-through", textDecorationColor: "var(--text-muted)" }}>{m.eventName}</h3>
-                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                            <span>{new Date(m.eventDate).toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</span>
-                            {m.eventTime && <span>• 🕐 {m.eventTime}</span>}
-                            <span>• Oleh: {m.creatorName}</span>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", display: "flex", gap: "10px" }}>
+                            <span>{m.eventDate}</span>
+                            <span>•</span>
+                            <span>Oleh: {m.creatorName}</span>
                           </div>
                         </div>
                       </div>
