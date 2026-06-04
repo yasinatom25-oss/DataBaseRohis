@@ -255,10 +255,10 @@ export default function DashboardPage() {
           : "Selamat Malam";
 
   return (
-    <div className="h-screen overflow-hidden bg-[var(--bg-main)]">
+    <div className="h-auto overflow-y-auto md:h-screen md:overflow-hidden bg-[var(--bg-main)]">
 
       {/* Main */}
-      <main className="main-content h-screen flex flex-col bg-[var(--bg-main)]" style={{ paddingBottom: "12px" }}>
+      <main className="main-content h-auto md:h-screen flex flex-col bg-[var(--bg-main)] pb-24 md:pb-3">
         {/* ===== Header ===== */}
         <header
           className="animate-fade-in-up"
@@ -374,13 +374,13 @@ export default function DashboardPage() {
 
 
         {/* ===== Dynamic Scrollable Area ===== */}
-        <div className="mobile-stack" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
+        <div className="flex flex-col gap-4 md:flex-1 md:min-h-0 w-full">
           {/* Top Row: Widgets */}
-          <div className="mobile-stack" style={{ flex: 1, display: "flex", gap: "12px", minHeight: 0 }}>
+          <div className="flex flex-col md:flex-row gap-4 md:flex-1 md:min-h-0 w-full">
             {/* Mutabaah Progress */}
             <div
-              className="solid-card animate-fade-in-up animate-delay-300 mobile-auto-height"
-              style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", minHeight: 0 }}
+              className="solid-card animate-fade-in-up animate-delay-300 flex flex-col h-auto md:h-full md:min-h-0"
+              style={{ flex: 1, padding: "14px 16px" }}
             >
             <div
               style={{
@@ -440,9 +440,8 @@ export default function DashboardPage() {
               </div>
             </div>
             <div
+              className="h-auto md:flex-1 md:overflow-y-auto"
               style={{
-                flex: 1,
-                overflowY: "auto",
                 paddingRight: "4px",
               }}
             >
@@ -462,8 +461,8 @@ export default function DashboardPage() {
 
           {/* Absensi Chart */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-400 mobile-auto-height"
-            style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", minHeight: 0 }}
+            className="solid-card animate-fade-in-up animate-delay-400 flex flex-col h-auto md:h-full md:min-h-0"
+            style={{ flex: 1, padding: "14px 16px" }}
           >
             <div
               style={{
@@ -531,13 +530,10 @@ export default function DashboardPage() {
 
           {/* Amanah – full width */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-500 mobile-auto-height"
+            className="solid-card animate-fade-in-up animate-delay-500 flex flex-col h-auto md:h-full md:min-h-0"
             style={{
               flex: 1,
               padding: "14px 16px",
-              display: "flex",
-              flexDirection: "column",
-              minHeight: 0,
             }}
           >
             <div
@@ -580,7 +576,7 @@ export default function DashboardPage() {
                 Lihat Semua
               </Link>
             </div>
-            <div style={{ flex: 1, overflowY: "auto", paddingRight: "4px" }}>
+            <div className="h-auto md:flex-1 md:overflow-y-auto" style={{ paddingRight: "4px" }}>
               <AmanahList tasks={tasks} onTaskClick={(task) => setSelectedTask(task)} />
             </div>
           </div>
