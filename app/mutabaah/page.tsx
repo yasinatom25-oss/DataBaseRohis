@@ -245,10 +245,10 @@ export default function MutabaahPage() {
                 </div>
                 <button 
                   onClick={handleExportExcel}
-                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-[#10b981] text-white rounded-lg text-sm font-semibold hover:bg-[#059669] transition-colors w-full sm:w-auto shrink-0"
+                  style={{ padding: "8px 16px", background: "#10b981", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}
                   title="Export data bulan ini ke Excel"
                 >
-                  <Download size={16} /> Export
+                  <Download size={14} /> Export
                 </button>
               </div>
             )}
@@ -286,7 +286,8 @@ export default function MutabaahPage() {
             </div>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full md:w-auto mt-2 md:mt-0 px-5 py-2.5 bg-[#008CBA] text-[var(--bg-card)] rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
+              style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}
+              className="w-full md:w-auto mt-2 md:mt-0"
             >
               {myLatestLog ? "Edit Mutabaah Pekan Ini" : "+ Isi Mutabaah Pekan Ini"}
             </button>

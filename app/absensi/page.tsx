@@ -283,9 +283,10 @@ export default function AbsensiPage() {
                     setMeetingType("Rapat Departemen");
                     setIsModalOpen(true);
                   }}
-                  className="w-full sm:w-auto flex justify-center items-center gap-1.5 px-4 py-2 bg-[var(--bg-card)] text-[var(--text-main)] border border-[var(--border-color)] rounded-lg text-sm font-semibold cursor-pointer hover:bg-[var(--hover-bg)] transition-colors"
+                  style={{ padding: "8px 16px", background: "var(--bg-card)", color: "var(--text-main)", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}
+                  className="w-full sm:w-auto justify-center"
                 >
-                  <Plus size={15} /> Rapat Departemen
+                  <Plus size={14} /> Rapat Departemen
                 </button>
               )}
               {isBPH(user.role.name) && (
@@ -294,9 +295,10 @@ export default function AbsensiPage() {
                     setMeetingType("Rapat Umum");
                     setIsModalOpen(true);
                   }}
-                  className="w-full sm:w-auto flex justify-center items-center gap-1.5 px-4 py-2 bg-[#008CBA] text-white border border-transparent rounded-lg text-sm font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
+                  style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}
+                  className="w-full sm:w-auto justify-center"
                 >
-                  <Plus size={15} /> Rapat Umum
+                  <Plus size={14} /> Rapat Umum
                 </button>
               )}
             </div>
