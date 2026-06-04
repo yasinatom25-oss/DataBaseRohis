@@ -34,7 +34,7 @@ export default function AttendancePieChart({ data }: AttendancePieChartProps) {
   }
 
   return (
-    <div style={{ width: "100%", flex: 1, minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ width: "100%", height: "200px", minHeight: "180px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsPie>
           <Pie
