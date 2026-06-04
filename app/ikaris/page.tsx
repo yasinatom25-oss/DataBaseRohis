@@ -275,11 +275,17 @@ export default function IkarisPage() {
                         <td className="whitespace-nowrap" style={{ padding: "12px 16px", textAlign: "right" }}>
                           <button
                             onClick={() => togglePaymentStatus(m)}
-                            className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
-                              m.status === "Sudah Bayar"
-                                ? "bg-transparent text-[var(--text-muted)] border-[var(--border-color)] hover:bg-[var(--hover-bg)]"
-                                : "bg-[#008CBA] text-white border-transparent hover:bg-[#007ba3]"
-                            }`}
+                            style={{
+                              padding: "8px 16px",
+                              background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
+                              color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "#ffffff",
+                              border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
+                              borderRadius: "8px",
+                              fontSize: "0.8rem",
+                              fontWeight: 600,
+                              cursor: "pointer",
+                              whiteSpace: "nowrap"
+                            }}
                           >
                             {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
                           </button>
@@ -330,11 +336,17 @@ export default function IkarisPage() {
                       <div className="flex justify-end">
                         <button
                           onClick={() => togglePaymentStatus(m)}
-                          className={`text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all cursor-pointer whitespace-nowrap ${
-                            m.status === "Sudah Bayar"
-                              ? "bg-transparent text-[var(--text-muted)] border-[var(--border-color)]"
-                              : "bg-[#008CBA] text-white border-transparent"
-                          }`}
+                          style={{
+                            padding: "8px 16px",
+                            background: m.status === "Sudah Bayar" ? "transparent" : "#008CBA",
+                            color: m.status === "Sudah Bayar" ? "var(--text-muted)" : "#ffffff",
+                            border: m.status === "Sudah Bayar" ? "1px solid var(--border-color)" : "none",
+                            borderRadius: "8px",
+                            fontSize: "0.8rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            whiteSpace: "nowrap"
+                          }}
                         >
                           {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}
                         </button>
