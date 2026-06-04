@@ -255,10 +255,10 @@ export default function DashboardPage() {
           : "Selamat Malam";
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
+    <div className="h-screen overflow-hidden bg-[var(--bg-main)]">
 
       {/* Main */}
-      <main className="main-content min-h-screen flex flex-col bg-[var(--bg-main)]">
+      <main className="main-content h-screen flex flex-col bg-[var(--bg-main)]" style={{ paddingBottom: "12px" }}>
         {/* ===== Header ===== */}
         <header
           className="animate-fade-in-up"
@@ -267,7 +267,7 @@ export default function DashboardPage() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "16px",
+            marginBottom: "12px",
             position: "relative",
             zIndex: 100,
           }}
@@ -298,7 +298,7 @@ export default function DashboardPage() {
         </header>
 
         {/* ===== Profile Card ===== */}
-        <div className="solid-card animate-fade-in-up animate-delay-100 flex flex-col md:flex-row md:items-center justify-between gap-6" style={{ flexShrink: 0, padding: "16px 20px", marginBottom: "16px" }}>
+        <div className="solid-card animate-fade-in-up animate-delay-100 flex flex-col md:flex-row md:items-center justify-between gap-4" style={{ flexShrink: 0, padding: "12px 16px", marginBottom: "12px" }}>
           
           {/* Avatar and Info */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -351,8 +351,8 @@ export default function DashboardPage() {
                 background: "#fee2e2",
                 border: "1px solid #fecaca",
                 borderRadius: "12px",
-                padding: "12px 16px",
-                marginBottom: "16px",
+                padding: "10px 14px",
+                marginBottom: "12px",
                 display: "flex",
                 alignItems: "center",
                 gap: "12px"
@@ -374,20 +374,20 @@ export default function DashboardPage() {
 
 
         {/* ===== Dynamic Scrollable Area ===== */}
-        <div className="mobile-stack" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px", minHeight: 0 }}>
+        <div className="mobile-stack" style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px", minHeight: 0 }}>
           {/* Top Row: Widgets */}
-          <div className="mobile-stack" style={{ flex: 1, display: "flex", gap: "16px", minHeight: 0 }}>
+          <div className="mobile-stack" style={{ flex: 1, display: "flex", gap: "12px", minHeight: 0 }}>
             {/* Mutabaah Progress */}
             <div
               className="solid-card animate-fade-in-up animate-delay-300 mobile-auto-height"
-              style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
+              style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", minHeight: 0 }}
             >
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "18px",
+                marginBottom: "12px",
               }}
             >
               <div>
@@ -442,14 +442,14 @@ export default function DashboardPage() {
           {/* Absensi Chart */}
           <div
             className="solid-card animate-fade-in-up animate-delay-400 mobile-auto-height"
-            style={{ flex: 1, padding: "16px 20px", display: "flex", flexDirection: "column", minHeight: 0 }}
+            style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", minHeight: 0 }}
           >
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "14px",
+                marginBottom: "10px",
               }}
             >
               <div>
@@ -538,7 +538,7 @@ export default function DashboardPage() {
             className="solid-card animate-fade-in-up animate-delay-500 mobile-auto-height"
             style={{
               flex: 1,
-              padding: "16px 20px",
+              padding: "14px 16px",
               display: "flex",
               flexDirection: "column",
               minHeight: 0,
@@ -549,7 +549,7 @@ export default function DashboardPage() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: "14px",
+                marginBottom: "10px",
               }}
             >
               <div>
