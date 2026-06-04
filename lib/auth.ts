@@ -19,6 +19,12 @@ export async function verifyUserSession(
       return;
     }
 
+    if (data.name !== parsedUser.name) {
+      localStorage.removeItem("rohiser_user");
+      onFail();
+      return;
+    }
+
     const updatedUser = {
       ...data,
       role: Array.isArray(data.role) ? data.role[0] : data.role,
