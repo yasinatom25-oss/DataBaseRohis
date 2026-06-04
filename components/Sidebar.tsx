@@ -15,9 +15,11 @@ import {
   Settings,
   LogOut,
   Users,
+  Bell,
 } from "lucide-react";
 import { User } from "@/lib/types";
 import { canViewIkaris } from "@/lib/rbac";
+import NotificationDropdown from "./NotificationDropdown";
 
 const BASE_NAV_ITEMS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -231,7 +233,6 @@ export default function Sidebar() {
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <Link href="/settings" style={{ color: "var(--text-muted)" }}><Settings size={22} /></Link>
           <Link href="/login" onClick={() => localStorage.removeItem("rohiser_user")} style={{ color: "var(--danger-text)" }}><LogOut size={22} /></Link>
         </div>
       </div>
@@ -259,44 +260,75 @@ export default function Sidebar() {
           if (canViewIkaris(safeRole)) {
             items.push({ href: "/ikaris", label: "Ikaris", icon: Wallet });
           }
-          return items.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "2px",
-                padding: "4px 12px",
-                fontSize: "0.6rem",
-                fontWeight: isActive ? 600 : 400,
-                color: isActive ? "#008CBA" : "var(--text-muted)",
-                textDecoration: "none",
-                transition: "color var(--transition-fast)",
-                position: "relative",
-              }}
-            >
-              {isActive && (
-                <div
+          return (
+            <>
+              {items.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
                   style={{
-                    position: "absolute",
-                    top: "-6px",
-                    width: "20px",
-                    height: "3px",
-                    borderRadius: "0 0 3px 3px",
-                    background: "#008CBA",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "2px",
+                    padding: "4px 8px",
+                    fontSize: "0.6rem",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#008CBA" : "var(--text-muted)",
+                    textDecoration: "none",
+                    transition: "color var(--transition-fast)",
+                    position: "relative",
                   }}
-                />
-              )}
-              <Icon size={20} />
-              {item.label}
-            </Link>
-            );
-          });
+                >
+                  {isActive && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "-6px",
+                        width: "20px",
+                        height: "3px",
+                        borderRadius: "0 0 3px 3px",
+                        background: "#008CBA",
+                      }}
+                    />
+                  )}
+                  <Icon size={20} />
+                  {item.label}
+                </Link>
+                );
+              })}
+              {/* Notification bell */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", padding: "4px 8px", fontSize: "0.6rem", color: "var(--text-muted)" }}>
+                <NotificationDropdown currentUser={user} />
+                <span>Notif</span>
+              </div>
+              {/* Settings */}
+              <Link
+                href="/settings"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "2px",
+                  padding: "4px 8px",
+                  fontSize: "0.6rem",
+                  fontWeight: pathname === "/settings" ? 600 : 400,
+                  color: pathname === "/settings" ? "#008CBA" : "var(--text-muted)",
+                  textDecoration: "none",
+                  position: "relative",
+                }}
+              >
+                {pathname === "/settings" && (
+                  <div style={{ position: "absolute", top: "-6px", width: "20px", height: "3px", borderRadius: "0 0 3px 3px", background: "#008CBA" }} />
+                )}
+                <Settings size={20} />
+                Pengaturan
+              </Link>
+            </>
+          );
         })()}
       </nav>
 

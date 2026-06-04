@@ -313,7 +313,7 @@ export default function IkarisPage() {
                 </div>
               ) : (
                 membersData.map(m => (
-                  <div key={m.id} className="py-4 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-3">
+                  <div key={m.id} className="py-4 pb-5 border-b border-[var(--border-color)] last:border-0 flex flex-col gap-2.5">
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
