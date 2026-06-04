@@ -150,7 +150,7 @@ html {
   scroll-behavior: smooth; 
 }
 
-input, textarea, select {
+input, textarea {
   font-size: 16px !important;
 }
 

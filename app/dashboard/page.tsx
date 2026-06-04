@@ -409,6 +409,13 @@ export default function DashboardPage() {
                   value={mutabaahTimeframe}
                   onChange={(e) => setMutabaahTimeframe(e.target.value as any)}
                   className="form-select"
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    padding: "4px 28px 4px 12px",
+                    height: "auto",
+                    lineHeight: "normal",
+                  }}
                 >
                   <option value="pekan">Pekan Ini</option>
                   <option value="bulan">Bulan Ini</option>
