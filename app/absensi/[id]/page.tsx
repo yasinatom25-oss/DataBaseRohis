@@ -110,8 +110,8 @@ export default function MeetingDetailPage() {
   const isNotetaker = !!(currentUserId && meeting.notetaker_id && meeting.notetaker_id === currentUserId);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <main className="main-content fade-in" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+    <div className="min-h-screen bg-[var(--bg-main)]">
+      <main className="main-content fade-in min-h-screen bg-[var(--bg-main)]">
 
         {/* Back Button */}
         <button

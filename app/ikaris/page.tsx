@@ -161,8 +161,8 @@ export default function IkarisPage() {
   const canEdit = canEditIkaris(currentUser.role.name);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <main className="main-content fade-in" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+    <div className="min-h-screen bg-[var(--bg-main)]">
+      <main className="main-content fade-in min-h-screen bg-[var(--bg-main)]">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "16px" }}>
         <div>
           <h1 style={{ fontSize: "1.8rem", fontWeight: 800, color: "var(--text-main)", display: "flex", alignItems: "center", gap: "10px" }}>

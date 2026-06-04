@@ -312,13 +312,6 @@ export default function Sidebar() {
           .mobile-header {
             display: flex !important;
           }
-          .main-content {
-            margin-left: 0 !important;
-            padding-top: 76px !important;
-            padding-bottom: 80px !important;
-            padding-left: 16px !important;
-            padding-right: 16px !important;
-          }
         }
       `}</style>
     </>

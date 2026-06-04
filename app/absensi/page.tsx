@@ -195,8 +195,8 @@ export default function AbsensiPage() {
   });
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+    <div className="min-h-screen bg-[var(--bg-main)]">
+      <main className="main-content min-h-screen bg-[var(--bg-main)]">
         {/* Header */}
         <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
           <div>

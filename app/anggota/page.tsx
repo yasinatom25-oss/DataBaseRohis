@@ -125,8 +125,8 @@ export default function AnggotaPage() {
   if (!currentUser) return null;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
-      <main className="main-content" style={{ flex: 1, marginLeft: "256px", padding: "24px 28px", minHeight: "100vh", background: "var(--bg-main)" }}>
+    <div className="min-h-screen bg-[var(--bg-main)]">
+      <main className="main-content min-h-screen bg-[var(--bg-main)]">
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>

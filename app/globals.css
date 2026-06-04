@@ -129,6 +129,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Global Layout Rules */
+.main-content {
+  margin-left: 256px;
+  padding: 24px 28px;
+  width: calc(100% - 256px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 76px 16px 80px 16px !important;
+  }
+}
+
 /* Cards */
 .solid-card {
   background: var(--card-bg);

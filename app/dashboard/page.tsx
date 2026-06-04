@@ -255,22 +255,10 @@ export default function DashboardPage() {
           : "Selamat Malam";
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg-main)" }}>
+    <div className="min-h-screen bg-[var(--bg-main)]">
 
       {/* Main */}
-      <main
-        className="main-content"
-        style={{
-          flex: 1,
-          marginLeft: "256px",
-          padding: "20px 24px",
-          height: "100vh",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
-          background: "var(--bg-main)",
-        }}
-      >
+      <main className="main-content min-h-screen flex flex-col bg-[var(--bg-main)]">
         {/* ===== Header ===== */}
         <header
           className="animate-fade-in-up"
