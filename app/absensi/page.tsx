@@ -294,7 +294,7 @@ export default function AbsensiPage() {
                     setMeetingType("Rapat Umum");
                     setIsModalOpen(true);
                   }}
-                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[#008CBA] text-white border-none rounded-lg text-[0.85rem] font-semibold cursor-pointer"
+                  className="w-full md:w-auto flex justify-center items-center gap-1.5 p-2 md:px-3.5 bg-[#008CBA] text-white border border-transparent rounded-lg text-[0.85rem] font-semibold cursor-pointer transition-colors hover:bg-[#007ba3]"
                 >
                   <Plus size={16} /> Rapat Umum
                 </button>
