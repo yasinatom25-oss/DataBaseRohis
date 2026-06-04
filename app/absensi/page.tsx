@@ -342,7 +342,7 @@ export default function AbsensiPage() {
                 {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
                     <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
                       <div className="flex items-center gap-3">
@@ -363,14 +363,16 @@ export default function AbsensiPage() {
                           {m.department}
                         </span>
                         {canCreateRecords(user.role.name) ? (
-                          <div className="flex flex-wrap gap-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
                             <Link href={`/absensi/${m.id}`} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
                             <button onClick={() => handleMarkCompleted(m.id)} className="border-none outline-none text-[0.7rem] md:text-[0.75rem] font-semibold text-[#16a34a] cursor-pointer bg-[#dcfce7] px-2 py-1 md:px-2 md:py-1 rounded whitespace-nowrap">✓ Terlaksana</button>
                             <div onClick={() => setSelectedMeeting(m)} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Isi Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={14} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer md:w-[15px] md:h-[15px]" />
                           </div>
                         ) : (
-                          <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end">
+                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -387,7 +389,7 @@ export default function AbsensiPage() {
                 {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
                 ) : (
-                  <div style={{ display: "flex", flexDirection: "column", gap: "12px", opacity: 0.85 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px", opacity: 0.85 }}>
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
                     <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 border border-[var(--border-color)] rounded-xl bg-[var(--hover-bg)] gap-3 md:gap-4">
                       <div className="flex items-center gap-3">
@@ -408,13 +410,15 @@ export default function AbsensiPage() {
                           Selesai
                         </span>
                         {canCreateRecords(user.role.name) ? (
-                          <div className="flex flex-wrap gap-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-3 items-center w-full md:w-auto md:justify-end">
                             <Link href={`/absensi/${m.id}`} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#10b981] no-underline whitespace-nowrap">Detail & Notulensi</Link>
                             <div onClick={() => setSelectedMeeting(m)} className="text-[0.7rem] md:text-[0.75rem] font-semibold text-[#008CBA] cursor-pointer whitespace-nowrap">Edit Presensi</div>
                             <Trash2 onClick={() => handleDeleteMeeting(m.id)} size={14} color="var(--danger-text)" className="ml-auto md:ml-0 cursor-pointer md:w-[15px] md:h-[15px]" />
                           </div>
                         ) : (
-                          <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 w-full md:w-auto md:justify-end">
+                            <Link href={`/absensi/${m.id}`} style={{ fontSize: "0.75rem", color: "#008CBA", fontWeight: 600, textDecoration: "none" }}>Lihat Detail & Notulensi</Link>
+                          </div>
                         )}
                       </div>
                     </div>

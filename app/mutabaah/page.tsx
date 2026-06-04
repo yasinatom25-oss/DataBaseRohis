@@ -272,16 +272,16 @@ export default function MutabaahPage() {
         </header>
 
         {/* Time Window Card */}
-        <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "20px", marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", borderLeft: "4px solid #16a34a" }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-            <div style={{ padding: "10px", borderRadius: "10px", background: "#dcfce7" }}>
+        <div className="solid-card animate-fade-in-up animate-delay-100 p-5 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between border-l-4 border-l-[#16a34a] gap-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 rounded-lg bg-[#dcfce7] shrink-0">
               <Clock size={24} color="#15803d" />
             </div>
             <div>
-              <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "4px" }}>
+              <h2 className="text-[1.05rem] font-semibold text-[var(--text-main)] mb-1">
                 Pengisian Mutabaah Dibuka
               </h2>
-              <p style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
+              <p className="text-[0.85rem] text-[var(--text-muted)]">
                 {myLatestLog 
                   ? "Anda sudah mengisi mutabaah pekan ini. Anda dapat mengeditnya jika ada kesalahan." 
                   : "Silakan isi mutabaah ibadah Anda untuk pekan ini. (Batas 1 kali pengisian per minggu)"}
@@ -290,17 +290,7 @@ export default function MutabaahPage() {
           </div>
           <button 
             onClick={() => setIsModalOpen(true)}
-            style={{ 
-              padding: "10px 20px", 
-              background: "#008CBA", 
-              color: "var(--bg-card)", 
-              borderRadius: "8px", 
-              border: "none", 
-              fontSize: "0.9rem", 
-              fontWeight: 600, 
-              cursor: "pointer",
-              transition: "all 0.2s"
-            }}
+            className="w-full md:w-auto px-5 py-2.5 bg-[#008CBA] text-[var(--bg-card)] rounded-lg text-[0.9rem] font-semibold cursor-pointer transition-colors hover:bg-[#007ba3] mt-2 md:mt-0"
           >
             {myLatestLog ? "Edit Mutabaah Pekan Ini" : "+ Isi Mutabaah Pekan Ini"}
           </button>
@@ -308,7 +298,7 @@ export default function MutabaahPage() {
 
         {/* Tabs for Data Visibility */}
         {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
-          <div className="animate-fade-in-up animate-delay-200" style={{ display: "flex", gap: "8px", marginBottom: "20px", borderBottom: "1px solid var(--border-color)", paddingBottom: "12px" }}>
+          <div className="animate-fade-in-up animate-delay-200 flex flex-wrap gap-2 md:gap-3 mb-5 border-b border-[var(--border-color)] pb-3">
             <button 
               onClick={() => setActiveTab("personal")}
               style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "personal" ? "#008CBA" : "transparent", color: activeTab === "personal" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
@@ -319,17 +309,7 @@ export default function MutabaahPage() {
               <select
                 value={activeTab.startsWith("divisi_") ? activeTab : "default"}
                 onChange={(e) => setActiveTab(e.target.value)}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  border: "1px solid var(--border-color)",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent",
-                  color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)",
-                  outline: "none"
-                }}
+                style={{ padding: "8px 16px", borderRadius: "8px", border: "1px solid var(--border-color)", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab.startsWith("divisi_") ? "#008CBA" : "transparent", color: activeTab.startsWith("divisi_") ? "var(--bg-card)" : "var(--text-muted)", outline: "none" }}
               >
                 <option value="default" disabled>Data Per Divisi...</option>
                 {departments.map(d => (
