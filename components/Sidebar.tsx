@@ -16,6 +16,7 @@ import {
   LogOut,
   Users,
   Bell,
+  Search,
 } from "lucide-react";
 import { User } from "@/lib/types";
 import { canViewIkaris } from "@/lib/rbac";
@@ -233,6 +234,9 @@ export default function Sidebar() {
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <Search size={20} style={{ color: "var(--text-muted)", cursor: "pointer" }} />
+          <div style={{ marginTop: "4px" }}><NotificationDropdown currentUser={user} /></div>
+          <Link href="/settings" style={{ color: "var(--text-muted)" }}><Settings size={22} /></Link>
           <Link href="/login" onClick={() => localStorage.removeItem("rohiser_user")} style={{ color: "var(--danger-text)" }}><LogOut size={22} /></Link>
         </div>
       </div>
@@ -305,28 +309,6 @@ export default function Sidebar() {
                 <NotificationDropdown currentUser={user} />
                 <span>Notif</span>
               </div>
-              {/* Settings */}
-              <Link
-                href="/settings"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "2px",
-                  padding: "4px 8px",
-                  fontSize: "0.6rem",
-                  fontWeight: pathname === "/settings" ? 600 : 400,
-                  color: pathname === "/settings" ? "#008CBA" : "var(--text-muted)",
-                  textDecoration: "none",
-                  position: "relative",
-                }}
-              >
-                {pathname === "/settings" && (
-                  <div style={{ position: "absolute", top: "-6px", width: "20px", height: "3px", borderRadius: "0 0 3px 3px", background: "#008CBA" }} />
-                )}
-                <Settings size={20} />
-                Pengaturan
-              </Link>
             </>
           );
         })()}

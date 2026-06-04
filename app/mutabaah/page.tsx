@@ -262,7 +262,9 @@ export default function MutabaahPage() {
                 className="bg-transparent border-none outline-none text-sm text-[var(--text-main)] w-full placeholder:text-[var(--text-muted)]"
               />
             </div>
-            <NotificationDropdown currentUser={user} />
+            <div className="hidden md:block">
+              <NotificationDropdown currentUser={user} />
+            </div>
           </div>
         </header>
 
