@@ -420,7 +420,21 @@ export default function DashboardPage() {
                   <option value="pekan">Pekan Ini</option>
                   <option value="bulan">Bulan Ini</option>
                 </select>
-                <Link href="/mutabaah" className="badge badge-primary" style={{ textDecoration: "none" }}>
+                <Link 
+                  href="/mutabaah" 
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: "8px",
+                    border: "1px solid #b3deec",
+                    background: "var(--primary-50)",
+                    color: "#00688b",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all var(--transition-fast)",
+                    textDecoration: "none",
+                  }}
+                >
                   Semua
                 </Link>
               </div>
