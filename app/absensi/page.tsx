@@ -290,9 +290,9 @@ export default function AbsensiPage() {
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "20px" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           {/* Chart */}
-          <div className="solid-card animate-fade-in-up animate-delay-200" style={{ padding: "24px" }}>
+          <div className="solid-card animate-fade-in-up animate-delay-200 col-span-1" style={{ padding: "24px" }}>
             <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : activeTab.startsWith("divisi_") ? activeTab.replace("divisi_", "") : "Rohis"}
             </h2>
@@ -320,7 +320,7 @@ export default function AbsensiPage() {
           </div>
 
           {/* Meetings Table */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+          <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
 
             {/* Jadwal Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>

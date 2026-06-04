@@ -263,22 +263,22 @@ export default function IkarisPage() {
         {loading ? (
           <div style={{ padding: "40px", textAlign: "center", color: "var(--text-muted)" }}>Memuat data Ikaris...</div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
+          <div className="overflow-x-auto w-full">
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
               <thead>
                 <tr style={{ background: "var(--bg-main)", borderBottom: "1px solid var(--border-color)" }}>
-                  <th style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>NAMA ANGGOTA</th>
-                  <th style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>DEPARTEMEN</th>
-                  <th style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>STATUS</th>
-                  {canEdit && <th style={{ padding: "16px 20px", textAlign: "right", fontSize: "0.85rem", color: "var(--text-muted)" }}>AKSI</th>}
+                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>NAMA ANGGOTA</th>
+                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>DEPARTEMEN</th>
+                  <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "left", fontSize: "0.85rem", color: "var(--text-muted)" }}>STATUS</th>
+                  {canEdit && <th className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right", fontSize: "0.85rem", color: "var(--text-muted)" }}>AKSI</th>}
                 </tr>
               </thead>
               <tbody>
                 {membersData.map(m => (
                   <tr key={m.id} style={{ borderBottom: "1px solid var(--border-color)", transition: "background 0.2s" }} className="hover-row">
-                    <td style={{ padding: "16px 20px", fontWeight: 500, color: "var(--text-main)" }}>{m.name}</td>
-                    <td style={{ padding: "16px 20px", color: "var(--text-muted)", fontSize: "0.9rem" }}>{m.departmentName}</td>
-                    <td style={{ padding: "16px 20px" }}>
+                    <td className="whitespace-nowrap" style={{ padding: "16px 20px", fontWeight: 500, color: "var(--text-main)" }}>{m.name}</td>
+                    <td className="whitespace-nowrap" style={{ padding: "16px 20px", color: "var(--text-muted)", fontSize: "0.9rem" }}>{m.departmentName}</td>
+                    <td className="whitespace-nowrap" style={{ padding: "16px 20px" }}>
                       {m.status === "Sudah Bayar" ? (
                         <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#dcfce7", color: "#16a34a", padding: "6px 12px", borderRadius: "20px", fontSize: "0.85rem", fontWeight: 600 }}>
                           <CheckCircle size={14} /> Lunas
@@ -290,7 +290,7 @@ export default function IkarisPage() {
                       )}
                     </td>
                     {canEdit && (
-                      <td style={{ padding: "16px 20px", textAlign: "right" }}>
+                      <td className="whitespace-nowrap" style={{ padding: "16px 20px", textAlign: "right" }}>
                         <button
                           onClick={() => togglePaymentStatus(m)}
                           style={{
@@ -302,7 +302,8 @@ export default function IkarisPage() {
                             fontWeight: 600,
                             cursor: "pointer",
                             fontSize: "0.85rem",
-                            transition: "all 0.2s"
+                            transition: "all 0.2s",
+                            whiteSpace: "nowrap"
                           }}
                         >
                           {m.status === "Sudah Bayar" ? "Batalkan" : "Tandai Lunas"}

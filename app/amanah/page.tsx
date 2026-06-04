@@ -144,13 +144,14 @@ export default function AmanahPage() {
 
         {/* Content */}
         <div className="solid-card animate-fade-in-up animate-delay-100" style={{ padding: "24px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5">
              <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)" }}>Daftar Amanah</h2>
-             <div style={{ display: "flex", gap: "10px" }}>
+             <div className="flex flex-wrap gap-3 w-full md:w-auto">
                <select
                  value={statusFilter}
                  onChange={(e) => setStatusFilter(e.target.value)}
-                 style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.8rem", outline: "none", cursor: "pointer" }}
+                 className="flex-1 md:flex-none"
+                 style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-card)", color: "var(--text-main)", fontSize: "0.8rem", outline: "none", cursor: "pointer" }}
                >
                  <option value="Semua">Semua Status</option>
                  <option value="pending">Pending</option>
@@ -161,6 +162,7 @@ export default function AmanahPage() {
                {canCreateRecords(user.role.name) && (
                  <button 
                    onClick={() => setIsCreateModalOpen(true)}
+                   className="whitespace-nowrap flex-1 md:flex-none"
                    style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}
                  >
                    + Tambah Amanah
