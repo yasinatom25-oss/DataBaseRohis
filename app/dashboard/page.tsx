@@ -435,7 +435,7 @@ export default function DashboardPage() {
                     textDecoration: "none",
                   }}
                 >
-                  Semua
+                  Lihat Semua
                 </Link>
               </div>
             </div>
