@@ -198,7 +198,7 @@ export default function MutabaahPage() {
     <div className="min-h-screen bg-[var(--bg-main)]">
       <main className="main-content min-h-screen bg-[var(--bg-main)]">
         {/* Header */}
-        <header className="animate-fade-in-up flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10 relative z-50 w-full">
+        <header className="animate-fade-in-up flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative z-50 w-full">
           <div>
             <h1 className="text-2xl font-bold text-[var(--text-main)] tracking-tight">Mutabaah Ibadah</h1>
             <p className="text-sm text-[var(--text-muted)] mt-1">Pantau dan catat target ibadah mingguan Anda</p>
@@ -269,7 +269,7 @@ export default function MutabaahPage() {
         </header>
 
         {/* Time Window Card */}
-        <div className="solid-card animate-fade-in-up animate-delay-100 mb-8" style={{ padding: "24px" }}>
+        <div className="solid-card animate-fade-in-up animate-delay-100 mb-10" style={{ padding: "24px" }}>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex items-start gap-3">
               <div className="p-2.5 rounded-lg bg-[#dcfce7] shrink-0">
@@ -298,7 +298,7 @@ export default function MutabaahPage() {
 
         {/* Tabs for Data Visibility */}
         {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
-          <div className="animate-fade-in-up animate-delay-200 flex flex-wrap gap-2 md:gap-3 mb-6 md:mb-8 border-b border-[var(--border-color)] pb-4 md:pb-5">
+          <div className="animate-fade-in-up animate-delay-200 flex flex-wrap gap-3 mb-10 border-b border-[var(--border-color)] pb-6">
             <button 
               onClick={() => setActiveTab("personal")}
               style={{ padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", background: activeTab === "personal" ? "#008CBA" : "transparent", color: activeTab === "personal" ? "var(--bg-card)" : "var(--text-muted)", transition: "all 0.2s" }}
