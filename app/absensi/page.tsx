@@ -280,7 +280,7 @@ export default function AbsensiPage() {
             {/* Jadwal Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-300" style={{ padding: "24px" }}>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal Rapat (Akan Datang)</h2>
-              <div key={activeTab} className="animate-fade-in-up">
+              <div>
                 {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
                 ) : (
@@ -325,7 +325,7 @@ export default function AbsensiPage() {
             {/* Riwayat Rapat */}
             <div className="solid-card animate-fade-in-up animate-delay-400" style={{ padding: "24px" }}>
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Riwayat Rapat (Selesai)</h2>
-              <div key={activeTab} className="animate-fade-in-up">
+              <div>
                 {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
                 ) : (
