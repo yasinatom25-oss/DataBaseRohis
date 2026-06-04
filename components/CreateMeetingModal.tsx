@@ -108,7 +108,6 @@ export default function CreateMeetingModal({
           location_type: locationType,
           location_detail: locationDetail || null,
           notetaker_id: notetakerId || null,
-          target_audience: finalTargetAudience,
         },
       ]);
 

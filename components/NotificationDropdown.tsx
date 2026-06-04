@@ -95,15 +95,12 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
 
       const { data: upcomingMeetings } = await supabase
         .from("attendances")
-        .select("id, event_name, event_date, event_time, event_type, notetaker_id, target_audience, department")
+        .select("id, event_name, event_date, event_time, event_type, notetaker_id")
         .eq("event_date", todayStr)
         .eq("status", "Scheduled")
         .not("event_time", "is", null);
 
       if (upcomingMeetings) {
-        const userIsBPH = isBPH(currentUser.role.name);
-        const userIsKadiv = isKadiv(currentUser.role.name);
-
         for (const m of upcomingMeetings) {
           // Hitung selisih waktu
           const [hour, minute] = (m.event_time as string).split(":").map(Number);
@@ -114,23 +111,6 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
 
           // Hanya tampilkan jika 0–75 menit lagi
           if (diffMin < 0 || diffMin > 75) continue;
-
-          // Target Audience filtering
-          if (m.event_type === "Rapat Umum") {
-            const aud = m.target_audience || "Semua Pengurus";
-            if (aud !== "Semua Pengurus") {
-              if (aud === "BPH + Kadiv" && !userIsBPH && !userIsKadiv) continue;
-              if (aud.startsWith("Divisi: ")) {
-                const targetDept = aud.replace("Divisi: ", "");
-                if (targetDept === "BPH" && !userIsBPH) continue;
-                if (targetDept !== "BPH" && currentUser.department?.name !== targetDept) continue;
-              }
-            }
-          } else if (m.event_type === "Rapat Departemen") {
-            // Rapat Departemen hanya untuk anggota departemen yang sama
-            const deptName = currentUser.department?.name;
-            if (!deptName || m.department !== deptName) continue;
-          }
 
           const minsLeft = Math.round(diffMin);
           const timeLabel = minsLeft <= 5 ? "Sebentar lagi!" : `${minsLeft} menit lagi`;
