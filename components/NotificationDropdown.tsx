@@ -158,28 +158,28 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200"
+        className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] hover:bg-[var(--hover-bg)] transition-all duration-200"
       >
-        <Bell size={18} className="text-slate-500 dark:text-slate-400" />
+        <Bell size={18} className="text-[var(--text-muted)]" />
         {notifications.length > 0 && (
-          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-800" />
+          <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--bg-card)]" />
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden animate-fade-in-up">
+        <div className="absolute top-full right-0 mt-3 w-[90vw] sm:w-[420px] md:w-[460px] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl shadow-xl z-50 overflow-hidden animate-fade-in-up">
           {/* Header */}
-          <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-            <h3 className="font-bold text-sm text-slate-800 dark:text-slate-100 m-0">Notifikasi</h3>
-            <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 py-1 px-3 rounded-full font-semibold">
+          <div className="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--bg-main)]">
+            <h3 className="font-bold text-sm text-[var(--text-main)] m-0">Notifikasi</h3>
+            <span className="text-xs bg-[var(--primary-100)] text-[var(--primary-800)] py-1 px-3 rounded-full font-semibold">
               {notifications.length} Baru
             </span>
           </div>
           
           {/* List of Notifications */}
-          <div className="max-h-[350px] overflow-y-auto p-3 flex flex-col gap-3">
+          <div className="max-h-[400px] overflow-y-auto p-3 flex flex-col gap-3">
             {notifications.length === 0 ? (
-              <div className="py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+              <div className="py-8 text-center text-sm text-[var(--text-muted)]">
                 Tidak ada notifikasi baru.
               </div>
             ) : (
@@ -188,19 +188,19 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
                   key={notif.id}
                   href={notif.link}
                   onClick={() => setIsOpen(false)}
-                  className="flex gap-4 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-md transition-all duration-200 group"
+                  className="flex gap-4 p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-[var(--primary-300)] hover:shadow-md transition-all duration-200 group"
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.bgClass}`}>
                     {notif.icon}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-sm text-slate-800 dark:text-slate-100 mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h4 className="font-semibold text-sm text-[var(--text-main)] mb-1 group-hover:text-[var(--primary-600)] transition-colors">
                       {notif.title}
                     </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed m-0">
+                    <p className="text-xs text-[var(--text-muted)] leading-relaxed m-0">
                       {notif.message}
                     </p>
-                    <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-2 block uppercase tracking-wider">
+                    <span className="text-[10px] font-semibold text-[var(--text-muted)] mt-2 block uppercase tracking-wider opacity-70">
                       {notif.time}
                     </span>
                   </div>
