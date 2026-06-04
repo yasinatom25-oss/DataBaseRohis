@@ -168,13 +168,7 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
 
       {isOpen && (
         <div className="absolute top-full right-0 mt-3 w-[90vw] sm:w-96 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl z-50 p-4 flex flex-col">
-          {/* Header */}
-          <div className="pt-2 pb-3 border-b border-[var(--border-color)] flex justify-between items-center shrink-0">
-            <h3 className="font-bold text-sm text-[var(--text-main)] m-0">Notifikasi</h3>
-            <span className="bg-blue-50 text-blue-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">
-              {notifications.length} Baru
-            </span>
-          </div>
+
           
           {/* List of Notifications */}
           <div className="max-h-[350px] overflow-y-auto py-3 flex flex-col gap-4 shrink-0">
