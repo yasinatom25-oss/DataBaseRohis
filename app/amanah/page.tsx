@@ -182,7 +182,7 @@ export default function AmanahPage() {
                     {group.tasks.length}
                   </span>
                 </h3>
-                <AmanahList tasks={group.tasks} onTaskClick={(task) => setSelectedTask(task)} onAddAmanah={() => setIsCreateModalOpen(true)} />
+                <AmanahList tasks={group.tasks} onTaskClick={(task) => setSelectedTask(task)} onAddAmanah={canCreateRecords(user.role.name) ? () => setIsCreateModalOpen(true) : undefined} />
               </div>
             ))
           )}
