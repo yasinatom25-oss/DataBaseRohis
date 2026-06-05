@@ -205,10 +205,9 @@ header {
   z-index: 50;
 }
 
-/* Dark Mode Logo Adaptation (Smart Background Removal) */
+/* Dark Mode Logo Adaptation (Glow Effect for Transparent Logo) */
 .dark .logo-original {
-  filter: invert(1) hue-rotate(180deg) !important;
-  mix-blend-mode: screen !important;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)) !important;
 }
 
 /* Floating Pill Components (Sidebar) */
