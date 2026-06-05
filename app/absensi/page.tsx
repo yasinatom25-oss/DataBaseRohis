@@ -350,7 +350,7 @@ export default function AbsensiPage() {
                     <p style={{ fontSize: "0.85rem", maxWidth: "300px", margin: "0 auto 20px" }}>Saat ini tidak ada jadwal rapat mendatang yang perlu dihadiri.</p>
                     {canCreateRecords(user.role.name) && (
                       <button
-                        onClick={() => setShowCreateModal(true)}
+                        onClick={() => setIsModalOpen(true)}
                         style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "10px", background: "#008CBA", color: "white", fontWeight: 600, fontSize: "0.85rem", border: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(0,140,186,0.3)" }}
                       >
                         + Buat Jadwal
