@@ -418,9 +418,9 @@ export default function AbsensiPage() {
                 {filteredMeetings.filter(m => m.status === "Completed").length === 0 ? (
                   <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada riwayat rapat.</div>
                 ) : (
-                  <div className="flex flex-col">
+                  <div className="flex flex-col gap-2 md:gap-4">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-6 md:py-7 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0 bg-[#e5e7eb] dark:bg-slate-700">
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
