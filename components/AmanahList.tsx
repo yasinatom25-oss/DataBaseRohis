@@ -57,7 +57,7 @@ function formatDate(dateStr?: string): string {
   });
 }
 
-export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
+export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahListProps) {
   const sorted = [...tasks].sort(
     (a, b) => {
       if (a.isTemplate && !b.isTemplate) return -1;
