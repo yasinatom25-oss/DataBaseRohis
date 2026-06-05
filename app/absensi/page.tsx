@@ -351,7 +351,8 @@ export default function AbsensiPage() {
                     {canCreateRecords(user.role.name) && (
                       <button
                         onClick={() => setIsModalOpen(true)}
-                        style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "10px", background: "#008CBA", color: "white", fontWeight: 600, fontSize: "0.85rem", border: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(0,140,186,0.3)" }}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "10px 20px", borderRadius: "10px", background: "#008CBA", color: "white", fontWeight: 600, fontSize: "0.85rem", border: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(0,140,186,0.3)" }}
+                        className="w-full md:w-auto"
                       >
                         + Buat Jadwal
                       </button>
@@ -360,7 +361,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
@@ -374,16 +375,16 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start md:items-end gap-3 mt-2 md:mt-0 w-full md:w-auto">
-                        <div className="flex items-center gap-2 pr-2 md:pr-4">
-                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--bg-main)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)" }}>
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mt-2 md:mt-0 w-full md:w-auto md:justify-end">
+                        <div className="flex items-center gap-2 pr-2 md:pr-4 w-full md:w-auto">
+                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--bg-main)", color: m.eventType === "Rapat Umum" ? "var(--primary-700)" : "var(--text-main)", flexShrink: 0 }}>
                             {m.department}
                           </span>
                           {canCreateRecords(user.role.name) && (
                             <button 
                               onClick={() => handleMarkCompleted(m.id)} 
                               style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "#10b981", color: "#ffffff", border: "none", cursor: "pointer" }}
-                              className="hover:bg-[#059669] transition-colors"
+                              className="hover:bg-[#059669] transition-colors whitespace-nowrap"
                             >
                               ✓ Terlaksana
                             </button>
@@ -417,7 +418,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0 bg-[#e5e7eb] dark:bg-slate-700">
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
@@ -431,12 +432,12 @@ export default function AbsensiPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start md:items-end gap-3 mt-2 md:mt-0 w-full md:w-auto pr-4 md:pr-6">
-                        <div className="flex items-center gap-2">
-                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "var(--bg-main)", color: "var(--text-main)" }}>
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mt-2 md:mt-0 w-full md:w-auto md:justify-end pr-0 md:pr-6">
+                        <div className="flex items-center gap-2 w-full md:w-auto">
+                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "var(--bg-main)", color: "var(--text-main)", flexShrink: 0 }}>
                             {m.department}
                           </span>
-                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "#475569", color: "#ffffff" }}>
+                          <span style={{ display: "inline-block", padding: "6px 12px", borderRadius: "8px", fontSize: "0.7rem", fontWeight: 600, background: "#475569", color: "#ffffff", flexShrink: 0 }}>
                             Selesai
                           </span>
                         </div>

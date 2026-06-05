@@ -147,7 +147,9 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-3 w-[90vw] sm:w-96 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-xl z-50 p-4 flex flex-col">
+        <div className="absolute top-full right-[-8px] sm:right-0 mt-4 w-[340px] max-w-[calc(100vw-32px)] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-2xl z-50 p-4 flex flex-col">
+          {/* Caret pointer */}
+          <div className="absolute -top-2 right-6 sm:right-4 w-4 h-4 bg-[var(--bg-card)] border-l border-t border-[var(--border-color)] transform rotate-45 rounded-tl-sm"></div>
 
           
           {/* List of Notifications */}
@@ -184,15 +186,17 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
           </div>
 
           {/* Bottom Element */}
-          <div className="mt-2 shrink-0">
-             <Link 
-               href="#" 
-               onClick={(e) => { e.preventDefault(); setIsOpen(false); }}
-               className="block text-center py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors w-full"
-             >
-               Tandai Semua Sudah Dibaca
-             </Link>
-          </div>
+          {notifications.length > 0 && (
+            <div className="mt-2 shrink-0">
+               <Link 
+                 href="#" 
+                 onClick={(e) => { e.preventDefault(); setIsOpen(false); }}
+                 className="block text-center py-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors w-full"
+               >
+                 Tandai Semua Sudah Dibaca
+               </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

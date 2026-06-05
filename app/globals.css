@@ -174,7 +174,19 @@ body {
   .main-content {
     margin-left: 0 !important;
     width: 100% !important;
+    /* Add horizontal padding to the main content wrapper */
     padding: 76px 16px 80px 16px !important;
+  }
+  
+  /* Scale down headings proportionally on mobile */
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  h3 { font-size: 1.1rem !important; }
+  
+  /* Reduce solid card padding so content fits better and has consistent internal spacing */
+  .solid-card {
+    padding: 16px !important;
+    border-radius: 12px !important;
   }
 }
 

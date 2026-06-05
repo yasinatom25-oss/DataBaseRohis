@@ -302,6 +302,7 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
               style={{
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
                 padding: "10px 20px",
                 borderRadius: "10px",
@@ -313,6 +314,7 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
                 cursor: "pointer",
                 boxShadow: "0 4px 14px rgba(0,140,186,0.3)"
               }}
+              className="w-full md:w-auto"
             >
               + Tambah Amanah
             </button>

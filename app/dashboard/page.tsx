@@ -487,9 +487,8 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div
+                className="max-md:text-lg text-xl font-bold"
                 style={{
-                  fontSize: "1.2rem",
-                  fontWeight: 700,
                   color:
                     attendanceStats.percentage >= 80
                       ? "#16a34a"
@@ -502,10 +501,12 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <AttendancePieChart data={attendanceStats} />
+            <div className="max-md:scale-[0.85] max-md:-my-6 flex justify-center">
+              <AttendancePieChart data={attendanceStats} />
+            </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-4 gap-2 mt-3 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 w-full">
               {[
                 { label: "Hadir", value: attendanceStats.hadir, color: "#16a34a" },
                 { label: "Izin", value: attendanceStats.izin, color: "#008CBA" },
