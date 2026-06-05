@@ -205,9 +205,9 @@ header {
   z-index: 50;
 }
 
-/* Dark Mode Logo Adaptation */
+/* Dark Mode Logo Adaptation (Smart Background Removal) */
 .dark .logo-original {
-  filter: invert(1) hue-rotate(180deg) brightness(1.5) !important;
+  filter: invert(1) hue-rotate(180deg) !important;
   mix-blend-mode: screen !important;
 }
 
