@@ -205,8 +205,8 @@ export default function FillAttendanceModal({ isOpen, onClose, meeting, currentU
                 <div>CATATAN</div>
               </div>
               
-              {entries.map((entry) => (
-                <div key={entry.user_id} style={{ display: "grid", gridTemplateColumns: "2fr 3fr 2fr", gap: "16px", alignItems: "center", background: "var(--bg-main)", padding: "12px", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
+              {entries.map((entry, idx) => (
+                <div key={entry.user_id} style={{ display: "grid", gridTemplateColumns: "2fr 3fr 2fr", gap: "16px", alignItems: "center", background: idx % 2 === 0 ? "var(--bg-main)" : "var(--hover-bg)", padding: "12px", borderRadius: "8px", border: "1px solid var(--border-color)" }}>
                   <div>
                     <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-main)" }}>{entry.name}</div>
                     <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>{entry.role}</div>
@@ -231,18 +231,21 @@ export default function FillAttendanceModal({ isOpen, onClose, meeting, currentU
                   <div>
                     <input
                       type="text"
-                      placeholder="Catatan..."
+                      placeholder={entry.status === "Izin" || entry.status === "Sakit" ? "Catatan..." : "Tidak perlu catatan"}
                       value={entry.notes}
                       onChange={(e) => handleNotesChange(entry.user_id, e.target.value)}
+                      disabled={entry.status !== "Izin" && entry.status !== "Sakit"}
                       style={{
                         width: "100%",
                         padding: "6px 10px",
                         borderRadius: "6px",
                         border: "1px solid var(--border-color)",
-                        background: "var(--bg-card)",
-                        color: "var(--text-main)",
+                        background: entry.status !== "Izin" && entry.status !== "Sakit" ? "var(--hover-bg)" : "var(--bg-card)",
+                        color: entry.status !== "Izin" && entry.status !== "Sakit" ? "var(--text-muted)" : "var(--text-main)",
                         fontSize: "0.85rem",
-                        outline: "none"
+                        outline: "none",
+                        opacity: entry.status !== "Izin" && entry.status !== "Sakit" ? 0.6 : 1,
+                        cursor: entry.status !== "Izin" && entry.status !== "Sakit" ? "not-allowed" : "text"
                       }}
                     />
                   </div>

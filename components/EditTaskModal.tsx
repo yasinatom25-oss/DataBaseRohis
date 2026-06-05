@@ -153,7 +153,7 @@ export default function EditTaskModal({
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div>
                   <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Tenggat Waktu</label>
-                  <input type="date" value={editDeadline} onChange={e => setEditDeadline(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
+                  <input type="date" min="2024-01-01" value={editDeadline} onChange={e => setEditDeadline(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid var(--border-color)", outline: "none" }} />
                 </div>
                 <div>
                   <label style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "4px", display: "block" }}>Penugasan Dari</label>

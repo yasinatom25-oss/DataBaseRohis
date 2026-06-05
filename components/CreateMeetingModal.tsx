@@ -218,6 +218,7 @@ export default function CreateMeetingModal({
             <label style={labelStyle}>Tanggal Pelaksanaan *</label>
             <input
               type="date"
+              min="2024-01-01"
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
               style={inputStyle}

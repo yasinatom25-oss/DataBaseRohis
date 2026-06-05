@@ -218,6 +218,7 @@ export default function CreateTaskModal({
             </label>
             <input
               type="date"
+              min="2024-01-01"
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
               style={{ width: "100%", padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none" }}

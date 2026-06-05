@@ -342,7 +342,21 @@ export default function AbsensiPage() {
               <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>Jadwal Rapat (Akan Datang)</h2>
               <div>
                 {filteredMeetings.filter(m => m.status === "Scheduled").length === 0 ? (
-                  <div style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px" }}>Belum ada jadwal rapat mendatang.</div>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "48px 24px", background: "var(--bg-main)", borderRadius: "12px", border: "1px dashed var(--border-color)", color: "var(--text-muted)" }}>
+                    <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
+                      <Calendar size={32} color="#008CBA" />
+                    </div>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "8px" }}>Belum Ada Rapat</h3>
+                    <p style={{ fontSize: "0.85rem", maxWidth: "300px", margin: "0 auto 20px" }}>Saat ini tidak ada jadwal rapat mendatang yang perlu dihadiri.</p>
+                    {canCreateRecords(user.role.name) && (
+                      <button
+                        onClick={() => setShowCreateModal(true)}
+                        style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "10px", background: "#008CBA", color: "white", fontWeight: 600, fontSize: "0.85rem", border: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(0,140,186,0.3)" }}
+                      >
+                        + Buat Jadwal
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (

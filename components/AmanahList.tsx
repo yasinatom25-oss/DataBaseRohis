@@ -7,11 +7,13 @@ import {
   CheckCircle2,
   AlertCircle,
   ChevronRight,
+  ClipboardList,
 } from "lucide-react";
 
 interface AmanahListProps {
   tasks: Task[];
   onTaskClick?: (task: Task) => void;
+  onAddAmanah?: () => void;
 }
 
 const STATUS_CONFIG: Record<
@@ -277,13 +279,44 @@ export default function AmanahList({ tasks, onTaskClick }: AmanahListProps) {
       {sorted.length === 0 && (
         <div
           style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
             textAlign: "center",
-            padding: "32px",
+            padding: "48px 24px",
+            background: "var(--bg-main)",
+            borderRadius: "12px",
+            border: "1px dashed var(--border-color)",
             color: "var(--text-muted)",
-            fontSize: "0.85rem",
           }}
         >
-          🎉 Tidak ada amanah pending!
+          <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--primary-50)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
+            <ClipboardList size={32} color="#008CBA" />
+          </div>
+          <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-main)", marginBottom: "8px" }}>Belum Ada Amanah</h3>
+          <p style={{ fontSize: "0.85rem", maxWidth: "300px", margin: "0 auto 20px" }}>Saat ini tidak ada daftar amanah yang perlu dikerjakan atau berstatus pending.</p>
+          {onAddAmanah && (
+            <button
+              onClick={onAddAmanah}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 20px",
+                borderRadius: "10px",
+                background: "#008CBA",
+                color: "white",
+                fontWeight: 600,
+                fontSize: "0.85rem",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 14px rgba(0,140,186,0.3)"
+              }}
+            >
+              + Tambah Amanah
+            </button>
+          )}
         </div>
       )}
     </div>
