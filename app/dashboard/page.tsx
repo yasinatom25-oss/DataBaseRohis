@@ -255,10 +255,10 @@ export default function DashboardPage() {
           : "Selamat Malam";
 
   return (
-    <div className="h-auto overflow-y-auto md:h-screen md:overflow-hidden bg-[var(--bg-main)]">
+    <div className="min-h-screen overflow-y-auto bg-[var(--bg-main)]">
 
       {/* Main */}
-      <main className="main-content h-auto md:h-screen flex flex-col bg-[var(--bg-main)] pb-24 md:pb-3">
+      <main className="main-content min-h-screen flex flex-col bg-[var(--bg-main)] pb-24 md:pb-6">
         {/* ===== Header ===== */}
         <header
           className="animate-fade-in-up"
@@ -379,7 +379,7 @@ export default function DashboardPage() {
           <div className="flex flex-col md:flex-row gap-4 md:flex-1 md:min-h-0 w-full">
             {/* Mutabaah Progress */}
             <div
-              className="solid-card animate-fade-in-up animate-delay-300 flex flex-col h-auto md:h-full md:min-h-0"
+              className="solid-card animate-fade-in-up animate-delay-300 flex flex-col flex-1 h-auto min-h-[300px]"
               style={{ flex: 1, padding: "14px 16px" }}
             >
             <div
@@ -440,7 +440,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div
-              className="h-auto md:flex-1 md:overflow-y-auto"
+              className="h-auto md:flex-1 overflow-y-auto"
               style={{
                 paddingRight: "4px",
               }}
@@ -461,7 +461,7 @@ export default function DashboardPage() {
 
           {/* Absensi Chart */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-400 flex flex-col h-auto md:h-full md:min-h-0"
+            className="solid-card animate-fade-in-up animate-delay-400 flex flex-col flex-1 h-auto min-h-[300px]"
             style={{ flex: 1, padding: "14px 16px" }}
           >
             <div
@@ -531,7 +531,7 @@ export default function DashboardPage() {
 
           {/* Amanah – full width */}
           <div
-            className="solid-card animate-fade-in-up animate-delay-500 flex flex-col h-auto md:h-full md:min-h-0"
+            className="solid-card animate-fade-in-up animate-delay-500 flex flex-col flex-1 h-auto min-h-[300px]"
             style={{
               flex: 1,
               padding: "14px 16px",
@@ -577,7 +577,7 @@ export default function DashboardPage() {
                 Lihat Semua
               </Link>
             </div>
-            <div className="h-auto md:flex-1 md:overflow-y-auto" style={{ paddingRight: "4px" }}>
+            <div className="h-auto md:flex-1 overflow-y-auto" style={{ paddingRight: "4px" }}>
               <AmanahList tasks={tasks} onTaskClick={(task) => setSelectedTask(task)} />
             </div>
           </div>
