@@ -360,7 +360,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 md:py-6 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
@@ -420,7 +420,7 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between py-5 md:py-6 border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6">
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0 bg-[#e5e7eb] dark:bg-slate-700">
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
