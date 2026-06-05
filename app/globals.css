@@ -205,11 +205,7 @@ header {
   z-index: 50;
 }
 
-/* Dark Mode Logo Adaptation (Smart Background Removal) */
-.dark .logo-original {
-  filter: invert(1) hue-rotate(180deg) !important;
-  mix-blend-mode: screen !important;
-}
+/* Dark Mode Logo Adaptation (Removed per user request) */
 
 /* Floating Pill Components (Sidebar) */
 .floating-pill {
