@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@/lib/types";
-import { Search, Plus, Users, LayoutDashboard, Trash2 } from "lucide-react";
+import { Search, Plus, Users, LayoutDashboard, Trash2, Calendar } from "lucide-react";
 import AttendancePieChart from "@/components/AttendancePieChart";
 import CreateMeetingModal from "@/components/CreateMeetingModal";
 import FillAttendanceModal from "@/components/FillAttendanceModal";
