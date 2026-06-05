@@ -71,7 +71,7 @@ export default function Sidebar() {
         }}
       >
         {/* Block 1: Logo */}
-        <div className="floating-pill" style={{ display: "flex", justifyContent: "center", padding: "16px 8px" }}>
+        <div className="floating-pill" style={{ display: "flex", justifyContent: "center", padding: "16px 8px", background: "#ffffff", borderColor: "#e2e8f0" }}>
           <Image src="/logo-original.png" alt="Rohani Islam Logo" width={120} height={120} className="logo-original" style={{ objectFit: "contain", borderRadius: "12px" }} priority />
         </div>
 
