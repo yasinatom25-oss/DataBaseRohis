@@ -313,7 +313,7 @@ export default function IkarisPage() {
                 </div>
               ) : (
                 membersData.map(m => (
-                  <div key={m.id} className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm p-4 flex flex-col gap-3.5">
+                  <div key={m.id} className="bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] shadow-sm flex flex-col gap-3.5" style={{ padding: "16px", boxSizing: "border-box" }}>
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-bold text-[var(--text-main)] text-base leading-snug mb-1">{m.name}</h3>
@@ -321,12 +321,12 @@ export default function IkarisPage() {
                       </div>
                       <div>
                         {m.status === "Sudah Bayar" ? (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "3px", background: "#dcfce7", color: "#16a34a", padding: "3px 6px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700 }}>
-                            <CheckCircle size={11} /> Lunas
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#dcfce7", color: "#16a34a", padding: "4px 8px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700, boxSizing: "border-box" }}>
+                            <CheckCircle size={12} /> Lunas
                           </span>
                         ) : (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "3px", background: "#fee2e2", color: "#ef4444", padding: "3px 6px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700 }}>
-                            <XCircle size={11} /> Belum
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#fee2e2", color: "#ef4444", padding: "4px 8px", borderRadius: "20px", fontSize: "0.65rem", fontWeight: 700, boxSizing: "border-box" }}>
+                            <XCircle size={12} /> Belum
                           </span>
                         )}
                       </div>

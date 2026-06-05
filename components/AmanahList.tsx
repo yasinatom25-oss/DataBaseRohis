@@ -90,6 +90,8 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
                   : "1px solid var(--border-color)",
                 cursor: "pointer",
                 transition: "all var(--transition-base)",
+                padding: "16px",
+                boxSizing: "border-box"
               }}
               onClick={() => onTaskClick?.(task)}
             >
@@ -99,8 +101,8 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
                   {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.7rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
                   {task.title}
                 </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  <span className={`badge ${cfg.badgeClass}`} style={{ fontSize: "0.65rem", padding: "3px 6px" }}>{cfg.label}</span>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <span className={`badge ${cfg.badgeClass}`} style={{ fontSize: "0.65rem", padding: "4px 8px", boxSizing: "border-box" }}>{cfg.label}</span>
                   <ChevronRight size={14} style={{ color: "var(--border-color)" }} />
                 </div>
               </div>
