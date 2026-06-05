@@ -72,7 +72,7 @@ export default function Sidebar() {
       >
         {/* Block 1: Logo */}
         <div className="floating-pill" style={{ display: "flex", justifyContent: "center", padding: "16px 8px" }}>
-          <Image src="/logo-original.png" alt="Rohani Islam Logo" width={120} height={120} className="logo-original" style={{ objectFit: "contain", borderRadius: "12px" }} priority />
+          <Image src="/logo-original.png" alt="Rohani Islam Logo" width={120} height={120} style={{ objectFit: "contain", borderRadius: "12px" }} priority />
         </div>
 
         {/* Menu Utama (Dipisah per item) */}
@@ -230,7 +230,7 @@ export default function Sidebar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Image src="/logo-original.png" alt="Logo" width={32} height={32} className="logo-original" style={{ borderRadius: "6px" }} />
+          <Image src="/logo-original.png" alt="Logo" width={32} height={32} style={{ borderRadius: "6px" }} />
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>

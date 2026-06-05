@@ -205,10 +205,7 @@ header {
   z-index: 50;
 }
 
-/* Dark Mode Logo Adaptation (Glow Effect for Transparent Logo) */
-.dark .logo-original {
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)) !important;
-}
+/* Dark Mode Logo Adaptation (Removed per user request) */
 
 /* Floating Pill Components (Sidebar) */
 .floating-pill {
