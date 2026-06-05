@@ -230,7 +230,7 @@ export default function Sidebar() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Image src="/logo-original.png" alt="Logo" width={32} height={32} style={{ borderRadius: "6px" }} />
+          <Image src="/logo-original.png" alt="Logo" width={32} height={32} style={{ borderRadius: "6px", background: "#ffffff", padding: "2px" }} />
           <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "var(--text-main)" }}>Rohiser</span>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
