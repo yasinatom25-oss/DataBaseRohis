@@ -18,19 +18,52 @@ const MUTABAAH_PARAMS = [
   { id: 13, name: "Menambah Wawasan Islami", unit: "kali", standard: 1 },
 ];
 
-export default function MutabaahFormModal({ existingLog, userId, onClose, onSuccess }: any) {
+export default function MutabaahFormModal({ existingLog, userLogs = [], userId, onClose, onSuccess }: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [values, setValues] = useState<Record<number, number>>(() => {
-    const init: Record<number, number> = {};
-    for (let i = 1; i <= 13; i++) {
-      init[i] = existingLog ? existingLog[`param_${i}_val`] : 0;
-    }
-    return init;
-  });
+  const getMonday = (d: Date) => {
+    const date = new Date(d);
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(date.setDate(diff));
+    const yyyy = monday.getFullYear();
+    const mm = String(monday.getMonth() + 1).padStart(2, '0');
+    const dd = String(monday.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
 
-  const [hafalanText, setHafalanText] = useState(existingLog?.hafalan_text || "");
+  const weekOptions = React.useMemo(() => {
+    const options = [];
+    const today = new Date();
+    for (let i = 0; i < 4; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - (i * 7));
+      const mondayStr = getMonday(d);
+      let label = "Pekan Ini";
+      if (i === 1) label = "Pekan Lalu";
+      if (i > 1) label = `${i} Pekan Lalu`;
+      options.push({ label: `${label} (Mulai ${mondayStr})`, value: mondayStr });
+    }
+    return options;
+  }, []);
+
+  // Default to current week's Monday, unless an existingLog was passed, then default to that log's week
+  const initialWeek = existingLog ? getMonday(new Date(existingLog.log_date)) : weekOptions[0].value;
+  const [selectedWeek, setSelectedWeek] = useState(initialWeek);
+
+  const [values, setValues] = useState<Record<number, number>>({});
+  const [hafalanText, setHafalanText] = useState("");
+
+  React.useEffect(() => {
+    const logForWeek = userLogs.find((l: any) => getMonday(new Date(l.log_date)) === selectedWeek);
+    const newValues: Record<number, number> = {};
+    for (let i = 1; i <= 13; i++) {
+      newValues[i] = logForWeek ? logForWeek[`param_${i}_val`] : 0;
+    }
+    setValues(newValues);
+    setHafalanText(logForWeek?.hafalan_text || "");
+  }, [selectedWeek, userLogs]);
 
   const handleInputChange = (id: number, val: string) => {
     const num = parseInt(val, 10);
@@ -52,16 +85,18 @@ export default function MutabaahFormModal({ existingLog, userId, onClose, onSucc
         payload[`param_${i}_val`] = values[i];
       }
 
-      if (existingLog) {
+      const currentLog = userLogs.find((l: any) => getMonday(new Date(l.log_date)) === selectedWeek);
+
+      if (currentLog) {
         // Edit mode
         const { error: err } = await supabase
           .from("mutabaah_logs")
           .update(payload)
-          .eq("id", existingLog.id);
+          .eq("id", currentLog.id);
         if (err) throw err;
       } else {
         // Create mode
-        payload.log_date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        payload.log_date = selectedWeek; // strictly set to the Monday of that week
         const { error: err } = await supabase
           .from("mutabaah_logs")
           .insert([payload]);
@@ -91,10 +126,21 @@ export default function MutabaahFormModal({ existingLog, userId, onClose, onSucc
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: "1px solid var(--border-color)" }}>
           <div>
             <h2 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text-main)", margin: 0 }}>
-              {existingLog ? "Edit Mutabaah Pekan Ini" : "Isi Mutabaah Pekan Ini"}
+              Isi Mutabaah Ibadah
             </h2>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginTop: "4px" }}>
-              Silakan ketik angka pencapaian ibadah Anda selama sepekan terakhir.
+            <div style={{ marginTop: "12px" }}>
+              <select
+                value={selectedWeek}
+                onChange={(e) => setSelectedWeek(e.target.value)}
+                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border-color)", background: "var(--bg-main)", color: "var(--text-main)", fontSize: "0.9rem", outline: "none", width: "100%", maxWidth: "300px" }}
+              >
+                {weekOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.85rem", marginTop: "12px" }}>
+              Silakan ketik angka pencapaian ibadah Anda selama pekan yang dipilih.
             </p>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}>
@@ -131,7 +177,7 @@ export default function MutabaahFormModal({ existingLog, userId, onClose, onSucc
                     <input
                       type="number"
                       min="0"
-                      value={values[param.id].toString()}
+                      value={(values[param.id] || 0).toString()}
                       onChange={e => handleInputChange(param.id, e.target.value)}
                       style={{
                         flex: 1, padding: "10px 14px", border: "1px solid var(--border-color)", borderRadius: "8px", fontSize: "0.9rem", outline: "none"

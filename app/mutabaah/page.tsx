@@ -22,6 +22,7 @@ export default function MutabaahPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [myLatestLog, setMyLatestLog] = useState<any>(null);
+  const [userLogs, setUserLogs] = useState<any[]>([]);
   const [selectedDetailLog, setSelectedDetailLog] = useState<any>(null);
   const [exportMonth, setExportMonth] = useState(() => {
     const d = new Date();
@@ -88,20 +89,27 @@ export default function MutabaahPage() {
           };
         }));
         
-        // Find latest log for current user to enable "Edit" if within same week
-        const myLogs = data.filter(d => d.user_id === currentUser.id);
-        if (myLogs.length > 0) {
-          const latest = myLogs[0];
-          const logDate = new Date(latest.log_date);
-          const todayDate = new Date();
-          const diffTime = Math.abs(todayDate.getTime() - logDate.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          
-          if (diffDays <= 6) {
-            setMyLatestLog(latest);
-          } else {
-            setMyLatestLog(null);
-          }
+        const getMonday = (d: Date) => {
+          const date = new Date(d);
+          const day = date.getDay();
+          const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+          const monday = new Date(date.setDate(diff));
+          const yyyy = monday.getFullYear();
+          const mm = String(monday.getMonth() + 1).padStart(2, '0');
+          const dd = String(monday.getDate()).padStart(2, '0');
+          return `${yyyy}-${mm}-${dd}`;
+        };
+
+        const currentMondayStr = getMonday(new Date());
+
+        const myLogs = data.filter((d: any) => d.user_id === currentUser.id);
+        setUserLogs(myLogs);
+        const currentWeekLog = myLogs.find((l: any) => getMonday(new Date(l.log_date)) === currentMondayStr);
+
+        if (currentWeekLog) {
+          setMyLatestLog(currentWeekLog);
+        } else {
+          setMyLatestLog(null);
         }
       }
     } catch (e) {
@@ -291,7 +299,7 @@ export default function MutabaahPage() {
               style={{ padding: "8px 16px", background: "#008CBA", color: "#ffffff", borderRadius: "8px", border: "none", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}
               className="w-full md:w-auto mt-2 md:mt-0"
             >
-              {myLatestLog ? "Edit Mutabaah Pekan Ini" : "+ Isi Mutabaah Pekan Ini"}
+              Isi / Edit Mutabaah
             </button>
           </div>
         </div>
@@ -424,6 +432,7 @@ export default function MutabaahPage() {
       {isModalOpen && (
         <MutabaahFormModal 
           userId={user.id} 
+          userLogs={userLogs}
           existingLog={myLatestLog} 
           onClose={() => setIsModalOpen(false)} 
           onSuccess={() => {

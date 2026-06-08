@@ -17,6 +17,7 @@ import {
   Users,
   Bell,
   Search,
+  Star,
 } from "lucide-react";
 import { User } from "@/lib/types";
 import { canViewIkaris } from "@/lib/rbac";
@@ -81,6 +82,10 @@ export default function Sidebar() {
             const items = [...BASE_NAV_ITEMS];
             if (canViewIkaris(safeRole)) {
               items.push({ href: "/ikaris", label: "Ikaris (Uang Kas)", icon: Wallet });
+            }
+            const isBPHOrKetua = safeRoleLower.includes("ketua") || safeRoleLower.includes("sekretaris") || safeRoleLower.includes("bendahara") || safeRoleLower.includes("pembina");
+            if (isBPHOrKetua) {
+              items.push({ href: "/penilaian-bulanan", label: "Penilaian", icon: Star });
             }
             return items.map((item) => {
               const isActive = pathname === item.href;
@@ -263,6 +268,10 @@ export default function Sidebar() {
           const items = [...BASE_NAV_ITEMS];
           if (canViewIkaris(safeRole)) {
             items.push({ href: "/ikaris", label: "Ikaris", icon: Wallet });
+          }
+          const isBPHOrKetua = safeRoleLower.includes("ketua") || safeRoleLower.includes("sekretaris") || safeRoleLower.includes("bendahara") || safeRoleLower.includes("pembina");
+          if (isBPHOrKetua) {
+            items.push({ href: "/penilaian-bulanan", label: "Penilaian", icon: Star });
           }
           return (
             <>
