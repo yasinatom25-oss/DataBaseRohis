@@ -90,7 +90,7 @@ export default function PenilaianBulananPage() {
           query = query.eq("department_id", userDeptObj.id);
         } else {
           // Fallback if no specific department id
-          const rawDept = user.department_id;
+          const rawDept = (user as any).department_id;
           if (rawDept) query = query.eq("department_id", rawDept);
         }
       }
