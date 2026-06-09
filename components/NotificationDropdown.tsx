@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Bell, ClipboardList, BookOpen } from "lucide-react";
+import { Bell, ClipboardList, BookOpen, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@/lib/types";
 import { isBPH, isKadiv } from "@/lib/rbac";
@@ -138,24 +138,24 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] hover:bg-[var(--hover-bg)] transition-all duration-200"
+        className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-bg-surface border border-slate-200 dark:border-slate-700 hover:bg-[var(--hover-bg)] transition-all duration-200"
       >
-        <Bell size={18} className="text-[var(--text-muted)]" />
+        <Bell size={18} className="text-text-muted" />
         {notifications.length > 0 && (
           <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--bg-card)]" />
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-[-8px] sm:right-0 mt-4 w-[340px] max-w-[calc(100vw-32px)] bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl shadow-2xl z-50 p-4 flex flex-col">
+        <div className="absolute top-full right-[-8px] sm:right-0 mt-4 w-[400px] max-w-[calc(100vw-32px)] bg-bg-surface border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 p-6 flex flex-col">
           {/* Caret pointer */}
-          <div className="absolute -top-2 right-6 sm:right-4 w-4 h-4 bg-[var(--bg-card)] border-l border-t border-[var(--border-color)] transform rotate-45 rounded-tl-sm"></div>
+          <div className="absolute -top-2 right-6 sm:right-4 w-4 h-4 bg-bg-surface border-l border-t border-slate-200 dark:border-slate-700 transform rotate-45 rounded-tl-sm"></div>
 
           
           {/* List of Notifications */}
           <div className="max-h-[350px] overflow-y-auto py-3 flex flex-col gap-4 shrink-0">
             {notifications.length === 0 ? (
-              <div className="py-8 text-center text-sm text-[var(--text-muted)]">
+              <div className="py-8 text-center text-sm text-text-muted">
                 Tidak ada notifikasi baru.
               </div>
             ) : (
@@ -164,21 +164,25 @@ export default function NotificationDropdown({ currentUser }: { currentUser: Use
                   key={notif.id}
                   href={notif.link}
                   onClick={() => setIsOpen(false)}
-                  className="flex gap-4 p-4 rounded-xl bg-[var(--bg-main)] border border-[var(--border-color)] hover:border-blue-300 hover:shadow-sm transition-all duration-200 group"
+                  className="flex items-center rounded-xl bg-bg-canvas border border-slate-200 dark:border-slate-700 hover:border-blue-300 transition-all duration-200 group"
+                  style={{ padding: "24px 28px", gap: "24px" }}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${notif.bgClass}`}>
+                  <div className={`w-[48px] h-[48px] rounded-[12px] flex items-center justify-center shrink-0 ${notif.bgClass}`}>
                     {notif.icon}
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-sm text-[var(--text-main)] mb-1 group-hover:text-blue-600 transition-colors">
+                  <div className="flex-1 min-w-0" style={{ maxWidth: "250px" }}>
+                    <div className="font-semibold text-[0.85rem] text-text-main mb-[2px] group-hover:text-blue-600 transition-colors truncate">
                       {notif.title}
-                    </h4>
-                    <p className="text-xs text-[var(--text-muted)] leading-relaxed m-0">
+                    </div>
+                    <div className="text-[0.72rem] text-text-muted mt-[4px] leading-relaxed line-clamp-2 pr-2">
                       {notif.message}
-                    </p>
-                    <span className="text-[10px] font-semibold text-[var(--text-muted)] mt-2 block uppercase tracking-wider opacity-70">
+                    </div>
+                    <div className="text-[0.72rem] text-text-muted mt-2 flex items-center gap-2 font-semibold opacity-70 uppercase tracking-wider">
                       {notif.time}
-                    </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center shrink-0">
+                    <ChevronRight size={18} className="text-slate-400 dark:text-slate-500" />
                   </div>
                 </Link>
               ))

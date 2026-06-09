@@ -125,8 +125,8 @@ export default function AnggotaPage() {
   if (!currentUser) return null;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
-      <main className="main-content min-h-screen bg-[var(--bg-main)]">
+    <div className="min-h-screen bg-bg-canvas">
+      <main className="main-content min-h-screen bg-bg-canvas">
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
@@ -149,7 +149,7 @@ export default function AnggotaPage() {
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h1 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text-main)", margin: 0, marginBottom: "6px" }}>
+            <h1  className="text-brand-primary dark:text-blue-400" style={{ fontSize: "1.8rem", fontWeight: 700, margin: 0, marginBottom: "6px" }} >
               Manajemen Anggota
             </h1>
             <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", margin: 0 }}>

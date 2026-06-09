@@ -97,7 +97,7 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
             >
               {/* --- Mobile Header: Title & Badge --- */}
               <div className="flex justify-between items-start gap-3 w-full">
-                <div className="font-semibold text-sm text-[var(--text-main)] leading-snug">
+                <div className="font-semibold text-sm text-text-main leading-snug">
                   {task.isTemplate && <span style={{ color: "#008CBA", fontSize: "0.7rem", background: "var(--primary-50)", padding: "2px 6px", borderRadius: "4px", marginRight: "6px" }}>[Master Rutin]</span>}
                   {task.title}
                 </div>
@@ -142,7 +142,7 @@ export default function AmanahList({ tasks, onTaskClick, onAddAmanah }: AmanahLi
 
                 {/* Info Details Mobile */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="flex flex-col text-[0.7rem] text-[var(--text-muted)] gap-1.5">
+                  <div className="flex flex-col text-[0.7rem] text-text-muted gap-1.5">
                     <span>Dari: {task.assignerName}</span>
                     <span>Untuk: {task.assigneeName}</span>
                     <span

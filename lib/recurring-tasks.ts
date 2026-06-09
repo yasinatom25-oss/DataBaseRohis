@@ -42,9 +42,12 @@ export async function spawnRecurringTasks() {
           const diffToRelease = currentDayOfWeek - template.recurrence_day;
           const releaseDateThisWeek = new Date(today);
           releaseDateThisWeek.setDate(today.getDate() - diffToRelease);
+          releaseDateThisWeek.setHours(0, 0, 0, 0);
+          
+          if (lastSpawnDate) lastSpawnDate.setHours(0, 0, 0, 0);
           
           // Bandingkan
-          if (!lastSpawnDate || lastSpawnDate < releaseDateThisWeek) {
+          if (!lastSpawnDate || lastSpawnDate.getTime() < releaseDateThisWeek.getTime()) {
             needsSpawning = true;
           }
         }

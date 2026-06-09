@@ -125,12 +125,12 @@ export default function AmanahPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
-      <main className="main-content min-h-screen bg-[var(--bg-main)]">
+    <div className="min-h-screen bg-bg-canvas">
+      <main className="main-content min-h-screen bg-bg-canvas">
         {/* Header */}
         <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
           <div>
-            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-main)", letterSpacing: "-0.02em" }}>Manajemen Amanah</h1>
+            <h1  className="text-brand-primary dark:text-blue-400" style={{ fontSize: "1.5rem", fontWeight: 700, letterSpacing: "-0.02em" }} >Manajemen Amanah</h1>
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Daftar tugas kepanitiaan dan organisasi</p>
           </div>
           <div className="hidden md:flex" style={{ alignItems: "center", gap: "10px" }}>

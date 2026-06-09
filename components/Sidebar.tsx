@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import ThemeToggle from "./ThemeToggle";
 import {
   LayoutDashboard,
   BookOpen,
@@ -94,24 +93,24 @@ export default function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                className="floating-pill"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: "12px 16px",
-                  fontSize: "0.85rem",
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? "#008CBA" : "var(--text-muted)",
-                  background: isActive ? "var(--primary-50)" : "var(--bg-card)",
-                  borderLeft: isActive ? "4px solid #008CBA" : "4px solid transparent",
-                  textDecoration: "none",
-                }}
-              >
-                <Icon size={18} style={{ flexShrink: 0 }} />
-                {item.label}
-              </Link>
-            );
+                  className="floating-pill"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: "12px 16px",
+                    fontSize: "0.85rem",
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? "var(--brand-primary)" : "var(--text-muted)",
+                    background: isActive ? "var(--hover-bg)" : "var(--bg-canvas)",
+                    borderLeft: isActive ? "4px solid var(--brand-primary)" : "4px solid transparent",
+                    textDecoration: "none",
+                  }}
+                >
+                  <Icon size={18} style={{ flexShrink: 0 }} />
+                  {item.label}
+                </Link>
+              );
             });
           })()}
         </nav>
@@ -131,9 +130,9 @@ export default function Sidebar() {
                 padding: "12px 16px",
                 fontSize: "0.85rem",
                 fontWeight: pathname === "/anggota" ? 600 : 500,
-                color: pathname === "/anggota" ? "#008CBA" : "var(--text-muted)",
-                background: pathname === "/anggota" ? "var(--primary-50)" : "var(--bg-card)",
-                borderLeft: pathname === "/anggota" ? "4px solid #008CBA" : "4px solid transparent",
+                color: pathname === "/anggota" ? "var(--brand-primary)" : "var(--text-muted)",
+                background: pathname === "/anggota" ? "var(--hover-bg)" : "var(--bg-canvas)",
+                borderLeft: pathname === "/anggota" ? "4px solid var(--brand-primary)" : "4px solid transparent",
                 textDecoration: "none",
               }}
             >
@@ -178,7 +177,7 @@ export default function Sidebar() {
                 width: "36px",
                 height: "36px",
                 borderRadius: "10px",
-                background: "linear-gradient(135deg, #008CBA, #80c9de)",
+                background: "linear-gradient(135deg, var(--brand-primary), #60A5FA)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -282,35 +281,35 @@ export default function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "2px",
-                    padding: "4px 8px",
-                    fontSize: "0.6rem",
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive ? "#008CBA" : "var(--text-muted)",
-                    textDecoration: "none",
-                    transition: "color var(--transition-fast)",
-                    position: "relative",
-                  }}
-                >
-                  {isActive && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "-6px",
-                        width: "20px",
-                        height: "3px",
-                        borderRadius: "0 0 3px 3px",
-                        background: "#008CBA",
-                      }}
-                    />
-                  )}
-                  <Icon size={20} />
-                  {item.label}
-                </Link>
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "2px",
+                      padding: "4px 8px",
+                      fontSize: "0.6rem",
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive ? "var(--brand-primary)" : "var(--text-muted)",
+                      textDecoration: "none",
+                      transition: "color var(--transition-fast)",
+                      position: "relative",
+                    }}
+                  >
+                    {isActive && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "-6px",
+                          width: "20px",
+                          height: "3px",
+                          borderRadius: "0 0 3px 3px",
+                          background: "var(--brand-primary)",
+                        }}
+                      />
+                    )}
+                    <Icon size={20} />
+                    {item.label}
+                  </Link>
                 );
               })}
 

@@ -16,10 +16,10 @@ interface AttendancePieChartProps {
 }
 
 const COLORS = [
-  { key: "hadir", label: "Hadir", color: "#16a34a" },
-  { key: "izin", label: "Izin", color: "#008CBA" },
-  { key: "sakit", label: "Sakit", color: "#d97706" },
-  { key: "alpa", label: "Alpa", color: "var(--danger-text)" },
+  { key: "hadir", label: "Hadir", color: "var(--color-hadir)" },
+  { key: "izin", label: "Izin", color: "var(--color-izin)" },
+  { key: "sakit", label: "Sakit", color: "var(--color-sakit)" },
+  { key: "alpa", label: "Alpa", color: "var(--color-alpa)" },
 ];
 
 export default function AttendancePieChart({ data }: AttendancePieChartProps) {

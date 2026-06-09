@@ -261,31 +261,13 @@ export default function PenilaianBulananPage() {
   if (!currentUser) return null;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
-      <main className="main-content min-h-screen bg-[var(--bg-main)]">
+    <div className="min-h-screen bg-bg-canvas">
+      <main className="main-content min-h-screen bg-bg-canvas">
         <div style={{ maxWidth: "100%", margin: "0 auto", padding: "0 10px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "16px" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-              <button
-                onClick={() => router.push("/dashboard")}
-                style={{
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--border-color)",
-                  color: "var(--text-main)",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: "4px"
-                }}
-                title="Kembali ke Dashboard"
-              >
-                <ArrowLeft size={20} />
-              </button>
               <div>
-                <h1 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text-main)", margin: 0, marginBottom: "6px" }}>
+                <h1  className="text-brand-primary dark:text-blue-400" style={{ fontSize: "1.8rem", fontWeight: 700, margin: 0, marginBottom: "6px" }} >
                   Penilaian Bulanan
                 </h1>
                 <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", margin: 0 }}>

@@ -110,8 +110,8 @@ export default function MeetingDetailPage() {
   const isNotetaker = !!(currentUserId && meeting.notetaker_id && meeting.notetaker_id === currentUserId);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
-      <main className="main-content fade-in min-h-screen bg-[var(--bg-main)]">
+    <div className="min-h-screen bg-bg-canvas">
+      <main className="main-content fade-in min-h-screen bg-bg-canvas">
 
         {/* Back Button */}
         <button

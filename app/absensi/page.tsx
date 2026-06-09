@@ -195,12 +195,12 @@ export default function AbsensiPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[var(--bg-main)]">
-      <main className="main-content min-h-screen bg-[var(--bg-main)]">
+    <div className="min-h-screen bg-bg-canvas">
+      <main className="main-content min-h-screen bg-bg-canvas">
         {/* Header */}
         <header className="animate-fade-in-up" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", position: "relative", zIndex: 100 }}>
           <div>
-            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-main)", letterSpacing: "-0.02em" }}>Absensi Kehadiran</h1>
+            <h1  className="text-brand-primary dark:text-blue-400" style={{ fontSize: "1.5rem", fontWeight: 700, letterSpacing: "-0.02em" }} >Absensi Kehadiran</h1>
             <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "2px" }}>Rekap kehadiran rapat pleno dan divisi</p>
           </div>
           <div className="hidden md:flex" style={{ alignItems: "center", gap: "10px" }}>
@@ -214,7 +214,7 @@ export default function AbsensiPage() {
 
         {/* Tabs for Data Visibility (Kadiv & BPH & Pembina only) */}
         {(canViewGlobalData(user.role.name) || isKadiv(user.role.name)) && (
-          <div className="animate-fade-in-up animate-delay-100 flex flex-col md:flex-row gap-4 mb-5 border-b border-[var(--border-color)] pb-4 md:justify-between md:items-center">
+          <div className="animate-fade-in-up animate-delay-100 flex flex-col md:flex-row gap-4 mb-2 md:justify-between md:items-center">
             
             {/* Mobile Dropdown Tab */}
             <div className="md:hidden w-full">
@@ -305,31 +305,33 @@ export default function AbsensiPage() {
           </div>
         )}
 
-        <div className="flex flex-col gap-6 w-full">
+        <div className="flex flex-col gap-6 w-full" style={{ marginTop: "32px" }}>
           {/* Top Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch w-full">
             {/* Chart */}
             <div className="solid-card w-full h-full flex flex-col" style={{ padding: "24px" }}>
-            <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "16px" }}>
+            <h2 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--text-main)", marginBottom: "36px" }}>
               Ringkasan Kehadiran {activeTab === "personal" ? "Anda" : activeTab === "divisi" ? "Divisi" : activeTab.startsWith("divisi_") ? activeTab.replace("divisi_", "") : "Rohis"}
             </h2>
-            <div key={activeTab} className="flex-1 flex flex-col items-center justify-center w-full animate-fade-in-up" style={{ animationDuration: "0.4s" }}>
-              <AttendancePieChart data={attendanceStats} />
-              <div className="grid grid-cols-4 gap-2 w-full mt-4">
+            <div key={activeTab} className="flex-1 flex flex-col justify-between w-full animate-fade-in-up" style={{ animationDuration: "0.4s" }}>
+              <div className="w-full flex-1 flex justify-center items-center min-h-[200px]">
+                <AttendancePieChart data={attendanceStats} />
+              </div>
+              <div className="grid grid-cols-4 gap-2 w-full mt-12">
                 <div className="text-center flex flex-col items-center justify-center">
-                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#16a34a" }}>{attendanceStats.hadir}</div>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--color-hadir)" }}>{attendanceStats.hadir}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Hadir</div>
                 </div>
                 <div className="text-center flex flex-col items-center justify-center">
-                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#008CBA" }}>{attendanceStats.izin}</div>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--color-izin)" }}>{attendanceStats.izin}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Izin</div>
                 </div>
                 <div className="text-center flex flex-col items-center justify-center">
-                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#d97706" }}>{attendanceStats.sakit}</div>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--color-sakit)" }}>{attendanceStats.sakit}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Sakit</div>
                 </div>
                 <div className="text-center flex flex-col items-center justify-center">
-                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--danger-text)" }}>{attendanceStats.alpa}</div>
+                  <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--color-alpa)" }}>{attendanceStats.alpa}</div>
                   <div style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>Alpa</div>
                 </div>
               </div>
@@ -360,14 +362,14 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Scheduled").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 dark:border-slate-700 last:border-0 gap-4 md:gap-6 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0" style={{ background: m.eventType === "Rapat Umum" ? "var(--primary-50)" : "var(--status-pending-bg)" }}>
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#008CBA" /> : <LayoutDashboard size={20} color="#d97706" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base leading-snug font-semibold text-[var(--text-main)] mb-1.5 truncate">{m.eventName}</h3>
-                          <div className="flex flex-wrap gap-2 md:gap-3 text-sm text-[var(--text-muted)]">
+                          <h3 className="text-base leading-snug font-semibold text-text-main mb-1.5 truncate">{m.eventName}</h3>
+                          <div className="flex flex-wrap gap-2 md:gap-3 text-sm text-text-muted">
                             <span className="truncate">{m.eventDate}</span>
                             <span>•</span>
                             <span className="truncate">Oleh: {m.creatorName}</span>
@@ -420,14 +422,14 @@ export default function AbsensiPage() {
                 ) : (
                   <div className="flex flex-col">
                   {filteredMeetings.filter(m => m.status === "Completed").map((m) => (
-                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-[var(--border-color)] last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+                    <div key={m.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 dark:border-slate-700 last:border-0 gap-4 md:gap-6 opacity-85 max-md:-mx-4 max-md:px-4 -mx-6 px-6" style={{ paddingTop: "20px", paddingBottom: "20px" }}>
                       <div className="flex items-center gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 md:w-[46px] md:h-[46px] rounded-xl flex items-center justify-center shrink-0 bg-[#e5e7eb] dark:bg-slate-700">
                           {m.eventType === "Rapat Umum" ? <Users size={20} color="#6b7280" /> : <LayoutDashboard size={20} color="#6b7280" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base leading-snug font-semibold text-[var(--text-muted)] mb-1.5 line-through truncate">{m.eventName}</h3>
-                          <div className="flex flex-wrap gap-2 md:gap-3 text-sm text-[var(--text-muted)]">
+                          <h3 className="text-base leading-snug font-semibold text-text-muted mb-1.5 line-through truncate">{m.eventName}</h3>
+                          <div className="flex flex-wrap gap-2 md:gap-3 text-sm text-text-muted">
                             <span className="truncate">{m.eventDate}</span>
                             <span>•</span>
                             <span className="truncate">Oleh: {m.creatorName}</span>
